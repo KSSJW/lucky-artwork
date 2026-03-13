@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Lucky Artwork
+Comment=Lucky Artwork
+Exec=lucky_artwork
+Icon=lucky_artwork
+Terminal=false
+Type=Application
+Categories=Utility;
