@@ -1,0 +1,190 @@
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:lucky_artwork/setting/api/api_setting.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+class Setting extends StatefulWidget {
+  const Setting({super.key});
+
+  @override
+  State<Setting> createState() => SettingState();
+}
+
+class SettingState extends State<Setting> {
+  String version = "1.0.0-beta.1";
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Setting")),
+      body: ListView(
+        children: [
+          ListTile(
+            leading: Icon(Icons.api),
+            title: Text("API"),
+            subtitle: Text("API ..."),
+            onTap: () async {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ApiSettingPage()),
+              );
+            },
+          ),
+          Divider(),
+
+          ListTile(
+            leading: Icon(Icons.update),
+            title: Text("Update"),
+            subtitle: Text("Update ..."),
+            onTap: () => {
+              launchUrl(Uri.parse("https://github.com/KSSJW/lucky-artwork/releases/latest"), mode: LaunchMode.externalApplication)
+            },
+          ),
+          Divider(),
+
+          ListTile(
+            leading: Icon(Icons.info),
+            title: Text("Info"),
+            subtitle: Text("Info ..."),
+            onTap: () => {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) {
+                  return AlertDialog (
+                    title: Text("Lucky Artwork"),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        RichText(
+                          text: TextSpan(
+                            style: const TextStyle(color: Colors.black),
+                            children: [
+                              TextSpan(text: "Version: "),
+                              TextSpan(
+                                text: version,
+                                style: TextStyle(
+                                  color: Colors.orange,
+                                ),
+                              ),
+                              TextSpan(text: "\n\n"),
+
+                              TextSpan(text: "Project: "),
+                              TextSpan(
+                                text: "lucky-artwork",
+                                style: TextStyle(
+                                  color: Colors.blue,
+                                  decoration: TextDecoration.underline,
+                                ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    launchUrl(
+                                      Uri.parse("https://github.com/KSSJW/lucky-artwork"),
+                                      mode: LaunchMode.externalApplication,
+                                    );
+                                  },
+                              ),
+                              TextSpan(text: "\n"),
+                              TextSpan(text: "Author: "),
+                              TextSpan(
+                                text: "KSSJW",
+                                style: TextStyle(
+                                  color: Colors.blue,
+                                  decoration: TextDecoration.underline,
+                                ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    launchUrl(
+                                      Uri.parse("https://github.com/KSSJW"),
+                                      mode: LaunchMode.externalApplication,
+                                    );
+                                  },
+                              ),
+                              TextSpan(text: "\n\n"),
+
+                              TextSpan(text: "Thanks to the API providers, who provided the soul of this software."),
+                              TextSpan(text: "\n\n"),
+
+                              TextSpan(
+                                text: "ManyACG",
+                                style: TextStyle(
+                                  color: Colors.blue,
+                                  decoration: TextDecoration.underline,
+                                ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    launchUrl(
+                                      Uri.parse("https://manyacg.top"),
+                                      mode: LaunchMode.externalApplication,
+                                    );
+                                  },
+                              ),
+                              TextSpan(text: "\n"),
+                              TextSpan(
+                                text: "ZiChenACG",
+                                style: TextStyle(
+                                  color: Colors.blue,
+                                  decoration: TextDecoration.underline,
+                                ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    launchUrl(
+                                      Uri.parse('https://app.zichen.zone/api/acg'),
+                                      mode: LaunchMode.externalApplication,
+                                    );
+                                  },
+                              ),
+                              TextSpan(text: "\n"),
+                              TextSpan(
+                                text: "樱花二次元图片",
+                                style: TextStyle(
+                                  color: Colors.blue,
+                                  decoration: TextDecoration.underline,
+                                ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    launchUrl(
+                                      Uri.parse('https://www.dmoe.cc'),
+                                      mode: LaunchMode.externalApplication,
+                                    );
+                                  },
+                              ),
+                              TextSpan(text: "\n"),
+                              TextSpan(
+                                text: "东方Project随机图片",
+                                style: TextStyle(
+                                  color: Colors.blue,
+                                  decoration: TextDecoration.underline,
+                                ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    launchUrl(
+                                      Uri.parse('https://img.paulzzh.com'),
+                                      mode: LaunchMode.externalApplication,
+                                    );
+                                  },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    actions: [
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text("OK"),
+                      ),
+                    ],
+                  );
+                },
+              )
+            },
+          ),
+        ]
+      )
+    );
+  }
+}

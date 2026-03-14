@@ -1,0 +1,137 @@
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class ApiSettingPage extends StatefulWidget {
+  const ApiSettingPage({super.key});
+
+  @override
+  ApiSettingPageState createState() => ApiSettingPageState();
+}
+
+class ApiSettingPageState extends State<ApiSettingPage> {
+  final TextEditingController _controller = TextEditingController();
+  String selectedApi = "";
+
+  final List<String> builtInApis = [
+    "https://manyacg.top/sese",
+    "https://app.zichen.zone/api/acg/api.php",
+    "https://www.dmoe.cc/random.php",
+    "https://img.paulzzh.com/touhou/random"
+  ];
+
+  List<String> customApis = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadApi();
+  }
+
+  Future<void> loadApi() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      customApis = prefs.getStringList("custom_apis") ?? [];
+      selectedApi = prefs.getString("api_url") ?? builtInApis.first;
+      _controller.text = selectedApi;
+    });
+  }
+
+  Future<void> saveApi(String api) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString("api_url", api);
+  }
+
+  Future<void> saveCustomApis() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList("custom_apis", customApis);
+  }
+
+  void addCustomApi() {
+    final newApi = _controller.text.trim();
+    if (newApi.isNotEmpty &&
+        !builtInApis.contains(newApi) &&
+        !customApis.contains(newApi)) {
+      setState(() {
+        customApis.add(newApi);
+      });
+      saveCustomApis();
+    }
+  }
+
+  void removeCustomApi(String api) {
+    setState(() {
+      customApis.remove(api);
+    });
+    saveCustomApis();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final allApis = [...builtInApis, ...customApis];
+
+    return Scaffold(
+      appBar: AppBar(title: const Text("API Settings")),
+      body: Column(
+        children: [
+          Text("The API needs to return an image, not JSON."),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: TextField(
+              controller: _controller,
+              decoration: const InputDecoration(
+                labelText: "Custom API URL",
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: allApis.length,
+              itemBuilder: (context, index) {
+                final api = allApis[index];
+                final isBuiltIn = builtInApis.contains(api);
+                return ListTile(
+                  title: Text(api),
+                  leading: Radio<String>(
+                    value: api,
+                    groupValue: selectedApi,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedApi = value!;
+                        _controller.text = value;
+                      });
+                      saveApi(value!);
+                    },
+                  ),
+                  trailing: isBuiltIn
+                      ? null
+                      : IconButton(
+                          icon: const Icon(Icons.delete, color: Colors.red),
+                          onPressed: () => removeCustomApi(api),
+                        ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        heroTag: "ApiSettingSave",
+        onPressed: () {
+          final customApi = _controller.text.trim();
+          final chosenApi = customApi.isNotEmpty ? customApi : selectedApi;
+          if (chosenApi.isNotEmpty) {
+            if (!builtInApis.contains(customApi) &&
+                !customApis.contains(customApi) &&
+                customApi.isNotEmpty) {
+              addCustomApi();
+            }
+            saveApi(chosenApi);
+            Navigator.pop(context, chosenApi);
+          }
+        },
+        child: const Icon(Icons.save),
+      ),
+    );
+  }
+}
