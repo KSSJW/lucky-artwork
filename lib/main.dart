@@ -4,9 +4,11 @@ import 'dart:typed_data';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() {
   runApp(App());
@@ -215,7 +217,10 @@ class MainPageState extends State<MainPage> {
 
     if (agreed) {
       return Scaffold(
-        body: pages[selectedIndex],
+        body: IndexedStack(
+          index: selectedIndex,
+          children: pages,
+        ),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: selectedIndex,
           onTap: onItemTapped,
@@ -242,15 +247,74 @@ class Home extends StatefulWidget {
 
 class HomeState extends State<Home> {
   late Future futureResponse;
-  Uint8List? currentImageBytes;
+  Uint8List? bytes;
 
-  Future<Uint8List> fetchData() async {
+  Future fetchData() async {
     final response = await http.get(Uri.parse("https://manyacg.top/sese"));
 
     if (response.statusCode == 200) {
-      return response.bodyBytes;
+      bytes = response.bodyBytes;
+      return response;
     } else {
       throw Exception("Get Error: ${response.statusCode}");
+    }
+  }
+
+  Future<void> saveImage(http.Response response) async {
+    final contentType = response.headers['content-type'];
+    final messenger = ScaffoldMessenger.of(context);
+
+    String extension = "png";
+
+    // 根据 content-type 决定扩展名
+    if (contentType?.contains("jpeg") ?? false) {
+      extension = "jpg";
+    } else if (contentType?.contains("webp") ?? false) {
+      extension = "webp";
+    }
+    
+    if (Platform.isLinux) {
+      final dir = await getDownloadsDirectory();
+
+      if (dir == null) {
+        messenger.showSnackBar(
+          SnackBar(content: Text("Failed to save image")),
+        );
+
+        return;
+      }
+
+      final file = File("${dir.path}/image_${DateTime.now().millisecondsSinceEpoch}.$extension");
+      await file.writeAsBytes(response.bodyBytes);
+      messenger.showSnackBar(
+        SnackBar(content: Text("Image saved to: ${file.path}")),
+      );
+
+      return;
+    }
+
+    if (Platform.isAndroid) {
+
+      if (await Permission.storage.request().isGranted) {
+        final result = await ImageGallerySaverPlus.saveImage(
+          response.bodyBytes,
+          quality: 100,
+          name: "image_${DateTime.now().millisecondsSinceEpoch}.$extension"
+        );
+
+        if (result['isSuccess']) {
+          final savedPath = result['filePath'];
+          messenger.showSnackBar(
+            SnackBar(content: Text("Image saved to: $savedPath")),
+          );
+        } else {
+          messenger.showSnackBar(
+            const SnackBar(content: Text("Failed to save image")),
+          );
+        }
+
+        return;
+      }
     }
   }
   
@@ -272,15 +336,12 @@ class HomeState extends State<Home> {
             return const Center(child: CircularProgressIndicator()); // 加载中
           } else if (snapshot.hasError) {
             return Center(child: Text("Error: ${snapshot.error}")); // 错误提示
-          } else if (snapshot.hasData) {
-            final bytes = snapshot.data as Uint8List;
-            currentImageBytes = bytes; // 保存到状态变量
-            
+          } else if (snapshot.hasData) {            
             return ListView(
               padding: const EdgeInsets.all(16),
               children: [
                 const SizedBox(height: 12),
-                Image.memory(snapshot.data!),
+                Image.memory(bytes!)
               ],
             );
           } else {
@@ -301,6 +362,15 @@ class HomeState extends State<Home> {
           const SizedBox(width: 12),
 
           FloatingActionButton(
+            onPressed: () async {
+              saveImage(await futureResponse);
+            },
+            tooltip: "Next",
+            child: Icon(Icons.download),
+          ),
+          const SizedBox(width: 12),
+
+          FloatingActionButton(
             onPressed: () {
               setState(() {
                 futureResponse = fetchData(); // 刷新
@@ -308,29 +378,6 @@ class HomeState extends State<Home> {
             },
             tooltip: "Next",
             child: Icon(Icons.refresh),
-          ),
-          const SizedBox(width: 12), // 按钮间距
-
-          FloatingActionButton(
-            onPressed: () async {
-              final messenger = ScaffoldMessenger.of(context);
-              final dir = await getDownloadsDirectory();
-
-              if (dir != null && currentImageBytes != null) {
-                final fileName = "saved_image_${DateTime.now().millisecondsSinceEpoch}.png";
-                final file = File("${dir.path}/$fileName");
-                await file.writeAsBytes(currentImageBytes!);
-                messenger.showSnackBar(
-                  SnackBar(content: Text("Image saved to: ${file.path}")),
-                );
-              } else {
-                messenger.showSnackBar(
-                  const SnackBar(content: Text("No images can be saved")),
-                );
-              }
-            },
-            tooltip: "Next",
-            child: Icon(Icons.download),
           ),
         ],
       ),
@@ -346,7 +393,7 @@ class Setting extends StatefulWidget {
 }
 
 class SettingState extends State<Setting> {
-  String version = "1.0.0-alpha.2";
+  String version = "1.0.0-alpha.3";
 
   @override
   Widget build(BuildContext context) {

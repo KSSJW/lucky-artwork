@@ -54,8 +54,11 @@ android/local.properties
 android/GeneratedPluginRegistrant.java
 android/.cxx/
 android/key.properties
+android/build/
 android/**/*.keystore
 android/**/*.jks
+*.apk
 
 # Linux related
 linux/flutter/ephemeral
+*.AppImage
