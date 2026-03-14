@@ -1,14 +1,29 @@
-import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:lucky_artwork/json/many_acg_json.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  runApp(MainPage());
+  runApp(App());
 }
+
+class App extends StatelessWidget {
+  const App({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: const MainPage(),
+    );
+  }
+}
+
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -18,7 +33,160 @@ class MainPage extends StatefulWidget {
 }
 
 class MainPageState extends State<MainPage> {
+  bool checked = false;
+  bool agreed = false;
   int selectedIndex = 0;
+
+  Future<void> checkAgreement() async {
+    final prefs = await SharedPreferences.getInstance();
+    agreed = prefs.getBool("user_agreement") ?? false;
+
+    if (!agreed) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showDialog(
+          context: context,
+          barrierDismissible: false, // 不允许点击外部关闭
+          builder: (context) {
+            return AlertDialog(
+              title: const Text("User Agreement 1.0.0"),
+              content: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Text("Welcome to this software. Please read the following terms carefully before you begin using it:"),
+                    SizedBox(height: 16),
+
+                    Text(
+                      "1. License:",
+                      style: TextStyle(
+                        color: Colors.blue,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+
+                    Text("You may only use this software in compliance with this agreement. This software is for personal learning and communication purposes only and may not be used for illegal or infringing activities."),
+                    SizedBox(height: 8),
+
+                    Text(
+                      "2. Data and Privacy:",
+                      style: TextStyle(
+                        color: Colors.blue,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+
+                    Text("When calling third-party APIs or user-defined APIs, HTTP requests may contain necessary technical information (such as device identifiers, request headers, cookies, authentication tokens, etc.) and data you actively provide in the request (such as account, email, location, or other parameters). This information may involve privacy during transmission. We recommend that you:"),
+                    SizedBox(height: 4),
+
+                    Text("- Provide relevant data only when necessary;"),
+                    Text("- Avoid including sensitive information in requests;"),
+                    Text("- Use security protocols such as HTTPS to ensure encrypted data transmission"),
+                    Text("- When configuring custom APIs, ensure they are legal, compliant, and meet privacy protection requirements."),
+                    SizedBox(height: 8),
+
+                    Text(
+                      "3. Third-Party API Usage:",
+                      style: TextStyle(
+                        color: Colors.blue,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+
+                    Text("This software obtains data by calling third-party APIs. You understand and agree that:"),
+                    SizedBox(height: 4),
+
+                    Text("- The data and services of third-party APIs are the responsibility of the respective providers, and this software is not responsible for their accuracy, legality, or availability."),
+                    Text("- When using third-party APIs, you must comply with the API provider's terms of service and privacy policy."),
+                    Text("- This software shall not be liable for any consequences arising from the interruption, change, or termination of third-party API services."),
+                    SizedBox(height: 8),
+
+                    Text(
+                      "4. User-Defined API Usage:",
+                      style: TextStyle(
+                        color: Colors.blue,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+
+                    Text("This software allows users to configure and call custom APIs. You understand and agree that:"),
+                    SizedBox(height: 4),
+
+                    Text("- You are solely responsible for ensuring that the configured APIs are legal, compliant, and do not infringe upon the rights of others."),
+                    Text("- You shall bear all risks, losses, or legal liabilities arising from the use of custom APIs."),
+                    Text("- This software is not responsible for the content, stability, or security of user-defined APIs."),
+                    SizedBox(height: 8),
+
+                    Text(
+                      "5. User Responsibility:",
+                      style: TextStyle(
+                        color: Colors.blue,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+
+                    Text("You shall ensure that you comply with relevant laws and regulations while using this software and shall not upload or disseminate illegal, infringing, or inappropriate content."),
+                    SizedBox(height: 8),
+
+                    Text(
+                      "6. Disclaimer:",
+                      style: TextStyle(
+                        color: Colors.blue,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+
+                    Text("This software is provided \"as is\" and is not liable for any errors, data loss, or other losses that may occur during use."),
+                    SizedBox(height: 8),
+
+                    Text(
+                      "7. Agreement Changes:",
+                      style: TextStyle(
+                        color: Colors.blue,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+
+                    Text("We reserve the right to modify this agreement as necessary. The modified agreement will be published and take effect in the updated version."),
+                    SizedBox(height: 16),
+
+                    Text("Clicking \"Agree\" indicates that you have read and accepted the above terms.")
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    exit(0);
+                  },
+                  child: const Text("Disagree"),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    final messenger = ScaffoldMessenger.of(context);
+                    await prefs.setBool("user_agreement", true);
+                    setState(() {
+                      agreed = true;
+                      checked = true;
+                      Navigator.of(context).pop();
+                    });
+                    messenger.showSnackBar(
+                      const SnackBar(content: Text("You have agreed to the User Agreement")),
+                    );
+                  },
+                  child: const Text("Agree"),
+                ),
+              ],
+            );
+          },
+        );
+      });
+    } else {
+      setState(() {
+        agreed = true;
+        checked = true;
+      });
+    }
+  }
 
   void onItemTapped(int index) {
     setState(() {
@@ -32,9 +200,21 @@ class MainPageState extends State<MainPage> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    checkAgreement();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    if (!checked) {
+      return const Scaffold(
+        body: Text("Initializing ..."),
+      );
+    }
+
+    if (agreed) {
+      return Scaffold(
         body: pages[selectedIndex],
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: selectedIndex,
@@ -44,8 +224,12 @@ class MainPageState extends State<MainPage> {
             BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Setting")
           ]
         ),
-      )
-    );
+      ); 
+    } else {
+      return Scaffold(
+        body: Text("Initializing ..."),
+      );
+    }
   }
 }
 
@@ -57,13 +241,14 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
-  late Future<ManyACGApiResponse> futureResponse;
+  late Future futureResponse;
+  Uint8List? currentImageBytes;
 
-  Future<ManyACGApiResponse> fetchData() async {
-    final response = await http.get(Uri.parse("https://manyacg.top/api/v1/artwork/random"));
+  Future<Uint8List> fetchData() async {
+    final response = await http.get(Uri.parse("https://manyacg.top/sese"));
 
     if (response.statusCode == 200) {
-      return ManyACGApiResponse.fromJson(jsonDecode(response.body));
+      return response.bodyBytes;
     } else {
       throw Exception("Get Error: ${response.statusCode}");
     }
@@ -79,7 +264,7 @@ class HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Lucky Artwork")),
-      body: FutureBuilder<ManyACGApiResponse>(
+      body: FutureBuilder(
         future: futureResponse,
         builder: (context, snapshot) {
 
@@ -88,23 +273,14 @@ class HomeState extends State<Home> {
           } else if (snapshot.hasError) {
             return Center(child: Text("Error: ${snapshot.error}")); // 错误提示
           } else if (snapshot.hasData) {
-            final item = snapshot.data!.data[0]; // 拿到第一条作品
-
+            final bytes = snapshot.data as Uint8List;
+            currentImageBytes = bytes; // 保存到状态变量
+            
             return ListView(
               padding: const EdgeInsets.all(16),
               children: [
-                Text("Title: ${item.title}", style: const TextStyle(fontSize: 18)),
-                Text("Author: ${item.artist.name}"),
                 const SizedBox(height: 12),
-                // 显示所有图片
-                ...item.pictures.map((pic) => Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Image ${pic.index} (${pic.width}x${pic.height})"),
-                    Image.network(pic.regular),
-                    const SizedBox(height: 16),
-                  ],
-                )),
+                Image.memory(snapshot.data!),
               ],
             );
           } else {
@@ -112,13 +288,51 @@ class HomeState extends State<Home> {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            futureResponse = fetchData(); // 点击刷新
-          });
-        },
-        child: const Icon(Icons.refresh),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            onPressed: () {
+              exit(0);  // 退出
+            },
+            tooltip: "Exit",
+            child: const Icon(Icons.cancel_outlined),
+          ),
+          const SizedBox(width: 12),
+
+          FloatingActionButton(
+            onPressed: () {
+              setState(() {
+                futureResponse = fetchData(); // 刷新
+              });
+            },
+            tooltip: "Next",
+            child: Icon(Icons.refresh),
+          ),
+          const SizedBox(width: 12), // 按钮间距
+
+          FloatingActionButton(
+            onPressed: () async {
+              final messenger = ScaffoldMessenger.of(context);
+              final dir = await getDownloadsDirectory();
+
+              if (dir != null && currentImageBytes != null) {
+                final fileName = "saved_image_${DateTime.now().millisecondsSinceEpoch}.png";
+                final file = File("${dir.path}/$fileName");
+                await file.writeAsBytes(currentImageBytes!);
+                messenger.showSnackBar(
+                  SnackBar(content: Text("Image saved to: ${file.path}")),
+                );
+              } else {
+                messenger.showSnackBar(
+                  const SnackBar(content: Text("No images can be saved")),
+                );
+              }
+            },
+            tooltip: "Next",
+            child: Icon(Icons.download),
+          ),
+        ],
       ),
     );
   }
@@ -132,7 +346,7 @@ class Setting extends StatefulWidget {
 }
 
 class SettingState extends State<Setting> {
-  String version = "1.0.0-alpha.1";
+  String version = "1.0.0-alpha.2";
 
   @override
   Widget build(BuildContext context) {
