@@ -1,6 +1,6 @@
 # Lucky Artwork
 
-A Flutter framework project that uses an API to randomly generate illustrations.
+A Flutter framework project that uses an API to get a random illustration.
 
 ## Home Page
 ![Cover](./assets/readme/Cover.png)
