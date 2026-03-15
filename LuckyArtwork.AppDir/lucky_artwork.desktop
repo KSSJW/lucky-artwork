@@ -1,8 +1,9 @@
+#!/usr/bin/env xdg-open
 [Desktop Entry]
 Name=Lucky Artwork
 Comment=Lucky Artwork
 Exec=lucky_artwork
-Icon=lucky_artwork
+Icon=lucky-artwork
 Terminal=false
 Type=Application
 Categories=Utility;

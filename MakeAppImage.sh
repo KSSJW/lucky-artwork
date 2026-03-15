@@ -6,4 +6,3 @@ chmod +x LuckyArtwork.AppDir/bundle/lucky_artwork
 chmod +x LuckyArtwork.AppDir/AppRun
 appimagetool LuckyArtwork.AppDir LuckyArtwork-linux-x86_64.AppImage
 rm -rf LuckyArtwork.AppDir/bundle/
-rm LuckyArtwork.AppDir/.DirIcon

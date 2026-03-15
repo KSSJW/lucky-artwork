@@ -11,7 +11,15 @@ class Setting extends StatefulWidget {
 }
 
 class SettingState extends State<Setting> {
-  String version = "1.0.0-beta.1";
+
+  TextSpan getVersion() {
+    return TextSpan(
+      text: "1.0.0-beta.2",
+      style: TextStyle(
+        color: Colors.orange,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,12 +70,7 @@ class SettingState extends State<Setting> {
                             style: const TextStyle(color: Colors.black),
                             children: [
                               TextSpan(text: "Version: "),
-                              TextSpan(
-                                text: version,
-                                style: TextStyle(
-                                  color: Colors.orange,
-                                ),
-                              ),
+                              getVersion(),
                               TextSpan(text: "\n\n"),
 
                               TextSpan(text: "Project: "),

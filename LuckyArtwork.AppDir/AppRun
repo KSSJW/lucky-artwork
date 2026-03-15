@@ -1,5 +1,4 @@
 #!/bin/bash
 
 HERE="$(dirname "$(readlink -f "$0")")"
-export LD_LIBRARY_PATH="$HERE/bundle/lib:$LD_LIBRARY_PATH"
 exec "$HERE/bundle/lucky_artwork" "$@"

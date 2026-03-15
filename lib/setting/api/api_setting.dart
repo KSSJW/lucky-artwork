@@ -92,8 +92,7 @@ class ApiSettingPageState extends State<ApiSettingPage> {
                 final isBuiltIn = builtInApis.contains(api);
                 return ListTile(
                   title: Text(api),
-                  leading: Radio<String>(
-                    value: api,
+                  leading: RadioGroup<String>(
                     groupValue: selectedApi,
                     onChanged: (value) {
                       setState(() {
@@ -102,13 +101,14 @@ class ApiSettingPageState extends State<ApiSettingPage> {
                       });
                       saveApi(value!);
                     },
+                    child: Radio<String>(value: api),
                   ),
                   trailing: isBuiltIn
-                      ? null
-                      : IconButton(
-                          icon: const Icon(Icons.delete, color: Colors.red),
-                          onPressed: () => removeCustomApi(api),
-                        ),
+                    ? null
+                    : IconButton(
+                        icon: const Icon(Icons.delete, color: Colors.red),
+                        onPressed: () => removeCustomApi(api),
+                      ),
                 );
               },
             ),

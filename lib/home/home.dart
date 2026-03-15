@@ -73,8 +73,12 @@ class HomeState extends State<Home> {
     }
 
     if (Platform.isAndroid) {
+      Map<Permission, PermissionStatus> statuses = await [
+        Permission.storage,
+        Permission.photos,
+      ].request();
 
-      if (await Permission.storage.request().isGranted) {
+      if (statuses[Permission.storage]!.isGranted || statuses[Permission.photos]!.isGranted) {
         final result = await ImageGallerySaverPlus.saveImage(
           response.bodyBytes,
           quality: 100,
