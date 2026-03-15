@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:lucky_artwork/setting/api/api_setting.dart';
+import 'package:lucky_artwork/setting/display/display_setting.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Setting extends StatefulWidget {
@@ -14,7 +15,7 @@ class SettingState extends State<Setting> {
 
   TextSpan getVersion() {
     return TextSpan(
-      text: "1.0.0-beta.2",
+      text: "1.0.0-beta.3",
       style: TextStyle(
         color: Colors.orange,
       ),
@@ -35,6 +36,19 @@ class SettingState extends State<Setting> {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => ApiSettingPage()),
+              );
+            },
+          ),
+          Divider(),
+
+          ListTile(
+            leading: Icon(Icons.display_settings),
+            title: Text("Display"),
+            subtitle: Text("Display ..."),
+            onTap: () async {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => DisplaySettingPage()),
               );
             },
           ),

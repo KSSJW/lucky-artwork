@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
+import 'package:lucky_artwork/setting/display/display_setting.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,6 +19,8 @@ class Home extends StatefulWidget {
 class HomeState extends State<Home> {
   late Future futureResponse;
   Uint8List? bytes;
+  late bool showLatency;
+  late Stopwatch stopwatch;
 
   Future<String> getAPI() async {
     var prefs = await SharedPreferences.getInstance();
@@ -27,7 +30,17 @@ class HomeState extends State<Home> {
 
   Future fetchData() async {
     var api = getAPI();
+
+    if (await DisplaySettingPageState().getConfig()) {
+      showLatency = true;
+      stopwatch = Stopwatch()..start();
+    } else {
+      showLatency = false;
+    }
+
     final response = await http.get(Uri.parse(await api));
+
+    if (showLatency) stopwatch.stop();
 
     if (response.statusCode == 200) {
       bytes = response.bodyBytes;
@@ -122,7 +135,8 @@ class HomeState extends State<Home> {
             return ListView(
               padding: const EdgeInsets.all(16),
               children: [
-                const SizedBox(height: 12),
+                if (showLatency) Text("Latency: ${stopwatch.elapsedMilliseconds} ms"),
+                SizedBox(height: 6),
                 Image.memory(bytes!)
               ],
             );
