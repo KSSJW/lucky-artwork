@@ -5,7 +5,7 @@ A Flutter framework project that uses an API to randomly generate illustrations.
 ## Home Page
 ![Cover](./assets/readme/Cover.png)
 
-## Supported platforms
+## Supported Platforms
 
 ![Linux x86_64](https://img.shields.io/badge/Available%20for-Linux%20x86__64-d0af36?logo=linux&logoColor=white)
 
