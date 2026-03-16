@@ -74,6 +74,7 @@ class ApiSettingPageState extends State<ApiSettingPage> {
       body: Column(
         children: [
           Text("The API needs to return an image, not JSON."),
+          Text("You can edit the text box to add custom APIs."),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: TextField(
@@ -115,7 +116,7 @@ class ApiSettingPageState extends State<ApiSettingPage> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         heroTag: "ApiSettingSave",
         onPressed: () {
           final customApi = _controller.text.trim();
@@ -130,7 +131,8 @@ class ApiSettingPageState extends State<ApiSettingPage> {
             Navigator.pop(context, chosenApi);
           }
         },
-        child: const Icon(Icons.save),
+        icon: const Icon(Icons.save),
+        label: const Text("Save"),
       ),
     );
   }

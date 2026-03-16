@@ -5,23 +5,71 @@ import 'package:lucky_artwork/home/home.dart';
 import 'package:lucky_artwork/setting/setting.dart';
 import 'package:lucky_artwork/user_agreement/user_agreement_context.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 void main() {
-  runApp(App());
+  runApp(
+    Phoenix(
+      child: App(),
+    ),
+  );
 }
+
+int themeMode = 0;
 
 class App extends StatelessWidget {
   const App({super.key});
 
+  Future<bool> loadThemeMode() async {
+    var prefs = await SharedPreferences.getInstance();
+    themeMode = prefs.getInt("theme_mode") ?? 0;
+
+    return true;
+  }
+
+  ThemeMode getThemeMode() {
+    switch (themeMode) {
+      case 0:
+        return ThemeMode.system;
+
+      case 1:
+        return ThemeMode.light;
+
+      case 2:
+        return ThemeMode.dark;
+
+      default:
+        return ThemeMode.system;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: const MainPage(),
+    return FutureBuilder(
+      future: loadThemeMode(),
+      builder: (context, snapshot) {
+        return MaterialApp(
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: Colors.blue,
+              brightness: Brightness.light,
+            ),
+            useMaterial3: true,
+          ),
+          darkTheme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: Colors.lightBlue,
+              brightness: Brightness.dark,
+            ),
+            useMaterial3: true,
+          ),
+          themeMode: getThemeMode(),
+          home: const MainPage(),
+        );
+      },
     );
   }
 }
-
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -70,6 +118,9 @@ class MainPageState extends State<MainPage> {
                       const SnackBar(content: Text("You have agreed to the User Agreement")),
                     );
                   },
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.green
+                  ),
                   child: const Text("Agree"),
                 ),
               ],

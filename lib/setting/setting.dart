@@ -12,18 +12,20 @@ class Setting extends StatefulWidget {
 }
 
 class SettingState extends State<Setting> {
-
+  
   TextSpan getVersion() {
     return TextSpan(
-      text: "1.0.0-beta.3",
+      text: "1.0.0",
       style: TextStyle(
-        color: Colors.orange,
+        color: Colors.green,
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       appBar: AppBar(title: Text("Setting")),
       body: ListView(
@@ -83,11 +85,21 @@ class SettingState extends State<Setting> {
                           text: TextSpan(
                             style: const TextStyle(color: Colors.black),
                             children: [
-                              TextSpan(text: "Version: "),
+                              TextSpan(
+                                text: "Version: ",
+                                style: TextStyle(
+                                  color: isDark ? Colors.white : Colors.black
+                                ),
+                              ),
                               getVersion(),
                               TextSpan(text: "\n\n"),
 
-                              TextSpan(text: "Project: "),
+                              TextSpan(
+                                text: "Project: ",
+                                style: TextStyle(
+                                  color: isDark ? Colors.white : Colors.black
+                                ),
+                              ),
                               TextSpan(
                                 text: "lucky-artwork",
                                 style: TextStyle(
@@ -103,7 +115,12 @@ class SettingState extends State<Setting> {
                                   },
                               ),
                               TextSpan(text: "\n"),
-                              TextSpan(text: "Author: "),
+                              TextSpan(
+                                text: "Author: ",
+                                style: TextStyle(
+                                  color: isDark ? Colors.white : Colors.black
+                                ),
+                              ),
                               TextSpan(
                                 text: "KSSJW",
                                 style: TextStyle(
@@ -120,7 +137,12 @@ class SettingState extends State<Setting> {
                               ),
                               TextSpan(text: "\n\n"),
 
-                              TextSpan(text: "Thanks to the API providers, who provided the soul of this software."),
+                              TextSpan(
+                                text: "Thanks to the API providers, who provided the soul of this software.",
+                                style: TextStyle(
+                                  color: isDark ? Colors.white : Colors.black
+                                ),
+                              ),
                               TextSpan(text: "\n\n"),
 
                               TextSpan(
