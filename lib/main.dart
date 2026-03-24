@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:lucky_artwork/history/history.dart';
 import 'package:lucky_artwork/home/home.dart';
 import 'package:lucky_artwork/setting/setting.dart';
 import 'package:lucky_artwork/user_agreement/user_agreement_context.dart';
@@ -139,11 +140,17 @@ class MainPageState extends State<MainPage> {
   void onItemTapped(int index) {
     setState(() {
       selectedIndex = index;
+      if (index == 1) {
+        historyKey.currentState?.refreshHistory();
+      }
     });
   }
 
-  final List<Widget> pages = [
+  final GlobalKey<HistoryState> historyKey = GlobalKey();
+
+  List<Widget> get pages => [
     Home(),
+    History(key: historyKey),
     Setting()
   ];
 
@@ -172,6 +179,7 @@ class MainPageState extends State<MainPage> {
           onTap: onItemTapped,
           items: [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+            BottomNavigationBarItem(icon: Icon(Icons.history), label: "History"),
             BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Setting")
           ]
         ),

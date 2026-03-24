@@ -72,10 +72,38 @@ class HomeState extends State<Home> with RouteAware {
 
     if (response.statusCode == 200) {
       bytes = response.bodyBytes;
+      await cacheImage(response); // 缓存
+
       return response;
     } else {
       throw Exception("Get Error: ${response.statusCode}");
     }
+  }
+
+  Future<void> cacheImage(http.Response response) async {
+    final contentType = response.headers['content-type'];
+
+    String extension = "raw";
+
+    // 根据 content-type 决定扩展名
+    if (contentType?.contains("png") ?? false) {
+      extension = "png";
+    } else if (contentType?.contains("jpeg") ?? false) {
+      extension = "jpg";
+    } else if (contentType?.contains("webp") ?? false) {
+      extension = "webp";
+    }
+
+    // 获取用户主目录
+    final home = Platform.environment['HOME'] ?? '.';
+    // 拼接 ~/.cache 路径
+    final cacheDir = Directory('$home/.cache/com.kssjw.lucky_artwork/images');
+    if (!cacheDir.existsSync()) {
+      cacheDir.createSync(recursive: true);
+    }
+
+    final file = File("${cacheDir.path}/image_${DateTime.now().millisecondsSinceEpoch}.$extension");
+    await file.writeAsBytes(response.bodyBytes);
   }
 
   Future<void> saveImage(http.Response response) async {
@@ -166,7 +194,7 @@ class HomeState extends State<Home> with RouteAware {
               children: [
                 if (showLatency) Text("Latency: ${stopwatch.elapsedMilliseconds} ms"),
                 SizedBox(height: 6),
-                Image.memory(bytes!)
+                Image.memory(bytes!),
               ],
             );
           } else {
