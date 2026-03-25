@@ -200,10 +200,11 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
                               Text("Are you ready to restart?"),
                               SizedBox(height: 8),
                               Text("Restarting will take effect immediately,"),
+                              SizedBox(height: 8),
                               Text(
-                                "but will clear the page cache.",
+                                "If you have disabled caching, it is recommended that you save the necessary data before restarting.",
                                 style: TextStyle(
-                                  color: Colors.red
+                                  color: Colors.orange
                                 ),
                               )
                             ],
@@ -220,7 +221,7 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
                                 Phoenix.rebirth(context);
                               },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.red,
+                                backgroundColor: Colors.orange,
                                 foregroundColor: Colors.white,
                               ),
                               child: const Text("Restart"),
@@ -233,6 +234,8 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
                   tooltip: "Restart",
                   icon: const Icon(Icons.restart_alt),
                   label: const Text("Restart"),
+                  backgroundColor: Colors.orange,
+                  foregroundColor: Colors.white,
                 ),
               ],
             ),
