@@ -82,8 +82,8 @@ class HomeState extends State<Home> with RouteAware {
 
   Future<void> cacheImage(http.Response response) async {
     final contentType = response.headers['content-type'];
-
     String extension = "raw";
+    Directory cacheDir = await getTemporaryDirectory();
 
     // 根据 content-type 决定扩展名
     if (contentType?.contains("png") ?? false) {
@@ -94,13 +94,17 @@ class HomeState extends State<Home> with RouteAware {
       extension = "webp";
     }
 
-    // 获取用户主目录
-    final home = Platform.environment['HOME'] ?? '.';
-    // 拼接 ~/.cache 路径
-    final cacheDir = Directory('$home/.cache/com.kssjw.lucky_artwork/images');
-    if (!cacheDir.existsSync()) {
-      cacheDir.createSync(recursive: true);
+    if (Platform.isLinux) {
+      final home = Platform.environment['HOME'] ?? '.';
+      cacheDir = Directory('$home/.cache/com.kssjw.lucky_artwork/images');
     }
+
+    if (Platform.isAndroid) {
+      final imagesDir = Directory("${cacheDir.path}/images");
+      cacheDir = imagesDir;
+    }
+
+    if (!cacheDir.existsSync()) cacheDir.createSync(recursive: true);
 
     final file = File("${cacheDir.path}/image_${DateTime.now().millisecondsSinceEpoch}.$extension");
     await file.writeAsBytes(response.bodyBytes);

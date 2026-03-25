@@ -14,11 +14,45 @@ class History extends StatefulWidget {
 }
 
 class HistoryState extends State<History> {
-  List<File> imageFiles = [];
+  List<File> imageFiles = [];  
+
+  Future<void> loadCacheImages() async {
+    Directory cacheDir = await getTemporaryDirectory();
+
+    if (Platform.isLinux) {
+      final home = Platform.environment['HOME'] ?? '.';
+      cacheDir = Directory('$home/.cache/com.kssjw.lucky_artwork/images');
+    }
+
+    if (Platform.isAndroid) {
+      final imagesDir = Directory("${cacheDir.path}/images");
+      cacheDir = imagesDir;
+    }
+    
+    if (await cacheDir.exists()) {
+      setState(() {
+        imageFiles = cacheDir
+          .listSync()
+          .where((f) => f is File && RegExp(r'\.(png|jpg|jpeg|webp|raw)$').hasMatch(f.path))
+          .map((f) => f as File)
+          .toList();
+      });
+    }
+  }
 
   Future<void> refreshHistory() async {
-    final home = Platform.environment['HOME'] ?? '.';
-    final cacheDir = Directory('$home/.cache/com.kssjw.lucky_artwork/images');
+    Directory cacheDir = await getTemporaryDirectory();
+
+    if (Platform.isLinux) {
+      final home = Platform.environment['HOME'] ?? '.';
+      cacheDir = Directory('$home/.cache/com.kssjw.lucky_artwork/images');
+    }
+
+    if (Platform.isAndroid) {
+      final imagesDir = Directory("${cacheDir.path}/images");
+      cacheDir = imagesDir;
+    }
+
     if (await cacheDir.exists()) {
       final files = cacheDir
           .listSync()
@@ -36,20 +70,6 @@ class HistoryState extends State<History> {
   void initState() {
     super.initState();
     loadCacheImages();
-  }
-
-  Future<void> loadCacheImages() async {
-    final home = Platform.environment['HOME'] ?? '.';
-    final cacheDir = Directory('$home/.cache/com.kssjw.lucky_artwork/images');
-    if (await cacheDir.exists()) {
-      setState(() {
-        imageFiles = cacheDir
-          .listSync()
-          .where((f) => f is File && RegExp(r'\.(png|jpg|jpeg|webp|raw)$').hasMatch(f.path))
-          .map((f) => f as File)
-          .toList();
-      });
-    }
   }
 
   @override
