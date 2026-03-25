@@ -22,6 +22,7 @@ class HomeState extends State<Home> with RouteAware {
   late bool showExitButton;
   late Stopwatch stopwatch;
   late double buttonSize;
+  late bool enabledCacheAndHistory = true;
 
   Future<double> getButtonSize() async {
     var prefs = await SharedPreferences.getInstance();
@@ -47,12 +48,20 @@ class HomeState extends State<Home> with RouteAware {
     return prefs.getBool("show_exit_button") ?? false;
   }
 
+  Future<bool> getCacheAndHistory() async {
+    var prefs = await SharedPreferences.getInstance();
+
+    return prefs.getBool("enabled_cache_and_history") ?? true;
+  }
+
   void loadConfig() async {
     bool tempShowExitbutton = await getExitButton();
     double tempSize = await getButtonSize();
+    bool tempCacheAndHistory = await getCacheAndHistory();
     setState(() {
       showExitButton = tempShowExitbutton;
       buttonSize = tempSize;
+      enabledCacheAndHistory = tempCacheAndHistory;
     });
   }
 
@@ -72,7 +81,8 @@ class HomeState extends State<Home> with RouteAware {
 
     if (response.statusCode == 200) {
       bytes = response.bodyBytes;
-      await cacheImage(response); // 缓存
+      
+      if (enabledCacheAndHistory) await cacheImage(response); // 缓存
 
       return response;
     } else {

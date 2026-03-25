@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:lucky_artwork/setting/api/api_setting.dart';
+import 'package:lucky_artwork/setting/cache/cache.dart';
 import 'package:lucky_artwork/setting/display/display_setting.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -15,7 +16,7 @@ class SettingState extends State<Setting> {
   
   TextSpan getVersion() {
     return TextSpan(
-      text: "1.1.0-alpha.2",
+      text: "1.1.0-alpha.3",
       style: TextStyle(
         color: Colors.red,
       ),
@@ -51,6 +52,19 @@ class SettingState extends State<Setting> {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => DisplaySettingPage()),
+              );
+            },
+          ),
+          Divider(),
+
+          ListTile(
+            leading: Icon(Icons.storage),
+            title: Text("Cache"),
+            subtitle: Text("Cache ..."),
+            onTap: () async {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CacheSettingPage())
               );
             },
           ),

@@ -14,7 +14,17 @@ class History extends StatefulWidget {
 }
 
 class HistoryState extends State<History> {
-  List<File> imageFiles = [];  
+  bool enabledCacheAndHistory= true;
+  List<File> imageFiles = [];
+
+  Future<bool> loadConfig() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      enabledCacheAndHistory = prefs.getBool("enabled_cache_and_history") ?? true;
+    });
+
+    return true;
+  }
 
   Future<void> loadCacheImages() async {
     Directory cacheDir = await getTemporaryDirectory();
@@ -35,7 +45,16 @@ class HistoryState extends State<History> {
           .listSync()
           .where((f) => f is File && RegExp(r'\.(png|jpg|jpeg|webp|raw)$').hasMatch(f.path))
           .map((f) => f as File)
-          .toList();
+          .toList()
+        ..sort((a, b) {
+          final aName = a.path.split('/').last;
+          final bName = b.path.split('/').last;
+
+          final aStamp = int.tryParse(RegExp(r'image_(\d+)').firstMatch(aName)?.group(1) ?? '0') ?? 0;
+          final bStamp = int.tryParse(RegExp(r'image_(\d+)').firstMatch(bName)?.group(1) ?? '0') ?? 0;
+
+          return bStamp.compareTo(aStamp);
+        });
       });
     }
   }
@@ -55,10 +74,19 @@ class HistoryState extends State<History> {
 
     if (await cacheDir.exists()) {
       final files = cacheDir
-          .listSync()
-          .where((f) => f is File && RegExp(r'\.(png|jpg|jpeg|webp|raw)$').hasMatch(f.path))
-          .map((f) => f as File)
-          .toList();
+        .listSync()
+        .where((f) => f is File && RegExp(r'\.(png|jpg|jpeg|webp|raw)$').hasMatch(f.path))
+        .map((f) => f as File)
+        .toList()
+      ..sort((a, b) {
+        final aName = a.path.split('/').last;
+        final bName = b.path.split('/').last;
+
+        final aStamp = int.tryParse(RegExp(r'image_(\d+)').firstMatch(aName)?.group(1) ?? '0') ?? 0;
+        final bStamp = int.tryParse(RegExp(r'image_(\d+)').firstMatch(bName)?.group(1) ?? '0') ?? 0;
+
+        return bStamp.compareTo(aStamp);
+      });
 
       setState(() {
         imageFiles = files;
@@ -69,11 +97,31 @@ class HistoryState extends State<History> {
   @override
   void initState() {
     super.initState();
+    loadConfig();
     loadCacheImages();
   }
 
   @override
   Widget build(BuildContext context) {
+
+    if (!enabledCacheAndHistory) {
+      return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.manage_history,
+                size: 80,
+              ),
+              SizedBox(height: 16),
+              Text("Cache and History are Disabled"),
+            ],
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(title: const Text("History")),
       body: imageFiles.isEmpty
