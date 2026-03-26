@@ -35,7 +35,7 @@ class FunctionUtilOfStorage {
     ].request();
   }
 
-  String getExtension(String? contentType) {
+  String getExtensionOfContentType(String? contentType) {
     String extension = "raw";
 
     // 根据 content-type 决定扩展名

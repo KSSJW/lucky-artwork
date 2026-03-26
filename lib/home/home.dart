@@ -65,7 +65,7 @@ class HomeState extends State<Home> with RouteAware {
 
   Future<void> cacheImage(http.Response response) async {
     final contentType = response.headers['content-type'];
-    String extension = FunctionUtilOfStorage().getExtension(contentType);
+    String extension = FunctionUtilOfStorage().getExtensionOfContentType(contentType);
     Directory cacheDir = await FunctionUtilOfStorage().getCacheDir();
 
     if (!cacheDir.existsSync()) cacheDir.createSync(recursive: true);
@@ -76,7 +76,7 @@ class HomeState extends State<Home> with RouteAware {
 
   Future<void> saveImage(http.Response response) async {
     final contentType = response.headers['content-type'];
-    String extension = FunctionUtilOfStorage().getExtension(contentType);
+    String extension = FunctionUtilOfStorage().getExtensionOfContentType(contentType);
     final messenger = ScaffoldMessenger.of(context);
     
     if (Platform.isLinux) {
@@ -149,7 +149,17 @@ class HomeState extends State<Home> with RouteAware {
               children: [
                 if (showLatency) Text("Latency: ${stopwatch.elapsedMilliseconds} ms"),
                 SizedBox(height: 6),
-                Image.memory(bytes!),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => FullScreenImage(bytes: bytes!, buttonSize: buttonSize),
+                      ),
+                    );
+                  },
+                  child: Image.memory(bytes!),
+                ),
               ],
             );
           } else {
@@ -176,7 +186,7 @@ class HomeState extends State<Home> with RouteAware {
               ),
             ),
           ),
-          const SizedBox(width: 12),
+          if (showExitButton) const SizedBox(width: 12),
 
           SizedBox(
             width: buttonSize,
@@ -213,6 +223,42 @@ class HomeState extends State<Home> with RouteAware {
             ),
           ),          
         ],
+      ),
+    );
+  }
+}
+
+class FullScreenImage extends StatefulWidget {
+  final Uint8List? bytes;
+  final double buttonSize;
+
+  const FullScreenImage({super.key, required this.bytes, required this.buttonSize});
+
+  @override
+  State<FullScreenImage> createState() => FullScreenImageState();
+}
+
+class FullScreenImageState extends State<FullScreenImage> {
+  
+  @override
+  Widget build(BuildContext context) {
+    final bytes = widget.bytes;
+
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+      ),
+      extendBodyBehindAppBar: true,
+      body: bytes == null ? const Center(
+        child: CircularProgressIndicator()
+      ) : InteractiveViewer(
+        maxScale: 1024.0,
+        child: SizedBox.expand(
+          child: Image.memory(
+            bytes,
+            fit: BoxFit.contain,
+          ),
+        ),
       ),
     );
   }

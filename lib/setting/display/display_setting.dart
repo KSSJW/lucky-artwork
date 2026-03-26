@@ -14,6 +14,7 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
   bool showLatency = true;
   bool showExitButton = false;
   double buttonSize = 56.0;
+  double imageColumns = 3;
 
   Future<bool> loadConfig() async {
     final prefs = await SharedPreferences.getInstance();
@@ -22,6 +23,7 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
       showLatency = prefs.getBool("show_latency") ?? true;
       showExitButton = prefs.getBool("show_exit_button") ?? false;
       buttonSize = prefs.getDouble("button_size") ?? 56.0;
+      imageColumns = prefs.getDouble("image_columns") ?? 3;
     });
 
     return true;
@@ -45,6 +47,11 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
   void saveButtonSize(double value) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setDouble("button_size", value);
+  }
+
+  void saveImageColumns(double value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble("image_columns", value);
   }
 
   String getSelectedTheme() {
@@ -83,9 +90,25 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
             appBar: AppBar(title: Text("Display Setting")),
             body: ListView(
               children: [
+
+                SizedBox(height: 8),
                 Column(
                   children: [
                     Text("Some features require a restart to take effect.")
+                  ],
+                ),
+                
+                SizedBox(height: 24),
+                Row(
+                  children: [
+                    SizedBox(width: 18),
+                    Text(
+                      "Home",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ],
                 ),
                 SizedBox(height: 8),
@@ -156,7 +179,58 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
                     });
                   },
                 ),
-                Divider(),
+
+                SizedBox(height: 24),
+                Row(
+                  children: [
+                    SizedBox(width: 18),
+                    Text(
+                      "History",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 8),
+
+                ListTile(
+                  title: Text("Image Columns"),
+                  leading: Icon(Icons.view_column),
+                  trailing: Text(
+                    imageColumns.toInt().toString(),
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+                Slider(
+                  value: imageColumns,
+                  min: 1.0,
+                  max: 12.0,
+                  divisions: 11,
+                  label: imageColumns.toInt().toString(),
+                  onChanged: (value) {
+                    setState(() {
+                      imageColumns = value;
+                      saveImageColumns(value);
+                    });
+                  },
+                ),
+
+                SizedBox(height: 24),
+                Row(
+                  children: [
+                    SizedBox(width: 18),
+                    Text(
+                      "Global",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 8),
 
                 ListTile(
                   title: Text("Button Size"),
@@ -179,6 +253,7 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
                     });
                   },
                 ),
+                SizedBox(height: 100)
               ],
             ),
             floatingActionButton: Row(

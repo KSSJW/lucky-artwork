@@ -17,11 +17,15 @@ class History extends StatefulWidget {
 class HistoryState extends State<History> {
   bool enabledCacheAndHistory= true;
   List<File> imageFiles = [];
+  double buttonSize= 56.0;
+  double imageColumns = 3.0;
 
   Future<bool> loadConfig() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       enabledCacheAndHistory = prefs.getBool("enabled_cache_and_history") ?? true;
+      buttonSize = prefs.getDouble("button_size") ?? 56.0;
+      imageColumns = prefs.getDouble("image_columns") ?? 3.0;
     });
 
     return true;
@@ -84,6 +88,7 @@ class HistoryState extends State<History> {
 
   @override
   Widget build(BuildContext context) {
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
 
     if (!enabledCacheAndHistory) {
       return Scaffold(
@@ -104,69 +109,74 @@ class HistoryState extends State<History> {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text("History")),
-      body: imageFiles.isEmpty
-          ? const Center(child: Text("No History"))
-          : GridView.builder(
-              padding: const EdgeInsets.all(8),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3, // 三列
-                crossAxisSpacing: 4,
-                mainAxisSpacing: 4,
-              ),
-              itemCount: imageFiles.length,
-              itemBuilder: (context, index) {
-                final file = imageFiles[index];
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (_) => FullScreenImage(file: file),
-                    ));
-                  },
-                  child: FutureBuilder<Uint8List>(
-                    future: file.readAsBytes(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return Image.memory(snapshot.data!, fit: BoxFit.cover);
-                      } else {
-                        return const Center(child: CircularProgressIndicator());
-                      }
-                    },
-                  ),
-                );
-              },
+      appBar: isDark ? AppBar(
+        title: const Text("History"),
+        backgroundColor: Colors.transparent.withAlpha(64),
+        foregroundColor: Colors.white,
+      ) : AppBar(
+        title: const Text("History"),
+        backgroundColor: Colors.white.withAlpha(64),
+        foregroundColor: Colors.black,
+      ),
+      extendBodyBehindAppBar: true,
+      body: imageFiles.isEmpty ? const Center(
+        child: Text("No History")
+      ) : ListView(
+        children: [
+          GridView.builder(
+            shrinkWrap: true, // 让 GridView 自适应高度
+            physics: const NeverScrollableScrollPhysics(),  // 禁止 GridView 自己滚动
+            padding: const EdgeInsets.all(8),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: imageColumns.toInt(), // 列
+              crossAxisSpacing: 4,
+              mainAxisSpacing: 4,
             ),
+            itemCount: imageFiles.length,
+            itemBuilder: (context, index) {
+              final file = imageFiles[index];
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => FullScreenImage(file: file, buttonSize: buttonSize),
+                    ),
+                  ).then((result) {
+                    if (result == null) return;
+                    if (result?["toDelete"]) refreshHistory();
+                  });
+                },
+                child: FutureBuilder<Uint8List>(
+                  future: file.readAsBytes(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Image.memory(snapshot.data!, fit: BoxFit.cover);
+                    } else {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                  },
+                ),
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }
 
 class FullScreenImage extends StatefulWidget {
   final File file;
+  final double buttonSize;
 
-  const FullScreenImage({super.key, required this.file});
+  const FullScreenImage({super.key, required this.file, required this.buttonSize});
 
   @override
   State<FullScreenImage> createState() => FullScreenImageState();
 }
 
 class FullScreenImageState extends State<FullScreenImage> {
-  double buttonSize = 56.0;
-
-  Future<double> getButtonSize() async {
-    var prefs = await SharedPreferences.getInstance();
-
-    return prefs.getDouble("button_size") ?? 56.0;
-  }
-
-  Future loadConfig() async {
-    final results = await Future.wait([
-      FunctionUtilOfDisplay().getButtonSize(),
-    ]);
-
-    setState(() {
-      buttonSize = results[0];
-    });
-  }
 
   String getExtension(String path) {
     return path.substring(path.lastIndexOf('.'));
@@ -229,31 +239,101 @@ class FullScreenImageState extends State<FullScreenImage> {
   @override
   void initState() {
     super.initState();
-    loadConfig();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: Center(
-        child: FutureBuilder<Uint8List>(
-          future: widget.file.readAsBytes(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return Image.memory(snapshot.data!);
-            } else {
-              return const CircularProgressIndicator();
-            }
-          },
-        ),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+      ),
+      extendBodyBehindAppBar: true,
+      body: FutureBuilder<Uint8List> (
+        future: widget.file.readAsBytes(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return InteractiveViewer(
+              maxScale: 1024.0,
+              child: SizedBox.expand(
+                child: Image.memory(
+                  snapshot.data!,
+                  fit: BoxFit.contain,
+                ),
+              ),
+            );
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
       ),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
+
           SizedBox(
-            width: buttonSize,
-            height: buttonSize,
+            width: widget.buttonSize,
+            height: widget.buttonSize,
+            child: FloatingActionButton(
+              heroTag: "Delete",
+              onPressed: () async {
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: const Text("Delete"),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Are you sure you want to delete this record?"),
+                          SizedBox(height: 8),
+                          Text(
+                            "This operation will delete it from your history.",
+                            style: TextStyle(
+                              color: Colors.red
+                            ),
+                          )
+                        ],
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text("Cancel"),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            widget.file.delete();
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop({"toDelete": true});
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red,
+                            foregroundColor: Colors.white,
+                          ),
+                          child: const Text("Delete"),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+              tooltip: "Delete",
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+              child: Icon(
+                Icons.delete,
+                size: widget.buttonSize * 0.5,
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+
+          SizedBox(
+            width: widget.buttonSize,
+            height: widget.buttonSize,
             child: FloatingActionButton(
               heroTag: "Download",
               onPressed: () async {
@@ -262,7 +342,7 @@ class FullScreenImageState extends State<FullScreenImage> {
               tooltip: "Download",
               child: Icon(
                 Icons.download,
-                size: buttonSize * 0.5,
+                size: widget.buttonSize * 0.5,
               ),
             ),
           ),
