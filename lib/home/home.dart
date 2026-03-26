@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:lucky_artwork/util/function_util.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -18,64 +18,37 @@ class Home extends StatefulWidget {
 class HomeState extends State<Home> with RouteAware {
   late Future futureResponse;
   Uint8List? bytes;
-  late bool showLatency;
-  late bool showExitButton;
   late Stopwatch stopwatch;
-  late double buttonSize;
-  late bool enabledCacheAndHistory = true;
+  bool showExitButton = false;
+  double buttonSize = 56.0;
+  bool enabledCacheAndHistory = true;
+  bool showLatency = true;
 
-  Future<double> getButtonSize() async {
-    var prefs = await SharedPreferences.getInstance();
+  Future loadConfig() async {
+    final results = await Future.wait([
+      FunctionUtilOfDisplay().isEnabledExitButton(),
+      FunctionUtilOfDisplay().getButtonSize(),
+      FunctionUtilOfStorage().isEnabledCacheAndHistory(),
+    ]);
 
-    return prefs.getDouble("button_size") ?? 56.0;
-  }
-
-  Future<String> getAPI() async {
-    var prefs = await SharedPreferences.getInstance();
-
-    return prefs.getString("api_url") ?? "https://manyacg.top/sese";  // 默认情况
-  }
-
-  Future<bool> getLatency() async {
-    var prefs = await SharedPreferences.getInstance();
-
-    return prefs.getBool("show_latency") ?? true;
-  }
-
-  Future<bool> getExitButton() async {
-    var prefs = await SharedPreferences.getInstance();
-
-    return prefs.getBool("show_exit_button") ?? false;
-  }
-
-  Future<bool> getCacheAndHistory() async {
-    var prefs = await SharedPreferences.getInstance();
-
-    return prefs.getBool("enabled_cache_and_history") ?? true;
-  }
-
-  void loadConfig() async {
-    bool tempShowExitbutton = await getExitButton();
-    double tempSize = await getButtonSize();
-    bool tempCacheAndHistory = await getCacheAndHistory();
     setState(() {
-      showExitButton = tempShowExitbutton;
-      buttonSize = tempSize;
-      enabledCacheAndHistory = tempCacheAndHistory;
+      showExitButton = results[0] as bool;
+      buttonSize = results[1] as double;
+      enabledCacheAndHistory = results[2] as bool;
     });
   }
 
   Future fetchData() async {
-    var api = getAPI();
+    var api = await FunctionUtilOfNetwork().getAPI();
 
-    if (await getLatency()) {
+    if (await FunctionUtilOfDisplay().isEnabledLatency()) {
       showLatency = true;
       stopwatch = Stopwatch()..start();
     } else {
       showLatency = false;
     }
 
-    final response = await http.get(Uri.parse(await api));
+    final response = await http.get(Uri.parse(api));
 
     if (showLatency) stopwatch.stop();
 
@@ -92,27 +65,8 @@ class HomeState extends State<Home> with RouteAware {
 
   Future<void> cacheImage(http.Response response) async {
     final contentType = response.headers['content-type'];
-    String extension = "raw";
-    Directory cacheDir = await getTemporaryDirectory();
-
-    // 根据 content-type 决定扩展名
-    if (contentType?.contains("png") ?? false) {
-      extension = "png";
-    } else if (contentType?.contains("jpeg") ?? false) {
-      extension = "jpg";
-    } else if (contentType?.contains("webp") ?? false) {
-      extension = "webp";
-    }
-
-    if (Platform.isLinux) {
-      final home = Platform.environment['HOME'] ?? '.';
-      cacheDir = Directory('$home/.cache/com.kssjw.lucky_artwork/images');
-    }
-
-    if (Platform.isAndroid) {
-      final imagesDir = Directory("${cacheDir.path}/images");
-      cacheDir = imagesDir;
-    }
+    String extension = FunctionUtilOfStorage().getExtension(contentType);
+    Directory cacheDir = await FunctionUtilOfStorage().getCacheDir();
 
     if (!cacheDir.existsSync()) cacheDir.createSync(recursive: true);
 
@@ -122,18 +76,8 @@ class HomeState extends State<Home> with RouteAware {
 
   Future<void> saveImage(http.Response response) async {
     final contentType = response.headers['content-type'];
+    String extension = FunctionUtilOfStorage().getExtension(contentType);
     final messenger = ScaffoldMessenger.of(context);
-
-    String extension = "raw";
-
-    // 根据 content-type 决定扩展名
-    if (contentType?.contains("png") ?? false) {
-      extension = "png";
-    } else if (contentType?.contains("jpeg") ?? false) {
-      extension = "jpg";
-    } else if (contentType?.contains("webp") ?? false) {
-      extension = "webp";
-    }
     
     if (Platform.isLinux) {
       final dir = await getDownloadsDirectory();
@@ -156,10 +100,7 @@ class HomeState extends State<Home> with RouteAware {
     }
 
     if (Platform.isAndroid) {
-      Map<Permission, PermissionStatus> statuses = await [
-        Permission.storage,
-        Permission.photos,
-      ].request();
+      Map<Permission, PermissionStatus> statuses = await FunctionUtilOfStorage().requestImagePermissionsPnAndroid();
 
       if (statuses[Permission.storage]!.isGranted || statuses[Permission.photos]!.isGranted) {
         final result = await ImageGallerySaverPlus.saveImage(

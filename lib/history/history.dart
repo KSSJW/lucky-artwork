@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
+import 'package:lucky_artwork/util/function_util.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,17 +28,7 @@ class HistoryState extends State<History> {
   }
 
   Future<void> loadCacheImages() async {
-    Directory cacheDir = await getTemporaryDirectory();
-
-    if (Platform.isLinux) {
-      final home = Platform.environment['HOME'] ?? '.';
-      cacheDir = Directory('$home/.cache/com.kssjw.lucky_artwork/images');
-    }
-
-    if (Platform.isAndroid) {
-      final imagesDir = Directory("${cacheDir.path}/images");
-      cacheDir = imagesDir;
-    }
+    Directory cacheDir = await FunctionUtilOfStorage().getCacheDir();
     
     if (await cacheDir.exists()) {
       setState(() {
@@ -60,17 +51,7 @@ class HistoryState extends State<History> {
   }
 
   Future<void> refreshHistory() async {
-    Directory cacheDir = await getTemporaryDirectory();
-
-    if (Platform.isLinux) {
-      final home = Platform.environment['HOME'] ?? '.';
-      cacheDir = Directory('$home/.cache/com.kssjw.lucky_artwork/images');
-    }
-
-    if (Platform.isAndroid) {
-      final imagesDir = Directory("${cacheDir.path}/images");
-      cacheDir = imagesDir;
-    }
+    Directory cacheDir = await FunctionUtilOfStorage().getCacheDir();
 
     if (await cacheDir.exists()) {
       final files = cacheDir
@@ -169,7 +150,7 @@ class FullScreenImage extends StatefulWidget {
 }
 
 class FullScreenImageState extends State<FullScreenImage> {
-  late double buttonSize;
+  double buttonSize = 56.0;
 
   Future<double> getButtonSize() async {
     var prefs = await SharedPreferences.getInstance();
@@ -177,10 +158,13 @@ class FullScreenImageState extends State<FullScreenImage> {
     return prefs.getDouble("button_size") ?? 56.0;
   }
 
-  void loadConfig() async {
-    double tempSize = await getButtonSize();
+  Future loadConfig() async {
+    final results = await Future.wait([
+      FunctionUtilOfDisplay().getButtonSize(),
+    ]);
+
     setState(() {
-      buttonSize = tempSize;
+      buttonSize = results[0];
     });
   }
 
@@ -213,10 +197,7 @@ class FullScreenImageState extends State<FullScreenImage> {
     }
 
     if (Platform.isAndroid) {
-      Map<Permission, PermissionStatus> statuses = await [
-        Permission.storage,
-        Permission.photos,
-      ].request();
+      Map<Permission, PermissionStatus> statuses = await FunctionUtilOfStorage().requestImagePermissionsPnAndroid();
 
       if (statuses[Permission.storage]!.isGranted || statuses[Permission.photos]!.isGranted) {
         final bytes = await file.readAsBytes();

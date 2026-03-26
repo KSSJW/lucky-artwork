@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:lucky_artwork/util/function_util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CacheSettingPage extends StatefulWidget {
@@ -33,18 +33,8 @@ class CacheSettingPageState extends State<CacheSettingPage> {
   }
 
   void getCacheSize() async {
-     Directory cacheDir = await getTemporaryDirectory();
-     int size = 0;
-
-    if (Platform.isLinux) {
-      final home = Platform.environment['HOME'] ?? '.';
-      cacheDir = Directory('$home/.cache/com.kssjw.lucky_artwork/images');
-    }
-
-    if (Platform.isAndroid) {
-      final imagesDir = Directory("${cacheDir.path}/images");
-      cacheDir = imagesDir;
-    }
+    Directory cacheDir = await FunctionUtilOfStorage().getCacheDir();
+    int size = 0;
 
     if (await cacheDir.exists()) {
       await for (var entity in cacheDir.list(recursive: true, followLinks: false)) {
@@ -65,17 +55,7 @@ class CacheSettingPageState extends State<CacheSettingPage> {
   }
 
   void clearCache() async {
-    Directory cacheDir = await getTemporaryDirectory();
-
-    if (Platform.isLinux) {
-      final home = Platform.environment['HOME'] ?? '.';
-      cacheDir = Directory('$home/.cache/com.kssjw.lucky_artwork/images');
-    }
-
-    if (Platform.isAndroid) {
-      final imagesDir = Directory("${cacheDir.path}/images");
-      cacheDir = imagesDir;
-    }
+    Directory cacheDir = await FunctionUtilOfStorage().getCacheDir();
 
     if (await cacheDir.exists()) {
       await for (var file in cacheDir.list(recursive: true)) {
