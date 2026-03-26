@@ -158,7 +158,15 @@ class HomeState extends State<Home> with RouteAware {
                       ),
                     );
                   },
-                  child: Image.memory(bytes!),
+                  child:  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxHeight: MediaQuery.of(context).size.height > 224.0 ? MediaQuery.of(context).size.height - 168.0 : MediaQuery.of(context).size.height,
+                    ),
+                    child: Image.memory(
+                      bytes!,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
                 ),
               ],
             );

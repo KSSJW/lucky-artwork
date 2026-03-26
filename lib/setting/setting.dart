@@ -16,9 +16,9 @@ class SettingState extends State<Setting> {
   
   TextSpan getVersion() {
     return TextSpan(
-      text: "1.1.0-beta.3",
+      text: "1.1.0",
       style: TextStyle(
-        color: Colors.orange,
+        color: Colors.green,
       ),
     );
   }
