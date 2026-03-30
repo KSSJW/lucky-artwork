@@ -174,14 +174,23 @@ class MainPageState extends State<MainPage> {
           index: selectedIndex,
           children: pages,
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: selectedIndex,
-          onTap: onItemTapped,
-          items: [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-            BottomNavigationBarItem(icon: Icon(Icons.history), label: "History"),
-            BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Setting")
-          ]
+        bottomNavigationBar: NavigationBar(
+          selectedIndex: selectedIndex,
+          onDestinationSelected: onItemTapped,
+          destinations: [
+            NavigationDestination(
+              icon: Icon(Icons.home),
+              label: "Home"
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.history),
+              label: "History"
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.settings),
+              label: "Setting"
+            ),
+          ],
         ),
       ); 
     } else {
