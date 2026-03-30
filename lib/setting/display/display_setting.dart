@@ -89,6 +89,7 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
           return Scaffold(
             appBar: AppBar(title: Text("Display Setting")),
             body: ListView(
+              padding: EdgeInsets.all(8),
               children: [
 
                 SizedBox(height: 8),
@@ -97,11 +98,11 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
                     Text("Some features require a restart to take effect.")
                   ],
                 ),
-                
-                SizedBox(height: 24),
+                SizedBox(height: 16),
+
                 Row(
                   children: [
-                    SizedBox(width: 18),
+                    SizedBox(width: 20),
                     Text(
                       "Home",
                       style: TextStyle(
@@ -111,79 +112,90 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
                     ),
                   ],
                 ),
-                SizedBox(height: 8),
 
-                PopupMenuButton<String>(
-                  onSelected: (value) {
-                    switch (value) {
-                      case "system":
-                        saveThemeConfig(0);
-                        break;
-                      
-                      case "light":
-                        saveThemeConfig(1);
-                        break;
+                Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Column(
+                    children: [
 
-                      case "dark":
-                        saveThemeConfig(2);
-                        break;
-                      
-                      default:
-                        break;
-                    }
-                  },
-                  itemBuilder: (context) => [
-                    const PopupMenuItem(
-                      value: "system",
-                      child: Text("System"),
-                    ),
-                    const PopupMenuItem(
-                      value: "light",
-                      child: Text("Light"),
-                    ),
-                    const PopupMenuItem(
-                      value: "dark",
-                      child: Text("Dark"),
-                    ),
-                  ],
-                  child: ListTile(
-                    leading: isDark ? Icon(Icons.dark_mode) : Icon(Icons.light_mode),
-                    title: const Text("Theme Mode"),
-                    subtitle: Text(getSelectedTheme()),
-                    trailing: const Icon(Icons.arrow_drop_down),
+                      SizedBox(height: 8),
+                      PopupMenuButton<String>(
+                        onSelected: (value) {
+                          switch (value) {
+                            case "system":
+                              saveThemeConfig(0);
+                              break;
+                            
+                            case "light":
+                              saveThemeConfig(1);
+                              break;
+
+                            case "dark":
+                              saveThemeConfig(2);
+                              break;
+                            
+                            default:
+                              break;
+                          }
+                        },
+                        itemBuilder: (context) => [
+                          const PopupMenuItem(
+                            value: "system",
+                            child: Text("System"),
+                          ),
+                          const PopupMenuItem(
+                            value: "light",
+                            child: Text("Light"),
+                          ),
+                          const PopupMenuItem(
+                            value: "dark",
+                            child: Text("Dark"),
+                          ),
+                        ],
+                        child: ListTile(
+                          leading: isDark ? Icon(Icons.dark_mode) : Icon(Icons.light_mode),
+                          title: const Text("Theme Mode"),
+                          subtitle: Text(getSelectedTheme()),
+                          trailing: const Icon(Icons.arrow_drop_down),
+                        ),
+                      ),
+                      Divider(),
+
+                      SwitchListTile(
+                        title: Text("Show Latency"),
+                        secondary: Icon(Icons.network_check),
+                        value: showLatency,
+                        onChanged: (value) {
+                          setState(() {
+                            showLatency = value;
+                            saveLatencyConfig(value);
+                          });
+                        },
+                      ),
+                      Divider(),
+
+                      SwitchListTile(
+                        title: Text("Show Exit Button"),
+                        secondary: Icon(Icons.power_settings_new),
+                        value: showExitButton,
+                        onChanged: (value) {
+                          setState(() {
+                            showExitButton = value;
+                            saveExitButtonConfig(value);
+                          });
+                        },
+                      ),
+                      SizedBox(height: 8),
+                    ],
                   ),
                 ),
-                Divider(),
 
-                SwitchListTile(
-                  title: Text("Show Latency"),
-                  secondary: Icon(Icons.network_check),
-                  value: showLatency,
-                  onChanged: (value) {
-                    setState(() {
-                      showLatency = value;
-                      saveLatencyConfig(value);
-                    });
-                  },
-                ),
-                Divider(),
-
-                SwitchListTile(
-                  title: Text("Show Exit Button"),
-                  secondary: Icon(Icons.power_settings_new),
-                  value: showExitButton,
-                  onChanged: (value) {
-                    setState(() {
-                      showExitButton = value;
-                      saveExitButtonConfig(value);
-                    });
-                  },
-                ),
-
-                SizedBox(height: 24),
+                SizedBox(height: 16),
                 Row(
                   children: [
-                    SizedBox(width: 18),
+                    SizedBox(width: 20),
                     Text(
                       "History",
                       style: TextStyle(
@@ -193,34 +205,45 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
                     ),
                   ],
                 ),
-                SizedBox(height: 8),
 
-                ListTile(
-                  title: Text("Image Columns"),
-                  leading: Icon(Icons.view_column),
-                  trailing: Text(
-                    imageColumns.toInt().toString(),
-                    style: TextStyle(fontSize: 16),
+                Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Column(
+                    children: [                      
+
+                      SizedBox(height: 8),
+                      ListTile(
+                        title: Text("Image Columns"),
+                        leading: Icon(Icons.view_column),
+                        trailing: Text(
+                          imageColumns.toInt().toString(),
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      Slider(
+                        value: imageColumns,
+                        min: 1.0,
+                        max: 12.0,
+                        divisions: 11,
+                        label: imageColumns.toInt().toString(),
+                        onChanged: (value) {
+                          setState(() {
+                            imageColumns = value;
+                            saveImageColumns(value);
+                          });
+                        },
+                      ),
+                      SizedBox(height: 8),
+                    ],
                   ),
                 ),
-                Slider(
-                  value: imageColumns,
-                  min: 1.0,
-                  max: 12.0,
-                  divisions: 11,
-                  label: imageColumns.toInt().toString(),
-                  onChanged: (value) {
-                    setState(() {
-                      imageColumns = value;
-                      saveImageColumns(value);
-                    });
-                  },
-                ),
 
-                SizedBox(height: 24),
+                SizedBox(height: 16),
                 Row(
                   children: [
-                    SizedBox(width: 18),
+                    SizedBox(width: 20),
                     Text(
                       "Global",
                       style: TextStyle(
@@ -230,29 +253,41 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
                     ),
                   ],
                 ),
-                SizedBox(height: 8),
 
-                ListTile(
-                  title: Text("Button Size"),
-                  leading: Icon(Icons.open_in_full),
-                  trailing: Text(
-                    buttonSize.toString(),
-                    style: TextStyle(fontSize: 16),
+                Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Column(
+                    children: [
+
+                      SizedBox(height: 8),
+                      ListTile(
+                        title: Text("Button Size"),
+                        leading: Icon(Icons.open_in_full),
+                        trailing: Text(
+                          buttonSize.toString(),
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      Slider(
+                        value: buttonSize,
+                        min: 28.0,
+                        max: 112.0,
+                        divisions: 84,
+                        label: buttonSize.toString(),
+                        onChanged: (value) {
+                          setState(() {
+                            buttonSize = value;
+                            saveButtonSize(value);
+                          });
+                        },
+                      ),
+                      SizedBox(height: 8),
+                    ],
                   ),
                 ),
-                Slider(
-                  value: buttonSize,
-                  min: 28.0,
-                  max: 112.0,
-                  divisions: 84,
-                  label: buttonSize.toString(),
-                  onChanged: (value) {
-                    setState(() {
-                      buttonSize = value;
-                      saveButtonSize(value);
-                    });
-                  },
-                ),
+
                 SizedBox(height: 100)
               ],
             ),

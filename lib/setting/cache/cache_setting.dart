@@ -81,79 +81,94 @@ class CacheSettingPageState extends State<CacheSettingPage> {
           return Scaffold(
             appBar: AppBar(title: Text("Cache Setting")),
             body: ListView(
+              padding: EdgeInsets.all(8),
               children: [
+
+                SizedBox(height: 8),
                 Column(
                   children: [
                     Text("Some features require a restart to take effect.")
                   ],
                 ),
-                SizedBox(height: 8),
-                
-                SwitchListTile(
-                  title: Text("Enable Cache and History"),
-                  secondary: Icon(Icons.history),
-                  value: enabledCacheAndHistory,
-                  onChanged: (value) {
-                    setState(() {
-                      enabledCacheAndHistory = value;
-                      saveCacheAndHistoryConfig(value);
-                    });
-                  },
-                ),
-                Divider(),
+                SizedBox(height: 16),
 
-                ListTile(
-                  leading: Icon(Icons.cleaning_services),
-                  title: Text("Clear Cache"),
-                  trailing: Text(
-                    formatBytes(cacheSize),
-                    style: TextStyle(fontSize: 16),
+                Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: const Text("Clear Cache"),
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("Are you sure you want to clear the cache?"),
-                              SizedBox(height: 8),
-                              Text(
-                                "You will be deleting the cache and history.",
-                                style: TextStyle(
-                                  color: Colors.red
+                  child: Column(
+                    children: [
+
+                      SizedBox(height: 8),
+                      SwitchListTile(
+                        title: Text("Enable Cache and History"),
+                        secondary: Icon(Icons.history),
+                        value: enabledCacheAndHistory,
+                        onChanged: (value) {
+                          setState(() {
+                            enabledCacheAndHistory = value;
+                            saveCacheAndHistoryConfig(value);
+                          });
+                        },
+                      ),
+                      Divider(),
+
+                      ListTile(
+                        leading: Icon(Icons.cleaning_services),
+                        title: Text("Clear Cache"),
+                        trailing: Text(
+                          formatBytes(cacheSize),
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text("Clear Cache"),
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("Are you sure you want to clear the cache?"),
+                                    SizedBox(height: 8),
+                                    Text(
+                                      "You will be deleting the cache and history.",
+                                      style: TextStyle(
+                                        color: Colors.red
+                                      ),
+                                    )
+                                  ],
                                 ),
-                              )
-                            ],
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text("Cancel"),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                clearCache();
-                                Navigator.of(context).pop();
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.red,
-                                foregroundColor: Colors.white,
-                              ),
-                              child: const Text("Clear"),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text("Cancel"),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      clearCache();
+                                      Navigator.of(context).pop();
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.red,
+                                      foregroundColor: Colors.white,
+                                    ),
+                                    child: const Text("Clear"),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                      ),
+                      SizedBox(height: 8),
+                    ],
+                  ),
+                ),              
               ],
             ),
             floatingActionButton: Row(
