@@ -1,10 +1,9 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
+import 'package:lucky_artwork/history/history_full_screen_image.dart';
+import 'package:lucky_artwork/history/history_function.dart';
 import 'package:lucky_artwork/util/function_util.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class History extends StatefulWidget {
@@ -17,6 +16,8 @@ class History extends StatefulWidget {
 class HistoryState extends State<History> {
   bool enabledCacheAndHistory= true;
   List<File> imageFiles = [];
+  bool isSelectionMode = false;
+  Set<int> selectedIndexes = {};
   double buttonSize= 56.0;
   double imageColumns = 3.0;
 
@@ -29,29 +30,6 @@ class HistoryState extends State<History> {
     });
 
     return true;
-  }
-
-  Future<void> loadCacheImages() async {
-    Directory cacheDir = await FunctionUtilOfStorage().getCacheDir();
-    
-    if (await cacheDir.exists()) {
-      setState(() {
-        imageFiles = cacheDir
-          .listSync()
-          .where((f) => f is File && RegExp(r'\.(png|jpg|jpeg|webp|raw)$').hasMatch(f.path))
-          .map((f) => f as File)
-          .toList()
-        ..sort((a, b) {
-          final aName = a.path.split('/').last;
-          final bName = b.path.split('/').last;
-
-          final aStamp = int.tryParse(RegExp(r'image_(\d+)').firstMatch(aName)?.group(1) ?? '0') ?? 0;
-          final bStamp = int.tryParse(RegExp(r'image_(\d+)').firstMatch(bName)?.group(1) ?? '0') ?? 0;
-
-          return bStamp.compareTo(aStamp);
-        });
-      });
-    }
   }
 
   Future<void> refreshHistory() async {
@@ -83,7 +61,7 @@ class HistoryState extends State<History> {
   void initState() {
     super.initState();
     loadConfig();
-    loadCacheImages();
+    refreshHistory();
   }
 
   @override
@@ -113,10 +91,58 @@ class HistoryState extends State<History> {
         title: const Text("History"),
         backgroundColor: Colors.transparent.withAlpha(64),
         foregroundColor: Colors.white,
+        actions: [
+          if (!isSelectionMode) IconButton(
+            icon: Icon(Icons.refresh),
+            tooltip: "Refresh",
+            onPressed: refreshHistory,
+          ),
+          IconButton(
+            icon: isSelectionMode ? Icon(Icons.close) : Icon(Icons.select_all),
+            tooltip: isSelectionMode ? "Close" : "Selection",
+            onPressed: () {
+              if (!isSelectionMode) {
+                setState(() {
+                  selectedIndexes.clear();
+                  isSelectionMode = true;
+                });
+              } else {
+                setState(() {
+                  isSelectionMode = false;
+                  selectedIndexes.clear();
+                });
+              }
+            },
+          ),
+        ],
       ) : AppBar(
         title: const Text("History"),
         backgroundColor: Colors.white.withAlpha(64),
         foregroundColor: Colors.black,
+        actions: [
+          if (!isSelectionMode) IconButton(
+            icon: Icon(Icons.refresh),
+            tooltip: "Refresh",
+            onPressed: refreshHistory,
+          ),
+          IconButton(
+            icon: isSelectionMode ? Icon(Icons.close) : Icon(Icons.select_all),
+            tooltip: isSelectionMode ? "Close" : "Selection",
+            onPressed: () {
+              if (!isSelectionMode) {
+                setState(() {
+                  selectedIndexes.clear();
+                  isSelectionMode = true;
+                });
+              } else {
+                setState(() {
+                  isSelectionMode = false;
+                  selectedIndexes.clear();
+                });
+              }
+            },
+          ),
+        ],
       ),
       extendBodyBehindAppBar: true,
       body: imageFiles.isEmpty ? const Center(
@@ -135,23 +161,69 @@ class HistoryState extends State<History> {
             itemCount: imageFiles.length,
             itemBuilder: (context, index) {
               final file = imageFiles[index];
+              final isSelected = selectedIndexes.contains(index);
+
               return GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => FullScreenImage(file: file, buttonSize: buttonSize),
-                    ),
-                  ).then((result) {
-                    if (result == null) return;
-                    if (result?["toDelete"]) refreshHistory();
-                  });
+                  if (isSelectionMode) {
+
+                    if (isSelected) {
+                      setState(() {
+                        selectedIndexes.remove(index);
+                      });
+                    } else {
+                      setState(() {
+                        selectedIndexes.add(index);
+                      });
+                    }
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => FullScreenImage(file: file, buttonSize: buttonSize),
+                      ),
+                    ).then((result) {
+                      if (result == null) return;
+                      if (result?["toDelete"]) refreshHistory();
+                    });
+                  }
                 },
                 child: FutureBuilder<Uint8List>(
                   future: file.readAsBytes(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      return Image.memory(snapshot.data!, fit: BoxFit.cover);
+                      return Stack(
+                        children: [
+                          AspectRatio(
+                            aspectRatio: 1, // 正方形格子
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: Image.file(file, fit: BoxFit.cover),
+                            ),
+                          ),
+
+                          if (isSelectionMode && isSelected)
+                          Positioned.fill(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.transparent.withAlpha(100),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                          ),
+
+                          if (isSelectionMode) Positioned(
+                            top: 4,
+                            right: 4,
+                            child: Icon(
+                              isSelected
+                                ? Icons.check_circle // 已选中时显示实心圆圈
+                                : Icons.radio_button_unchecked, // 未选中时显示空心圆圈
+                              color: isSelected ? Colors.blue : Colors.grey,
+                            ),
+                          ),
+                        ],
+                      );
                     } else {
                       return const Center(child: CircularProgressIndicator());
                     }
@@ -162,117 +234,12 @@ class HistoryState extends State<History> {
           ),
         ],
       ),
-    );
-  }
-}
-
-class FullScreenImage extends StatefulWidget {
-  final File file;
-  final double buttonSize;
-
-  const FullScreenImage({super.key, required this.file, required this.buttonSize});
-
-  @override
-  State<FullScreenImage> createState() => FullScreenImageState();
-}
-
-class FullScreenImageState extends State<FullScreenImage> {
-
-  String getExtension(String path) {
-    return path.substring(path.lastIndexOf('.'));
-  }
-
-  Future<void> saveImage(File file) async {
-    final messenger = ScaffoldMessenger.of(context);
-    
-    if (Platform.isLinux) {
-      final dir = await getDownloadsDirectory();
-
-      if (dir == null) {
-        messenger.showSnackBar(
-          SnackBar(content: Text("Failed to save image")),
-        );
-
-        return;
-      }
-
-      final ext = getExtension(file.path);
-      final newPath = "${dir.path}/image_${DateTime.now().millisecondsSinceEpoch}$ext";
-      await file.copy(newPath);
-      messenger.showSnackBar(
-        SnackBar(content: Text("Image saved to: $newPath")),
-      );
-
-      return;
-    }
-
-    if (Platform.isAndroid) {
-      Map<Permission, PermissionStatus> statuses = await FunctionUtilOfStorage().requestImagePermissionsPnAndroid();
-
-      if (statuses[Permission.storage]!.isGranted || statuses[Permission.photos]!.isGranted) {
-        final bytes = await file.readAsBytes();
-        final ext = getExtension(file.path);
-
-        final result = await ImageGallerySaverPlus.saveImage(
-          bytes,
-          quality: 100,
-          name: "image_${DateTime.now().millisecondsSinceEpoch}$ext"
-        );
-
-        if (result['isSuccess']) {
-          messenger.showSnackBar(
-            SnackBar(content: Text("Image saved to: /Pictures")),
-          );
-        } else {
-          messenger.showSnackBar(
-            const SnackBar(content: Text("Failed to save image")),
-          );
-        }
-
-        return;
-      }
-
-      return;
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-      ),
-      extendBodyBehindAppBar: true,
-      body: FutureBuilder<Uint8List> (
-        future: widget.file.readAsBytes(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return InteractiveViewer(
-              maxScale: 1024.0,
-              child: SizedBox.expand(
-                child: Image.memory(
-                  snapshot.data!,
-                  fit: BoxFit.contain,
-                ),
-              ),
-            );
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        },
-      ),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-
-          SizedBox(
-            width: widget.buttonSize,
-            height: widget.buttonSize,
+          if (isSelectionMode) SizedBox(
+            width: buttonSize,
+            height: buttonSize,
             child: FloatingActionButton(
               heroTag: "Delete",
               onPressed: () async {
@@ -304,10 +271,22 @@ class FullScreenImageState extends State<FullScreenImage> {
                           child: const Text("Cancel"),
                         ),
                         ElevatedButton(
-                          onPressed: () {
-                            widget.file.delete();
-                            Navigator.of(context).pop();
-                            Navigator.of(context).pop({"toDelete": true});
+                          onPressed: () async {
+                            final navigator = Navigator.of(context);
+
+                            for (var index in selectedIndexes) {
+                              final file = imageFiles[index];
+                              
+                              if (await file.exists()) file.delete();
+                            }
+
+                            await refreshHistory();
+                            setState(() {
+                              isSelectionMode = false;
+                              selectedIndexes.clear();
+                            });
+
+                            navigator.pop();
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.red,
@@ -325,29 +304,45 @@ class FullScreenImageState extends State<FullScreenImage> {
               foregroundColor: Colors.white,
               child: Icon(
                 Icons.delete,
-                size: widget.buttonSize * 0.5,
+                size: buttonSize * 0.5,
               ),
             ),
           ),
           const SizedBox(width: 12),
 
-          SizedBox(
-            width: widget.buttonSize,
-            height: widget.buttonSize,
+          if (isSelectionMode) SizedBox(
+            width: buttonSize,
+            height: buttonSize,
             child: FloatingActionButton(
               heroTag: "Download",
               onPressed: () async {
-                saveImage(widget.file);
+                final message = ScaffoldMessenger.of(context);
+                int status = -1;
+
+                for (var index in selectedIndexes) {
+                  final file = imageFiles[index];
+                  
+                  if (await file.exists()) {
+                    status = await HistoryFunction().saveImage(file);
+                  }
+                }
+
+                HistoryFunction().showSnackBar(message, status);
+
+                setState(() {
+                  isSelectionMode = false;
+                  selectedIndexes.clear();
+                });
               },
               tooltip: "Download",
               child: Icon(
                 Icons.download,
-                size: widget.buttonSize * 0.5,
+                size: buttonSize * 0.5,
               ),
             ),
           ),
         ]
-      )
+      ),
     );
   }
 }
