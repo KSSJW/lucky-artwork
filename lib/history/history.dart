@@ -324,21 +324,38 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
                 final navigator = Navigator.of(context);
                 final message = ScaffoldMessenger.of(context);
                 int status = -1;
+                int total = selectedIndexes.length;
+                final progress = ValueNotifier<int>(0);
 
                 showDialog(
                   context: context,
                   barrierDismissible: false,
-                  builder: (_) => const Center(child: CircularProgressIndicator()),
+                  builder: (_) {
+                    return AlertDialog(
+                      title: const Text("Saving Images"),
+                      content: ValueListenableBuilder<int>(
+                        valueListenable: progress,
+                        builder: (context, current, _) {
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              LinearProgressIndicator(value: total == 0 ? 0 : current / total),
+                              Text("$current / $total"),
+                            ],
+                          );
+                        },
+                      ),
+                    );
+                  },
                 );
 
                 for (var index in selectedIndexes) {
                   final file = imageFiles[index];
                   
-                  if (await file.exists()) {
-                    status = await HistoryFunction().saveImage(file);
-                  }
+                  if (await file.exists()) status = await HistoryFunction().saveImage(file);
+                  progress.value++;
                 }
-                
+
                 navigator.pop();
                 HistoryFunction().showSnackBar(message, status);
                 

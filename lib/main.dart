@@ -176,24 +176,32 @@ class MainPageState extends State<MainPage> {
 
     if (agreed) {
       return Scaffold(
-      body: PageView(
-        controller: pageController,
-        children: [
-          Home(),
-          History(key: historyKey),
-          Setting(),
-        ],
-      ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: selectedIndex,
-        onDestinationSelected: onItemTapped,
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.home), label: "Home"),
-          NavigationDestination(icon: Icon(Icons.history), label: "History"),
-          NavigationDestination(icon: Icon(Icons.settings), label: "Setting"),
-        ],
-      ),
-    );
+        body: PageView(
+          controller: pageController,
+          onPageChanged: (index) {
+            setState(() {
+              selectedIndex = index;
+              if (index == 1) {
+                historyKey.currentState?.refreshHistory();
+              }
+            });
+          },
+          children: [
+            Home(),
+            History(key: historyKey),
+            Setting(),
+          ],
+        ),
+        bottomNavigationBar: NavigationBar(
+          selectedIndex: selectedIndex,
+          onDestinationSelected: onItemTapped,
+          destinations: const [
+            NavigationDestination(icon: Icon(Icons.home), label: "Home"),
+            NavigationDestination(icon: Icon(Icons.history), label: "History"),
+            NavigationDestination(icon: Icon(Icons.settings), label: "Setting"),
+          ],
+        ),
+      );
     } else {
       return Scaffold(
         body: Text("Initializing ..."),

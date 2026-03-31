@@ -15,4 +15,4 @@ A Flutter framework project that uses an API to get a random illustration.
 
 ## Cover Image
 
-[(Pixiv) 楽園の素敵なネコ](https://www.pixiv.net/artworks/27302543)
+[(Pixiv) 二色蓮花蝶](https://www.pixiv.net/artworks/89387820)
