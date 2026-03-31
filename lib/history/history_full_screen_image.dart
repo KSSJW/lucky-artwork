@@ -15,6 +15,7 @@ class FullScreenImage extends StatefulWidget {
 }
 
 class FullScreenImageState extends State<FullScreenImage> {
+  bool showUI = true;
 
   @override
   void initState() {
@@ -24,29 +25,36 @@ class FullScreenImageState extends State<FullScreenImage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: showUI ? AppBar(
         backgroundColor: Colors.transparent,
-      ),
+      ) : null,
       extendBodyBehindAppBar: true,
       body: FutureBuilder<Uint8List> (
         future: widget.file.readAsBytes(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return InteractiveViewer(
-              maxScale: 1024.0,
-              child: SizedBox.expand(
-                child: Image.memory(
-                  snapshot.data!,
-                  fit: BoxFit.contain,
+            return GestureDetector(
+              onTap: () {
+                setState(() {
+                  showUI = !showUI;
+                });
+              },
+              child: InteractiveViewer(
+                maxScale: 1024.0,
+                child: SizedBox.expand(
+                  child: Image.file(
+                    widget.file,
+                    fit: BoxFit.contain,
+                  ),
                 ),
-              ),
+              )
             );
           } else {
             return const Center(child: CircularProgressIndicator());
           }
         },
       ),
-      floatingActionButton: Row(
+      floatingActionButton: showUI ? Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
 
@@ -117,7 +125,8 @@ class FullScreenImageState extends State<FullScreenImage> {
             child: FloatingActionButton(
               heroTag: "Download",
               onPressed: () async {
-                HistoryFunction().saveImageAndShowPath(context, widget.file);
+                ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+                HistoryFunction().saveImageAndShowPath(widget.file, messenger);
               },
               tooltip: "Download",
               child: Icon(
@@ -127,7 +136,7 @@ class FullScreenImageState extends State<FullScreenImage> {
             ),
           ),
         ]
-      )
+      ) : null,
     );
   }
 }

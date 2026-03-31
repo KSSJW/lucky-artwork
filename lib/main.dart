@@ -83,6 +83,7 @@ class MainPageState extends State<MainPage> {
   bool checked = false;
   bool agreed = false;
   int selectedIndex = 0;
+  final PageController pageController = PageController();
 
   Future<void> checkAgreement() async {
     final prefs = await SharedPreferences.getInstance();
@@ -144,6 +145,11 @@ class MainPageState extends State<MainPage> {
         historyKey.currentState?.refreshHistory();
       }
     });
+    pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
   }
 
   final GlobalKey<HistoryState> historyKey = GlobalKey();
@@ -170,29 +176,24 @@ class MainPageState extends State<MainPage> {
 
     if (agreed) {
       return Scaffold(
-        body: IndexedStack(
-          index: selectedIndex,
-          children: pages,
-        ),
-        bottomNavigationBar: NavigationBar(
-          selectedIndex: selectedIndex,
-          onDestinationSelected: onItemTapped,
-          destinations: [
-            NavigationDestination(
-              icon: Icon(Icons.home),
-              label: "Home"
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.history),
-              label: "History"
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.settings),
-              label: "Setting"
-            ),
-          ],
-        ),
-      ); 
+      body: PageView(
+        controller: pageController,
+        children: [
+          Home(),
+          History(key: historyKey),
+          Setting(),
+        ],
+      ),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: selectedIndex,
+        onDestinationSelected: onItemTapped,
+        destinations: const [
+          NavigationDestination(icon: Icon(Icons.home), label: "Home"),
+          NavigationDestination(icon: Icon(Icons.history), label: "History"),
+          NavigationDestination(icon: Icon(Icons.settings), label: "Setting"),
+        ],
+      ),
+    );
     } else {
       return Scaffold(
         body: Text("Initializing ..."),

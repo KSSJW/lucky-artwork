@@ -13,7 +13,7 @@ class History extends StatefulWidget {
   State<History> createState() => HistoryState();
 }
 
-class HistoryState extends State<History> {
+class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
   bool enabledCacheAndHistory= true;
   List<File> imageFiles = [];
   bool isSelectionMode = false;
@@ -58,6 +58,9 @@ class HistoryState extends State<History> {
   }
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   void initState() {
     super.initState();
     loadConfig();
@@ -66,6 +69,8 @@ class HistoryState extends State<History> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     bool isDark = Theme.of(context).brightness == Brightness.dark;
 
     if (!enabledCacheAndHistory) {
@@ -316,8 +321,15 @@ class HistoryState extends State<History> {
             child: FloatingActionButton(
               heroTag: "Download",
               onPressed: () async {
+                final navigator = Navigator.of(context);
                 final message = ScaffoldMessenger.of(context);
                 int status = -1;
+
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (_) => const Center(child: CircularProgressIndicator()),
+                );
 
                 for (var index in selectedIndexes) {
                   final file = imageFiles[index];
@@ -326,9 +338,10 @@ class HistoryState extends State<History> {
                     status = await HistoryFunction().saveImage(file);
                   }
                 }
-
+                
+                navigator.pop();
                 HistoryFunction().showSnackBar(message, status);
-
+                
                 setState(() {
                   isSelectionMode = false;
                   selectedIndexes.clear();

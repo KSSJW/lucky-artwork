@@ -3,9 +3,8 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:lucky_artwork/home/home_full_screen_image.dart';
+import 'package:lucky_artwork/home/home_funcion.dart';
 import 'package:lucky_artwork/util/function_util.dart';
 
 class Home extends StatefulWidget {
@@ -15,7 +14,7 @@ class Home extends StatefulWidget {
   State<Home> createState() => HomeState();
 }
 
-class HomeState extends State<Home> with RouteAware {
+class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   late Future futureResponse;
   Uint8List? bytes;
   late Stopwatch stopwatch;
@@ -74,55 +73,8 @@ class HomeState extends State<Home> with RouteAware {
     await file.writeAsBytes(response.bodyBytes);
   }
 
-  Future<void> saveImage(http.Response response) async {
-    final contentType = response.headers['content-type'];
-    String extension = FunctionUtilOfStorage().getExtensionOfContentType(contentType);
-    final messenger = ScaffoldMessenger.of(context);
-    
-    if (Platform.isLinux) {
-      final dir = await getDownloadsDirectory();
-
-      if (dir == null) {
-        messenger.showSnackBar(
-          SnackBar(content: Text("Failed to save image")),
-        );
-
-        return;
-      }
-
-      final file = File("${dir.path}/image_${DateTime.now().millisecondsSinceEpoch}.$extension");
-      await file.writeAsBytes(response.bodyBytes);
-      messenger.showSnackBar(
-        SnackBar(content: Text("Image saved to: ${file.path}")),
-      );
-
-      return;
-    }
-
-    if (Platform.isAndroid) {
-      Map<Permission, PermissionStatus> statuses = await FunctionUtilOfStorage().requestImagePermissionsPnAndroid();
-
-      if (statuses[Permission.storage]!.isGranted || statuses[Permission.photos]!.isGranted) {
-        final result = await ImageGallerySaverPlus.saveImage(
-          response.bodyBytes,
-          quality: 100,
-          name: "image_${DateTime.now().millisecondsSinceEpoch}.$extension"
-        );
-
-        if (result['isSuccess']) {
-          messenger.showSnackBar(
-            SnackBar(content: Text("Image saved to: /Pictures")),
-          );
-        } else {
-          messenger.showSnackBar(
-            const SnackBar(content: Text("Failed to save image")),
-          );
-        }
-
-        return;
-      }
-    }
-  }
+  @override
+  bool get wantKeepAlive => true;
   
   @override
   void initState() {
@@ -133,6 +85,8 @@ class HomeState extends State<Home> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+    
     return Scaffold(
       appBar: AppBar(title: const Text("Lucky Artwork")),
       body: FutureBuilder(
@@ -154,7 +108,7 @@ class HomeState extends State<Home> with RouteAware {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => FullScreenImage(bytes: bytes!, buttonSize: buttonSize),
+                        builder: (_) => FullScreenImage(bytes: bytes!, futureResponse: futureResponse, buttonSize: buttonSize),
                       ),
                     );
                   },
@@ -202,7 +156,8 @@ class HomeState extends State<Home> with RouteAware {
             child: FloatingActionButton(
               heroTag: "Download",
               onPressed: () async {
-                saveImage(await futureResponse);
+                ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+                HomeFuncion().saveImageAndShowPath(await futureResponse, messenger);
               },
               tooltip: "Download",
               child: Icon(
@@ -231,42 +186,6 @@ class HomeState extends State<Home> with RouteAware {
             ),
           ),          
         ],
-      ),
-    );
-  }
-}
-
-class FullScreenImage extends StatefulWidget {
-  final Uint8List? bytes;
-  final double buttonSize;
-
-  const FullScreenImage({super.key, required this.bytes, required this.buttonSize});
-
-  @override
-  State<FullScreenImage> createState() => FullScreenImageState();
-}
-
-class FullScreenImageState extends State<FullScreenImage> {
-  
-  @override
-  Widget build(BuildContext context) {
-    final bytes = widget.bytes;
-
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-      ),
-      extendBodyBehindAppBar: true,
-      body: bytes == null ? const Center(
-        child: CircularProgressIndicator()
-      ) : InteractiveViewer(
-        maxScale: 1024.0,
-        child: SizedBox.expand(
-          child: Image.memory(
-            bytes,
-            fit: BoxFit.contain,
-          ),
-        ),
       ),
     );
   }

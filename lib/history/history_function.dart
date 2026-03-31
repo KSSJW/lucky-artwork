@@ -49,34 +49,7 @@ class HistoryFunction {
     return -1; // Fallback
   }
 
-  void showSnackBar(ScaffoldMessengerState message, int status) {
-    switch (status) {
-      case 1:
-        if (Platform.isLinux) {
-          message.showSnackBar(
-            SnackBar(content: Text("Images saved to: /Downloads")),
-          );
-        }
-        if (Platform.isAndroid) {
-          message.showSnackBar(
-            SnackBar(content: Text("Images saved to: /Pictures")),
-          );
-        }
-        break;
-
-      case -1:
-        message.showSnackBar(
-          SnackBar(content: Text("Failed to save images")),
-        );
-        break;
-
-      default:
-        break;
-    }
-  }
-
-  Future<void> saveImageAndShowPath(BuildContext context, File file) async {
-    final messenger = ScaffoldMessenger.of(context);
+  Future<void> saveImageAndShowPath(File file, ScaffoldMessengerState messenger) async {
     
     if (Platform.isLinux) {
       final dir = await getDownloadsDirectory();
@@ -126,6 +99,32 @@ class HistoryFunction {
       }
 
       return;
+    }
+  }
+
+  void showSnackBar(ScaffoldMessengerState message, int status) {
+    switch (status) {
+      case 1:
+        if (Platform.isLinux) {
+          message.showSnackBar(
+            SnackBar(content: Text("Images saved to: /Downloads")),
+          );
+        }
+        if (Platform.isAndroid) {
+          message.showSnackBar(
+            SnackBar(content: Text("Images saved to: /Pictures")),
+          );
+        }
+        break;
+
+      case -1:
+        message.showSnackBar(
+          SnackBar(content: Text("Failed to save images")),
+        );
+        break;
+
+      default:
+        break;
     }
   }
 }
