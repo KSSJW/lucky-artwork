@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucky_artwork/setting/api/api_setting_function.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiSettingPage extends StatefulWidget {
@@ -36,16 +37,6 @@ class ApiSettingPageState extends State<ApiSettingPage> {
     });
   }
 
-  Future<void> saveApi(String api) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString("api_url", api);
-  }
-
-  Future<void> saveCustomApis() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setStringList("custom_apis", customApis);
-  }
-
   void addCustomApi() {
     final newApi = _controller.text.trim();
     if (newApi.isNotEmpty &&
@@ -54,7 +45,7 @@ class ApiSettingPageState extends State<ApiSettingPage> {
       setState(() {
         customApis.add(newApi);
       });
-      saveCustomApis();
+      ApiSettingFunction.config.saveCustomApis(customApis);
     }
   }
 
@@ -62,7 +53,7 @@ class ApiSettingPageState extends State<ApiSettingPage> {
     setState(() {
       customApis.remove(api);
     });
-    saveCustomApis();
+    ApiSettingFunction.config.saveCustomApis(customApis);
   }
 
   @override
@@ -100,7 +91,7 @@ class ApiSettingPageState extends State<ApiSettingPage> {
                         selectedApi = value!;
                         _controller.text = value;
                       });
-                      saveApi(value!);
+                      ApiSettingFunction.config.saveApi(value!);
                     },
                     child: Radio<String>(value: api),
                   ),
@@ -110,6 +101,13 @@ class ApiSettingPageState extends State<ApiSettingPage> {
                         icon: const Icon(Icons.delete, color: Colors.red),
                         onPressed: () => removeCustomApi(api),
                       ),
+                  onTap: () {
+                    setState(() {
+                      selectedApi = api;
+                      _controller.text = api;
+                    });
+                    ApiSettingFunction.config.saveApi(api);
+                  },
                 );
               },
             ),
@@ -127,8 +125,8 @@ class ApiSettingPageState extends State<ApiSettingPage> {
                 customApi.isNotEmpty) {
               addCustomApi();
             }
-            saveApi(chosenApi);
-            Navigator.pop(context, chosenApi);
+            ApiSettingFunction.config.saveApi(chosenApi);
+            Navigator.pop(context);
           }
         },
         icon: const Icon(Icons.save),

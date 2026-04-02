@@ -1,6 +1,6 @@
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lucky_artwork/home/home_funcion.dart';
 
 class FullScreenImage extends StatefulWidget {
@@ -20,6 +20,8 @@ class FullScreenImageState extends State<FullScreenImage> {
   @override
   Widget build(BuildContext context) {
     final bytes = widget.bytes;
+
+    showUI ? SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge) : SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
     return Scaffold(
       appBar: showUI ? AppBar(

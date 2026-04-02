@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:lucky_artwork/history/history.dart';
 import 'package:lucky_artwork/home/home.dart';
 import 'package:lucky_artwork/setting/setting.dart';
-import 'package:lucky_artwork/user_agreement/user_agreement_context.dart';
+import 'package:lucky_artwork/util/function_util.dart';
+import 'package:lucky_artwork/util/user_agreement_util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 void main() {
   runApp(
@@ -138,6 +140,10 @@ class MainPageState extends State<MainPage> {
     }
   }
 
+  Future<void> checkWakeLock() async {
+    await FunctionUtilOfDisplay().isEnabledWakeLock() ? WakelockPlus.enable() : WakelockPlus.disable();
+  }
+
   void onItemTapped(int index) {
     setState(() {
       selectedIndex = index;
@@ -164,6 +170,7 @@ class MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     checkAgreement();
+    checkWakeLock();
   }
 
   @override

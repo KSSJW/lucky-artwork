@@ -70,6 +70,12 @@ class FunctionUtilOfDisplay {
 
     return prefs.getBool("show_exit_button") ?? false;
   }
+
+  Future<bool> isEnabledWakeLock() async {
+    var prefs = await SharedPreferences.getInstance();
+
+    return prefs.getBool("wake_lock") ?? false;
+  }
 }
 
 class FunctionUtilOfNetwork {

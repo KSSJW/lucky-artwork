@@ -1,7 +1,7 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lucky_artwork/history/history_function.dart';
 
 class FullScreenImage extends StatefulWidget {
@@ -24,6 +24,8 @@ class FullScreenImageState extends State<FullScreenImage> {
 
   @override
   Widget build(BuildContext context) {
+    showUI ? SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge) : SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+
     return Scaffold(
       appBar: showUI ? AppBar(
         backgroundColor: Colors.transparent,
