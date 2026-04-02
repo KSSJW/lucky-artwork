@@ -32,12 +32,6 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    loadConfig();
-  }
-
-  @override
   Widget build(BuildContext context) {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
 

@@ -18,11 +18,6 @@ class FullScreenImageState extends State<FullScreenImage> {
   bool showUI = true;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     showUI ? SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge) : SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
@@ -128,7 +123,7 @@ class FullScreenImageState extends State<FullScreenImage> {
               heroTag: "Download",
               onPressed: () async {
                 ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
-                HistoryFunction().saveImageAndShowPath(widget.file, messenger);
+                HistoryFunction.storage.saveImageAndShowPath(widget.file, messenger);
               },
               tooltip: "Download",
               child: Icon(

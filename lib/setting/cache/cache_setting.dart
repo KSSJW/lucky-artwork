@@ -1,9 +1,6 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:lucky_artwork/setting/cache/cache_setting_function.dart';
 import 'package:lucky_artwork/util/function_util.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class CacheSettingPage extends StatefulWidget {
   const CacheSettingPage({super.key});
@@ -17,32 +14,16 @@ class CacheSettingPageState extends State<CacheSettingPage> {
   int cacheSize = 0;
 
   Future<bool> loadConfig() async {
-    final prefs = await SharedPreferences.getInstance();
+    final result = await Future.wait([
+      FunctionUtil.config.isEnabledCacheAndHistory(),
+      CacheSettingFunction.storage.getCacheSize()
+    ]);
     setState(() {
-      enabledCacheAndHistory = prefs.getBool("enabled_cache_and_history") ?? true;
-      getCacheSize();
+      enabledCacheAndHistory = result[0] as bool;
+      cacheSize = result[1] as int;
     });
 
     return true;
-  }
-
-  void getCacheSize() async {
-    Directory cacheDir = await FunctionUtilOfStorage().getCacheDir();
-    int size = 0;
-
-    if (await cacheDir.exists()) {
-      await for (var entity in cacheDir.list(recursive: true, followLinks: false)) {
-        if (entity is File) size += await entity.length();
-      }
-    }
-
-    cacheSize = size;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    loadConfig();
   }
 
   @override
@@ -93,7 +74,7 @@ class CacheSettingPageState extends State<CacheSettingPage> {
                         title: Text("Clear Cache"),
                         trailing: Text(
                           CacheSettingFunction.util.formatBytes(cacheSize),
-                          style: TextStyle(fontSize: 16),
+                          style: TextStyle(fontSize: 16.0),
                         ),
                         onTap: () {
                           showDialog(
@@ -125,7 +106,7 @@ class CacheSettingPageState extends State<CacheSettingPage> {
                                   ),
                                   ElevatedButton(
                                     onPressed: () {
-                                      CacheSettingFunction.util.clearCache();
+                                      CacheSettingFunction.storage.clearCache();
                                       Navigator.of(context).pop();
                                     },
                                     style: ElevatedButton.styleFrom(

@@ -1,10 +1,9 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lucky_artwork/history/history_full_screen_image.dart';
 import 'package:lucky_artwork/history/history_function.dart';
 import 'package:lucky_artwork/util/function_util.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class History extends StatefulWidget {
   const History({super.key});
@@ -22,18 +21,22 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
   double imageColumns = 3.0;
 
   Future<bool> loadConfig() async {
-    final prefs = await SharedPreferences.getInstance();
+    final result = await Future.wait([
+      FunctionUtil.config.isEnabledCacheAndHistory(),
+      FunctionUtil.display.getButtonSize(),
+      FunctionUtil.display.getImageColumns()
+    ]);
     setState(() {
-      enabledCacheAndHistory = prefs.getBool("enabled_cache_and_history") ?? true;
-      buttonSize = prefs.getDouble("button_size") ?? 56.0;
-      imageColumns = prefs.getDouble("image_columns") ?? 3.0;
+      enabledCacheAndHistory = result[0] as bool;
+      buttonSize = result[1] as double;
+      imageColumns = result[2] as double;
     });
 
     return true;
   }
 
   Future<void> refreshHistory() async {
-    Directory cacheDir = await FunctionUtilOfStorage().getCacheDir();
+    Directory cacheDir = await FunctionUtil.storage.getCacheDir();
 
     if (await cacheDir.exists()) {
       final files = cacheDir
@@ -188,6 +191,7 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
                         builder: (_) => FullScreenImage(file: file, buttonSize: buttonSize),
                       ),
                     ).then((result) {
+                      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
                       if (result == null) return;
                       if (result?["toDelete"]) refreshHistory();
                     });
@@ -352,12 +356,12 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
                 for (var index in selectedIndexes) {
                   final file = imageFiles[index];
                   
-                  if (await file.exists()) status = await HistoryFunction().saveImage(file);
+                  if (await file.exists()) status = await HistoryFunction.storage.saveImage(file);
                   progress.value++;
                 }
 
                 navigator.pop();
-                HistoryFunction().showSnackBar(message, status);
+                HistoryFunction.display.showSnackBar(message, status);
                 
                 setState(() {
                   isSelectionMode = false;

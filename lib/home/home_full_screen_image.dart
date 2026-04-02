@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lucky_artwork/home/home_funcion.dart';
@@ -56,7 +55,7 @@ class FullScreenImageState extends State<FullScreenImage> {
               heroTag: "Download",
               onPressed: () async {
                 ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
-                HomeFuncion().saveImageAndShowPath(await widget.futureResponse, messenger);
+                HomeFuncion.storage.saveImageAndShowPath(await widget.futureResponse, messenger);
               },
               tooltip: "Download",
               child: Icon(

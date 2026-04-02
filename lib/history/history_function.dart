@@ -7,10 +7,12 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class HistoryFunction {
+  static Storage storage = Storage();
+  static Display display = Display();
+  static Util util = Util();
+}
 
-  String getExtension(String path) {
-    return path.substring(path.lastIndexOf('.'));
-  }
+class Storage {
 
   Future<int> saveImage(File file) async {
     if (Platform.isLinux) {
@@ -18,7 +20,7 @@ class HistoryFunction {
 
       if (dir == null) return -1;
 
-      final ext = getExtension(file.path);
+      final ext = Util().getExtension(file.path);
       final newPath = "${dir.path}/image_${DateTime.now().millisecondsSinceEpoch}$ext";
       await file.copy(newPath);
 
@@ -26,11 +28,11 @@ class HistoryFunction {
     }
 
     if (Platform.isAndroid) {
-      Map<Permission, PermissionStatus> statuses = await FunctionUtilOfStorage().requestImagePermissionsPnAndroid();
+      Map<Permission, PermissionStatus> statuses = await FunctionUtil.storage.requestImagePermissionsPnAndroid();
 
       if (statuses[Permission.storage]!.isGranted || statuses[Permission.photos]!.isGranted) {
         final bytes = await file.readAsBytes();
-        final ext = getExtension(file.path);
+        final ext = Util().getExtension(file.path);
 
         final result = await ImageGallerySaverPlus.saveImage(
           bytes,
@@ -62,7 +64,7 @@ class HistoryFunction {
         return;
       }
 
-      final ext = getExtension(file.path);
+      final ext = Util().getExtension(file.path);
       final newPath = "${dir.path}/image_${DateTime.now().millisecondsSinceEpoch}$ext";
       await file.copy(newPath);
       messenger.showSnackBar(
@@ -73,11 +75,11 @@ class HistoryFunction {
     }
 
     if (Platform.isAndroid) {
-      Map<Permission, PermissionStatus> statuses = await FunctionUtilOfStorage().requestImagePermissionsPnAndroid();
+      Map<Permission, PermissionStatus> statuses = await FunctionUtil.storage.requestImagePermissionsPnAndroid();
 
       if (statuses[Permission.storage]!.isGranted || statuses[Permission.photos]!.isGranted) {
         final bytes = await file.readAsBytes();
-        final ext = getExtension(file.path);
+        final ext = Util().getExtension(file.path);
 
         final result = await ImageGallerySaverPlus.saveImage(
           bytes,
@@ -101,6 +103,9 @@ class HistoryFunction {
       return;
     }
   }
+}
+
+class Display {
 
   void showSnackBar(ScaffoldMessengerState message, int status) {
     switch (status) {
@@ -126,5 +131,12 @@ class HistoryFunction {
       default:
         break;
     }
+  }
+}
+
+class Util {
+
+  String getExtension(String path) {
+    return path.substring(path.lastIndexOf('.'));
   }
 }

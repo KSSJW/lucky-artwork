@@ -1,7 +1,7 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:lucky_artwork/home/home_full_screen_image.dart';
 import 'package:lucky_artwork/home/home_funcion.dart';
@@ -25,9 +25,9 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
 
   Future loadConfig() async {
     final results = await Future.wait([
-      FunctionUtilOfDisplay().isEnabledExitButton(),
-      FunctionUtilOfDisplay().getButtonSize(),
-      FunctionUtilOfStorage().isEnabledCacheAndHistory(),
+      FunctionUtil.display.isEnabledExitButton(),
+      FunctionUtil.display.getButtonSize(),
+      FunctionUtil.config.isEnabledCacheAndHistory(),
     ]);
 
     setState(() {
@@ -38,9 +38,9 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   }
 
   Future fetchData() async {
-    var api = await FunctionUtilOfNetwork().getAPI();
+    var api = await FunctionUtil.network.getAPI();
 
-    if (await FunctionUtilOfDisplay().isEnabledLatency()) {
+    if (await FunctionUtil.display.isEnabledLatency()) {
       showLatency = true;
       stopwatch = Stopwatch()..start();
     } else {
@@ -54,23 +54,12 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
     if (response.statusCode == 200) {
       bytes = response.bodyBytes;
       
-      if (enabledCacheAndHistory) await cacheImage(response); // 缓存
+      if (enabledCacheAndHistory) await HomeFuncion.storage.cacheImage(response); // 缓存
 
       return response;
     } else {
       throw Exception("Get Error: ${response.statusCode}");
     }
-  }
-
-  Future<void> cacheImage(http.Response response) async {
-    final contentType = response.headers['content-type'];
-    String extension = FunctionUtilOfStorage().getExtensionOfContentType(contentType);
-    Directory cacheDir = await FunctionUtilOfStorage().getCacheDir();
-
-    if (!cacheDir.existsSync()) cacheDir.createSync(recursive: true);
-
-    final file = File("${cacheDir.path}/image_${DateTime.now().millisecondsSinceEpoch}.$extension");
-    await file.writeAsBytes(response.bodyBytes);
   }
 
   @override
@@ -110,7 +99,9 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                       MaterialPageRoute(
                         builder: (_) => FullScreenImage(bytes: bytes!, futureResponse: futureResponse, buttonSize: buttonSize),
                       ),
-                    );
+                    ).then((_) {
+                      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+                    });
                   },
                   child:  ConstrainedBox(
                     constraints: BoxConstraints(
@@ -157,7 +148,7 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
               heroTag: "Download",
               onPressed: () async {
                 ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
-                HomeFuncion().saveImageAndShowPath(await futureResponse, messenger);
+                HomeFuncion.storage.saveImageAndShowPath(await futureResponse, messenger);
               },
               tooltip: "Download",
               child: Icon(

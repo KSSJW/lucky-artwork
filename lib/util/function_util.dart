@@ -4,13 +4,23 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class FunctionUtilOfStorage {
+class FunctionUtil {
+  static Config config = Config();
+  static Storage storage = Storage();
+  static Network network = Network();
+  static Display display = Display();
+}
+
+class Config {
 
   Future<bool> isEnabledCacheAndHistory() async {
     var prefs = await SharedPreferences.getInstance();
 
     return prefs.getBool("enabled_cache_and_history") ?? true;
   }
+}
+
+class Storage {
 
   Future<Directory> getCacheDir() async {
     Directory cacheDir = await getTemporaryDirectory();
@@ -51,7 +61,16 @@ class FunctionUtilOfStorage {
   }
 }
 
-class FunctionUtilOfDisplay {
+class Network {
+
+  Future<String> getAPI() async {
+    var prefs = await SharedPreferences.getInstance();
+
+    return prefs.getString("api_url") ?? "https://manyacg.top/sese";  // Fallback
+  }
+}
+
+class Display {
 
   Future<double> getButtonSize() async {
     var prefs = await SharedPreferences.getInstance();
@@ -71,18 +90,15 @@ class FunctionUtilOfDisplay {
     return prefs.getBool("show_exit_button") ?? false;
   }
 
+  Future<double> getImageColumns() async {
+    var prefs = await SharedPreferences.getInstance();
+
+    return prefs.getDouble("image_columns") ?? 3.0;
+  }
+
   Future<bool> isEnabledWakeLock() async {
     var prefs = await SharedPreferences.getInstance();
 
     return prefs.getBool("wake_lock") ?? false;
-  }
-}
-
-class FunctionUtilOfNetwork {
-
-  Future<String> getAPI() async {
-    var prefs = await SharedPreferences.getInstance();
-
-    return prefs.getString("api_url") ?? "https://manyacg.top/sese";  // Fallback
   }
 }

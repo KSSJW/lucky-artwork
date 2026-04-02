@@ -23,11 +23,9 @@ int themeMode = 0;
 class App extends StatelessWidget {
   const App({super.key});
 
-  Future<bool> loadThemeMode() async {
+  Future<void> loadThemeMode() async {
     var prefs = await SharedPreferences.getInstance();
     themeMode = prefs.getInt("theme_mode") ?? 0;
-
-    return true;
   }
 
   ThemeMode getThemeMode() {
@@ -141,7 +139,7 @@ class MainPageState extends State<MainPage> {
   }
 
   Future<void> checkWakeLock() async {
-    await FunctionUtilOfDisplay().isEnabledWakeLock() ? WakelockPlus.enable() : WakelockPlus.disable();
+    await FunctionUtil.display.isEnabledWakeLock() ? WakelockPlus.enable() : WakelockPlus.disable();
   }
 
   void onItemTapped(int index) {
