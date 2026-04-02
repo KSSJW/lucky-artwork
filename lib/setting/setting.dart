@@ -16,7 +16,7 @@ class SettingState extends State<Setting> {
   
   TextSpan getVersion() {
     return TextSpan(
-      text: "1.3.0-beta.2",
+      text: "1.3.0-beta.3",
       style: TextStyle(
         color: Colors.orange,
       ),
@@ -97,7 +97,6 @@ class SettingState extends State<Setting> {
                   onTap: () => {
                     showDialog(
                       context: context,
-                      barrierDismissible: false,
                       builder: (context) {
                         return AlertDialog (
                           title: Text("Lucky Artwork"),

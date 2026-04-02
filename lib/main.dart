@@ -101,29 +101,34 @@ class MainPageState extends State<MainPage> {
                 child: UserAgreementContext().get(),
               ),
               actions: [
-                TextButton(
-                  onPressed: () {
-                    exit(0);
-                  },
-                  child: const Text("Disagree"),
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    final messenger = ScaffoldMessenger.of(context);
-                    await prefs.setBool("user_agreement", true);
-                    setState(() {
-                      agreed = true;
-                      checked = true;
-                      Navigator.of(context).pop();
-                    });
-                    messenger.showSnackBar(
-                      const SnackBar(content: Text("You have agreed to the User Agreement")),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.green
-                  ),
-                  child: const Text("Agree"),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        exit(0);
+                      },
+                      child: const Text("Disagree"),
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        final messenger = ScaffoldMessenger.of(context);
+                        await prefs.setBool("user_agreement", true);
+                        setState(() {
+                          agreed = true;
+                          checked = true;
+                          Navigator.of(context).pop();
+                        });
+                        messenger.showSnackBar(
+                          const SnackBar(content: Text("You have agreed to the User Agreement")),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.green
+                      ),
+                      child: const Text("Agree"),
+                    ),
+                  ],
                 ),
               ],
             );

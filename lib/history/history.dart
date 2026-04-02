@@ -184,7 +184,12 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
       ) : GridView.builder(
         controller: scrollController,
         shrinkWrap: true, // 让 GridView 自适应高度
-        padding: const EdgeInsets.fromLTRB(8, 56, 8, 0),
+        padding: EdgeInsets.only(
+          top: kToolbarHeight + MediaQuery.of(context).padding.top + 8,
+          left: 8,
+          right: 8,
+          bottom: 8,
+        ),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: imageColumns.toInt(), // 列
           crossAxisSpacing: 4,
@@ -264,7 +269,7 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
             ),
           );
         },
-      ),        
+      ),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -276,7 +281,6 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
               onPressed: () async {
                 showDialog(
                   context: context,
-                  barrierDismissible: false,
                   builder: (context) {
                     return AlertDialog(
                       title: const Text("Delete"),
@@ -295,35 +299,40 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
                         ],
                       ),
                       actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text("Cancel"),
-                        ),
-                        ElevatedButton(
-                          onPressed: () async {
-                            final navigator = Navigator.of(context);
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text("Cancel"),
+                            ),
+                            ElevatedButton(
+                              onPressed: () async {
+                                final navigator = Navigator.of(context);
 
-                            for (var index in selectedIndexes) {
-                              final file = imageFiles[index];
-                              
-                              if (await file.exists()) file.delete();
-                            }
+                                for (var index in selectedIndexes) {
+                                  final file = imageFiles[index];
+                                  
+                                  if (await file.exists()) file.delete();
+                                }
 
-                            await refreshHistory();
-                            setState(() {
-                              isSelectionMode = false;
-                              selectedIndexes.clear();
-                            });
+                                await refreshHistory();
+                                setState(() {
+                                  isSelectionMode = false;
+                                  selectedIndexes.clear();
+                                });
 
-                            navigator.pop();
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red,
-                            foregroundColor: Colors.white,
-                          ),
-                          child: const Text("Delete"),
+                                navigator.pop();
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red,
+                                foregroundColor: Colors.white,
+                              ),
+                              child: const Text("Delete"),
+                            ),
+                          ],
                         ),
                       ],
                     );

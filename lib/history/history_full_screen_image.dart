@@ -63,7 +63,6 @@ class FullScreenImageState extends State<FullScreenImage> {
               onPressed: () async {
                 showDialog(
                   context: context,
-                  barrierDismissible: false,
                   builder: (context) {
                     return AlertDialog(
                       title: const Text("Delete"),
@@ -82,23 +81,28 @@ class FullScreenImageState extends State<FullScreenImage> {
                         ],
                       ),
                       actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text("Cancel"),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            widget.file.delete();
-                            Navigator.of(context).pop();
-                            Navigator.of(context).pop({"toDelete": true});
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red,
-                            foregroundColor: Colors.white,
-                          ),
-                          child: const Text("Delete"),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text("Cancel"),
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  widget.file.delete();
+                                  Navigator.of(context).pop();
+                                  Navigator.of(context).pop({"toDelete": true});
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red,
+                                  foregroundColor: Colors.white,
+                                ),
+                                child: const Text("Delete"),
+                              ),
+                          ],
                         ),
                       ],
                     );

@@ -79,7 +79,6 @@ class CacheSettingPageState extends State<CacheSettingPage> {
                         onTap: () {
                           showDialog(
                             context: context,
-                            barrierDismissible: false,
                             builder: (context) {
                               return AlertDialog(
                                 title: const Text("Clear Cache"),
@@ -98,22 +97,27 @@ class CacheSettingPageState extends State<CacheSettingPage> {
                                   ],
                                 ),
                                 actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: const Text("Cancel"),
-                                  ),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      CacheSettingFunction.storage.clearCache();
-                                      Navigator.of(context).pop();
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.red,
-                                      foregroundColor: Colors.white,
-                                    ),
-                                    child: const Text("Clear"),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text("Cancel"),
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          CacheSettingFunction.storage.clearCache();
+                                          Navigator.of(context).pop();
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.red,
+                                          foregroundColor: Colors.white,
+                                        ),
+                                        child: const Text("Clear"),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               );

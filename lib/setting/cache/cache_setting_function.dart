@@ -58,7 +58,6 @@ class Item {
           onPressed: () {
             showDialog(
               context: context,
-              barrierDismissible: false,
               builder: (context) {
                 return AlertDialog(
                   title: const Text("Restart"),
@@ -79,21 +78,26 @@ class Item {
                     ],
                   ),
                   actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text("Cancel"),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Phoenix.rebirth(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.orange,
-                        foregroundColor: Colors.white,
-                      ),
-                      child: const Text("Restart"),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text("Cancel"),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Phoenix.rebirth(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.orange,
+                            foregroundColor: Colors.white,
+                          ),
+                          child: const Text("Restart"),
+                        ),
+                      ],
                     ),
                   ],
                 );
