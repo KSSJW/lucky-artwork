@@ -20,6 +20,10 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
   double buttonSize= 56.0;
   double imageColumns = 3.0;
 
+  ScrollController scrollController = ScrollController();
+  int pageSize = 50;
+  int currentMax = 50;
+
   Future<bool> loadConfig() async {
     final result = await Future.wait([
       FunctionUtil.config.isEnabledCacheAndHistory(),
@@ -66,8 +70,15 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
   @override
   void initState() {
     super.initState();
-    loadConfig();
     refreshHistory();
+    scrollController.addListener(() {
+      if (scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent) {
+        setState(() {
+          currentMax += pageSize;
+        });
+      }
+    });
   }
 
   @override
@@ -75,6 +86,21 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
     super.build(context);
 
     bool isDark = Theme.of(context).brightness == Brightness.dark;
+
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    double itemSize = screenWidth / imageColumns; // 每个正方形格子的边长
+
+    int rowsPerPage = (screenHeight ~/ itemSize); // 显示行数
+    
+    int pageSize = (rowsPerPage * imageColumns.toInt() * 1.5).toInt();  // 每页数量
+
+    // 如果计算结果和当前不一致，就更新
+    if (pageSize != pageSize) {
+      pageSize = pageSize;
+      currentMax = pageSize;
+    }
 
     if (!enabledCacheAndHistory) {
       return Scaffold(
@@ -155,94 +181,90 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
       extendBodyBehindAppBar: true,
       body: imageFiles.isEmpty ? const Center(
         child: Text("No History")
-      ) : ListView(
-        children: [
-          GridView.builder(
-            shrinkWrap: true, // 让 GridView 自适应高度
-            physics: const NeverScrollableScrollPhysics(),  // 禁止 GridView 自己滚动
-            padding: const EdgeInsets.all(8),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: imageColumns.toInt(), // 列
-              crossAxisSpacing: 4,
-              mainAxisSpacing: 4,
-            ),
-            itemCount: imageFiles.length,
-            itemBuilder: (context, index) {
-              final file = imageFiles[index];
-              final isSelected = selectedIndexes.contains(index);
+      ) : GridView.builder(
+        controller: scrollController,
+        shrinkWrap: true, // 让 GridView 自适应高度
+        padding: const EdgeInsets.fromLTRB(8, 56, 8, 0),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: imageColumns.toInt(), // 列
+          crossAxisSpacing: 4,
+          mainAxisSpacing: 4,
+        ),
+        itemCount: (currentMax < imageFiles.length) ? currentMax : imageFiles.length,
+        itemBuilder: (context, index) {
+          final file = imageFiles[index];
+          final isSelected = selectedIndexes.contains(index);
 
-              return GestureDetector(
-                onTap: () {
-                  if (isSelectionMode) {
+          return GestureDetector(
+            onTap: () {
+              if (isSelectionMode) {
 
-                    if (isSelected) {
-                      setState(() {
-                        selectedIndexes.remove(index);
-                      });
-                    } else {
-                      setState(() {
-                        selectedIndexes.add(index);
-                      });
-                    }
-                  } else {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => FullScreenImage(file: file, buttonSize: buttonSize),
-                      ),
-                    ).then((result) {
-                      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-                      if (result == null) return;
-                      if (result?["toDelete"]) refreshHistory();
-                    });
-                  }
-                },
-                child: FutureBuilder<Uint8List>(
-                  future: file.readAsBytes(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return Stack(
-                        children: [
-                          AspectRatio(
-                            aspectRatio: 1, // 正方形格子
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: Image.file(file, fit: BoxFit.cover),
-                            ),
-                          ),
-
-                          if (isSelectionMode && isSelected)
-                          Positioned.fill(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.transparent.withAlpha(100),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                          ),
-
-                          if (isSelectionMode) Positioned(
-                            top: 4,
-                            right: 4,
-                            child: Icon(
-                              isSelected
-                                ? Icons.check_circle // 已选中时显示实心圆圈
-                                : Icons.radio_button_unchecked, // 未选中时显示空心圆圈
-                              color: isSelected ? Colors.blue : Colors.grey,
-                            ),
-                          ),
-                        ],
-                      );
-                    } else {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                  },
-                ),
-              );
+                if (isSelected) {
+                  setState(() {
+                    selectedIndexes.remove(index);
+                  });
+                } else {
+                  setState(() {
+                    selectedIndexes.add(index);
+                  });
+                }
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => FullScreenImage(file: file, buttonSize: buttonSize),
+                  ),
+                ).then((result) {
+                  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+                  if (result == null) return;
+                  if (result?["toDelete"]) refreshHistory();
+                });
+              }
             },
-          ),
-        ],
-      ),
+            child: FutureBuilder(
+              future: loadConfig(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Stack(
+                    children: [
+                      AspectRatio(
+                        aspectRatio: 1, // 正方形格子
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.file(file, fit: BoxFit.cover),
+                        ),
+                      ),
+
+                      if (isSelectionMode && isSelected)
+                      Positioned.fill(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.transparent.withAlpha(100),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                      ),
+
+                      if (isSelectionMode) Positioned(
+                        top: 4,
+                        right: 4,
+                        child: Icon(
+                          isSelected
+                            ? Icons.check_circle // 已选中时显示实心圆圈
+                            : Icons.radio_button_unchecked, // 未选中时显示空心圆圈
+                          color: isSelected ? Colors.blue : Colors.grey,
+                        ),
+                      ),
+                    ],
+                  );
+                } else {
+                  return const Center(child: CircularProgressIndicator());
+                }
+              },
+            ),
+          );
+        },
+      ),        
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
