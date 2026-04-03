@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:lucky_artwork/home/home_full_screen_image.dart';
 import 'package:lucky_artwork/home/home_funcion.dart';
@@ -18,6 +19,8 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   late Future futureResponse;
   Uint8List? bytes;
   late Stopwatch stopwatch;
+  bool imageLoading = false;
+
   bool showExitButton = false;
   double buttonSize = 56.0;
   bool enabledCacheAndHistory = true;
@@ -38,27 +41,36 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   }
 
   Future fetchData() async {
-    var api = await FunctionUtil.network.getAPI();
+    setState(() => imageLoading = true);
 
-    if (await FunctionUtil.display.isEnabledLatency()) {
-      showLatency = true;
-      stopwatch = Stopwatch()..start();
-    } else {
-      showLatency = false;
-    }
+    try {
+      var api = await FunctionUtil.network.getAPI();
 
-    final response = await http.get(Uri.parse(api));
+      if (await FunctionUtil.display.isEnabledLatency()) {
+        showLatency = true;
+        stopwatch = Stopwatch()..start();
+      } else {
+        showLatency = false;
+      }
 
-    if (showLatency) stopwatch.stop();
+      final response = await http.get(Uri.parse(api));
 
-    if (response.statusCode == 200) {
-      bytes = response.bodyBytes;
-      
-      if (enabledCacheAndHistory) await HomeFuncion.storage.cacheImage(response); // 缓存
+      if (showLatency) stopwatch.stop();
 
-      return response;
-    } else {
-      throw Exception("Get Error: ${response.statusCode}");
+      if (response.statusCode == 200) {
+        bytes = response.bodyBytes;
+        
+        if (enabledCacheAndHistory) await HomeFuncion.storage.cacheImage(response); // 缓存
+
+        setState(() => imageLoading = false);
+
+        return response;
+      } else {
+        setState(() => imageLoading = false);
+      }
+    } catch (e) {
+      setState(() => imageLoading = false);
+      throw Exception(e);
     }
   }
 
@@ -75,6 +87,8 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
     
     return Scaffold(
       appBar: AppBar(title: const Text("Lucky Artwork")),
@@ -83,15 +97,42 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
         builder: (context, snapshot) {
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator()); // 加载中
+            return Center(
+              child: SpinKitSquareCircle(
+                color: isDark ? Colors.white : Colors.blueGrey,
+                duration : const Duration(milliseconds: 600),
+              ),
+            ); // 加载中
           } else if (snapshot.hasError) {
-            return Center(child: Text("Error: ${snapshot.error}")); // 错误提示
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.error_outline,
+                    size: 80,
+                  ),
+                  SizedBox(height: 16),
+                  Text("${snapshot.error}")
+                ],
+              ),
+            ); // 错误提示
           } else if (snapshot.hasData) {            
             return ListView(
               padding: const EdgeInsets.all(16),
               children: [
-                if (showLatency) Text("Latency: ${stopwatch.elapsedMilliseconds} ms"),
+                if (showLatency) Row(
+                  children: [
+                    Icon(
+                      Icons.network_check,
+                      color: stopwatch.elapsedMilliseconds < 3000 ? Colors.green : Colors.orange,
+                    ),
+                    SizedBox(width: 6),
+                    Text("${stopwatch.elapsedMilliseconds} ms"),
+                  ],
+                ),
                 SizedBox(height: 6),
+
                 GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -116,7 +157,19 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
               ],
             );
           } else {
-            return const Center(child: Text("No Data"));
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.error_outline,
+                    size: 80,
+                  ),
+                  SizedBox(height: 16),
+                  Text("No Data")
+                ],
+              ),
+            );
           }
         },
       ),
@@ -162,7 +215,16 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
           SizedBox(
             width: buttonSize,
             height: buttonSize,
-            child: FloatingActionButton(
+            child: imageLoading ? FloatingActionButton(
+              heroTag: "Loading",
+              onPressed: () {},
+              tooltip: "Loading",
+              child: SizedBox(
+                width: buttonSize * 0.5,
+                height: buttonSize * 0.5,
+                child: CircularProgressIndicator(),
+              ),
+            ) : FloatingActionButton(
               heroTag: "Next",
               onPressed: () {
                 setState(() {
