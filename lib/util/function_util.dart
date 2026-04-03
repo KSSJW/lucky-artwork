@@ -72,6 +72,18 @@ class Network {
 
 class Display {
 
+  Future<int> getNavigationBarStyle() async {
+    var prefs = await SharedPreferences.getInstance();
+
+    return prefs.getInt("navigation_bar_style") ?? 0;
+  }
+
+  Future<bool> isEnabledWakeLock() async {
+    var prefs = await SharedPreferences.getInstance();
+
+    return prefs.getBool("wake_lock") ?? false;
+  }
+
   Future<double> getButtonSize() async {
     var prefs = await SharedPreferences.getInstance();
 
@@ -94,11 +106,5 @@ class Display {
     var prefs = await SharedPreferences.getInstance();
 
     return prefs.getDouble("image_columns") ?? 3.0;
-  }
-
-  Future<bool> isEnabledWakeLock() async {
-    var prefs = await SharedPreferences.getInstance();
-
-    return prefs.getBool("wake_lock") ?? false;
   }
 }

@@ -11,20 +11,22 @@ class DisplaySettingPage extends StatefulWidget {
 
 class DisplaySettingPageState extends State<DisplaySettingPage> {
   int themeMode = 0;
+  int navigationBarStyle = 0;
+  bool wakeLock = false;
+  double buttonSize = 56.0;
   bool showLatency = true;
   bool showExitButton = false;
-  double buttonSize = 56.0;
-  bool wakeLock = false;
   double imageColumns = 3;
 
   Future<bool> loadConfig() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       themeMode = prefs.getInt("theme_mode") ?? 0;
+      navigationBarStyle = prefs.getInt("navigation_bar_style") ?? 0;
+      wakeLock = prefs.getBool("wake_lock") ?? false;
+      buttonSize = prefs.getDouble("button_size") ?? 56.0;
       showLatency = prefs.getBool("show_latency") ?? true;
       showExitButton = prefs.getBool("show_exit_button") ?? false;
-      buttonSize = prefs.getDouble("button_size") ?? 56.0;
-      wakeLock = prefs.getBool("wake_lock") ?? false;
       imageColumns = prefs.getDouble("image_columns") ?? 3;
     });
 
@@ -59,7 +61,7 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
                   children: [
                     SizedBox(width: 20),
                     Text(
-                      "Home",
+                      "Global",
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -117,7 +119,95 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
                         ),
                       ),
                       Divider(),
+                      ListTile(
+                        title: Text("Navigation Bar Style"),
+                        leading: Icon(Icons.style),
+                      ),
+                      SizedBox(height: 8),
+                      SegmentedButton(
+                        segments: [
+                          ButtonSegment(
+                            value: 0,
+                            label: Text("Bottom"),
+                          ),
+                          ButtonSegment(
+                            value: 1,
+                            label: Text("Left"),
+                          ),
+                        ],
+                        selected: {
+                          navigationBarStyle,
+                        },
+                        onSelectionChanged: (newSelection) {
+                          setState(() {
+                            navigationBarStyle = newSelection.first;
+                          });
+                          DisplaySettingFunction.config.saveNavigationBarStyle(newSelection.first);
+                        },
+                      ),
+                      SizedBox(height: 16),
+                      Divider(),
+                      SwitchListTile(
+                        title: Text("Wake Lock"),
+                        secondary: Icon(Icons.lightbulb),
+                        value: wakeLock,
+                        onChanged: (value) {
+                          setState(() {
+                            wakeLock = value;
+                            DisplaySettingFunction.config.saveWakeLock(value);
+                          });
+                        },
+                      ),
+                      Divider(),
+                      ListTile(
+                        title: Text("Button Size"),
+                        leading: Icon(Icons.open_in_full),
+                        trailing: Text(
+                          buttonSize.toString(),
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      Slider(
+                        value: buttonSize,
+                        min: 28.0,
+                        max: 112.0,
+                        divisions: 84,
+                        label: buttonSize.toString(),
+                        onChanged: (value) {
+                          setState(() {
+                            buttonSize = value;
+                            DisplaySettingFunction.config.saveButtonSize(value);
+                          });
+                        },
+                      ),
+                      SizedBox(height: 8),
+                    ],
+                  ),
+                ),
 
+                SizedBox(height: 16),
+
+                Row(
+                  children: [
+                    SizedBox(width: 20),
+                    Text(
+                      "Home",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+
+                Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Column(
+                    children: [
+
+                      SizedBox(height: 8),
                       SwitchListTile(
                         title: Text("Show Latency"),
                         secondary: Icon(Icons.network_check),
@@ -148,6 +238,7 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
                 ),
 
                 SizedBox(height: 16),
+                
                 Row(
                   children: [
                     SizedBox(width: 20),
@@ -187,67 +278,6 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
                           setState(() {
                             imageColumns = value;
                             DisplaySettingFunction.config.saveImageColumns(value);
-                          });
-                        },
-                      ),
-                      SizedBox(height: 8),
-                    ],
-                  ),
-                ),
-
-                SizedBox(height: 16),
-                Row(
-                  children: [
-                    SizedBox(width: 20),
-                    Text(
-                      "Global",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Column(
-                    children: [
-
-                      SizedBox(height: 8),
-                      SwitchListTile(
-                        title: Text("Wake Lock"),
-                        secondary: Icon(Icons.lightbulb),
-                        value: wakeLock,
-                        onChanged: (value) {
-                          setState(() {
-                            wakeLock = value;
-                            DisplaySettingFunction.config.saveWakeLock(value);
-                          });
-                        },
-                      ),
-                      Divider(),
-
-                      ListTile(
-                        title: Text("Button Size"),
-                        leading: Icon(Icons.open_in_full),
-                        trailing: Text(
-                          buttonSize.toString(),
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ),
-                      Slider(
-                        value: buttonSize,
-                        min: 28.0,
-                        max: 112.0,
-                        divisions: 84,
-                        label: buttonSize.toString(),
-                        onChanged: (value) {
-                          setState(() {
-                            buttonSize = value;
-                            DisplaySettingFunction.config.saveButtonSize(value);
                           });
                         },
                       ),

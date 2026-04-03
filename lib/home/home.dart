@@ -62,14 +62,20 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
         
         if (enabledCacheAndHistory) await HomeFuncion.storage.cacheImage(response); // 缓存
 
-        setState(() => imageLoading = false);
+        setState(() {
+          imageLoading = false;
+        });
 
         return response;
       } else {
-        setState(() => imageLoading = false);
+        setState(() {
+          imageLoading = false;
+        });
       }
     } catch (e) {
-      setState(() => imageLoading = false);
+      setState(() {
+        imageLoading = false;
+      });
       throw Exception(e);
     }
   }
@@ -200,6 +206,8 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
             child: FloatingActionButton(
               heroTag: "Download",
               onPressed: () async {
+                if (imageLoading) return;
+
                 ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
                 HomeFuncion.storage.saveImageAndShowPath(await futureResponse, messenger);
               },

@@ -82,6 +82,8 @@ class MainPage extends StatefulWidget {
 class MainPageState extends State<MainPage> {
   bool checked = false;
   bool agreed = false;
+  int navigationBarStyle = 0;
+
   int selectedIndex = 0;
   final PageController pageController = PageController();
 
@@ -143,6 +145,10 @@ class MainPageState extends State<MainPage> {
     }
   }
 
+  Future<void> loadNavigationBarStyle() async {
+    navigationBarStyle = await FunctionUtil.display.getNavigationBarStyle();
+  }
+
   Future<void> checkWakeLock() async {
     await FunctionUtil.display.isEnabledWakeLock() ? WakelockPlus.enable() : WakelockPlus.disable();
   }
@@ -173,6 +179,7 @@ class MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     checkAgreement();
+    loadNavigationBarStyle();
     checkWakeLock();
   }
 
@@ -185,32 +192,100 @@ class MainPageState extends State<MainPage> {
     }
 
     if (agreed) {
+
+      // 底部导航栏
+      if (navigationBarStyle == 0) {
+        return Scaffold(
+          body: PageView(
+            controller: pageController,
+            onPageChanged: (index) {
+              setState(() {
+                selectedIndex = index;
+                if (index == 1) {
+                  historyKey.currentState?.refreshHistory();
+                }
+              });
+            },
+            children: [
+              Home(),
+              History(key: historyKey),
+              Setting(),
+            ],
+          ),
+          bottomNavigationBar: NavigationBar(
+            selectedIndex: selectedIndex,
+            onDestinationSelected: onItemTapped,
+            destinations: const [
+              NavigationDestination(icon: Icon(Icons.home), label: "Home"),
+              NavigationDestination(icon: Icon(Icons.history), label: "History"),
+              NavigationDestination(icon: Icon(Icons.settings), label: "Setting"),
+            ],
+          ),
+        );
+      }
+
+      // 左侧导航栏
+      if (navigationBarStyle == 1) {
+        return Scaffold(
+          body: Row(
+            children: [
+              NavigationRail(
+                selectedIndex: selectedIndex,
+                onDestinationSelected: onItemTapped,
+                labelType: NavigationRailLabelType.all,
+                destinations: [
+                  NavigationRailDestination(
+                    padding: EdgeInsets.symmetric(vertical: 12),
+                    icon: Icon(Icons.home),
+                    label: Text("Home"),
+                  ),
+                  NavigationRailDestination(
+                    padding: EdgeInsets.symmetric(vertical: 12),
+                    icon: Icon(Icons.history),
+                    label: Text("History"),
+                  ),
+                  NavigationRailDestination(
+                    padding: EdgeInsets.symmetric(vertical: 12),
+                    icon: Icon(Icons.settings),
+                    label: Text("Setting"),
+                  ),
+                ],
+              ),
+
+              // 主内容区域
+              Expanded(
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: PageView(
+                        scrollDirection: Axis.vertical,
+                        controller: pageController,
+                        onPageChanged: (index) {
+                          setState(() {
+                            selectedIndex = index;
+                            if (index == 1) {
+                              historyKey.currentState?.refreshHistory();
+                            }
+                          });
+                        },
+                        children: [
+                          Home(),
+                          History(key: historyKey),
+                          Setting(),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      }
+
+      // Fallback
       return Scaffold(
-        body: PageView(
-          controller: pageController,
-          onPageChanged: (index) {
-            setState(() {
-              selectedIndex = index;
-              if (index == 1) {
-                historyKey.currentState?.refreshHistory();
-              }
-            });
-          },
-          children: [
-            Home(),
-            History(key: historyKey),
-            Setting(),
-          ],
-        ),
-        bottomNavigationBar: NavigationBar(
-          selectedIndex: selectedIndex,
-          onDestinationSelected: onItemTapped,
-          destinations: const [
-            NavigationDestination(icon: Icon(Icons.home), label: "Home"),
-            NavigationDestination(icon: Icon(Icons.history), label: "History"),
-            NavigationDestination(icon: Icon(Icons.settings), label: "Setting"),
-          ],
-        ),
+        body: Text("NavigationBar Error"),
       );
     } else {
       return Scaffold(
