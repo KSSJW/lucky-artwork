@@ -1,8 +1,9 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart' show Phoenix;
 import 'package:lucky_artwork/setting/api/api_setting.dart';
 import 'package:lucky_artwork/setting/cache/cache_setting.dart';
 import 'package:lucky_artwork/setting/display/display_setting.dart';
+import 'package:lucky_artwork/util/function_util.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Setting extends StatefulWidget {
@@ -13,14 +14,31 @@ class Setting extends StatefulWidget {
 }
 
 class SettingState extends State<Setting> {
+  double buttonSize = 56.0;
   
   TextSpan getVersion() {
     return TextSpan(
-      text: "1.3.0-beta.6",
+      text: "1.3.0",
       style: TextStyle(
-        color: Colors.orange,
+        color: Colors.green,
       ),
     );
+  }
+
+  Future loadConfig() async {
+    final results = await Future.wait([
+      FunctionUtil.display.getButtonSize(),
+    ]);
+
+    setState(() {
+      buttonSize = results[0];
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadConfig();
   }
 
   @override
@@ -74,7 +92,7 @@ class SettingState extends State<Setting> {
                   onTap: () async {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => CacheSettingPage())
+                      MaterialPageRoute(builder: (context) => CacheSettingPage()),
                     );
                   },
                 ),
@@ -98,149 +116,7 @@ class SettingState extends State<Setting> {
                     showDialog(
                       context: context,
                       builder: (context) {
-                        return AlertDialog (
-                          title: Text("Lucky Artwork"),
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              RichText(
-                                text: TextSpan(
-                                  style: const TextStyle(color: Colors.black),
-                                  children: [
-                                    TextSpan(
-                                      text: "Version: ",
-                                      style: TextStyle(
-                                        color: isDark ? Colors.white : Colors.black
-                                      ),
-                                    ),
-                                    getVersion(),
-                                    TextSpan(text: "\n\n"),
-
-                                    TextSpan(
-                                      text: "Project: ",
-                                      style: TextStyle(
-                                        color: isDark ? Colors.white : Colors.black
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: "lucky-artwork",
-                                      style: TextStyle(
-                                        color: Colors.blue,
-                                        decoration: TextDecoration.underline,
-                                      ),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () {
-                                          launchUrl(
-                                            Uri.parse("https://github.com/KSSJW/lucky-artwork"),
-                                            mode: LaunchMode.externalApplication,
-                                          );
-                                        },
-                                    ),
-                                    TextSpan(text: "\n"),
-                                    TextSpan(
-                                      text: "Author: ",
-                                      style: TextStyle(
-                                        color: isDark ? Colors.white : Colors.black
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: "KSSJW",
-                                      style: TextStyle(
-                                        color: Colors.blue,
-                                        decoration: TextDecoration.underline,
-                                      ),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () {
-                                          launchUrl(
-                                            Uri.parse("https://github.com/KSSJW"),
-                                            mode: LaunchMode.externalApplication,
-                                          );
-                                        },
-                                    ),
-                                    TextSpan(text: "\n\n"),
-
-                                    TextSpan(
-                                      text: "Thanks to the API providers, who provided the soul of this software.",
-                                      style: TextStyle(
-                                        color: isDark ? Colors.white : Colors.black
-                                      ),
-                                    ),
-                                    TextSpan(text: "\n\n"),
-
-                                    TextSpan(
-                                      text: "ManyACG",
-                                      style: TextStyle(
-                                        color: Colors.blue,
-                                        decoration: TextDecoration.underline,
-                                      ),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () {
-                                          launchUrl(
-                                            Uri.parse("https://manyacg.top"),
-                                            mode: LaunchMode.externalApplication,
-                                          );
-                                        },
-                                    ),
-                                    TextSpan(text: "\n"),
-                                    TextSpan(
-                                      text: "ZiChenACG",
-                                      style: TextStyle(
-                                        color: Colors.blue,
-                                        decoration: TextDecoration.underline,
-                                      ),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () {
-                                          launchUrl(
-                                            Uri.parse('https://app.zichen.zone/api/acg'),
-                                            mode: LaunchMode.externalApplication,
-                                          );
-                                        },
-                                    ),
-                                    TextSpan(text: "\n"),
-                                    TextSpan(
-                                      text: "樱花二次元图片",
-                                      style: TextStyle(
-                                        color: Colors.blue,
-                                        decoration: TextDecoration.underline,
-                                      ),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () {
-                                          launchUrl(
-                                            Uri.parse('https://www.dmoe.cc'),
-                                            mode: LaunchMode.externalApplication,
-                                          );
-                                        },
-                                    ),
-                                    TextSpan(text: "\n"),
-                                    TextSpan(
-                                      text: "东方Project随机图片",
-                                      style: TextStyle(
-                                        color: Colors.blue,
-                                        decoration: TextDecoration.underline,
-                                      ),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () {
-                                          launchUrl(
-                                            Uri.parse('https://img.paulzzh.com'),
-                                            mode: LaunchMode.externalApplication,
-                                          );
-                                        },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          actions: [
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text("OK"),
-                            ),
-                          ],
-                        );
+                        return FunctionUtil.item.getInfoAlertDialog(isDark, getVersion(), Navigator.of(context));
                       },
                     )
                   },
@@ -249,8 +125,71 @@ class SettingState extends State<Setting> {
               ],
             ),
           ),
-        ]
-      )
+        ],
+      ),
+      floatingActionButton: SizedBox(
+        width: buttonSize,
+        height: buttonSize,
+        child: FloatingActionButton(
+          heroTag: null,
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: const Text("Restart"),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Are you ready to restart?"),
+                      SizedBox(height: 8),
+                      Text("Restarting will take effect immediately,"),
+                      SizedBox(height: 8),
+                      Text(
+                        "If you have disabled caching, it is recommended that you save the necessary data before restarting.",
+                        style: TextStyle(
+                          color: Colors.orange
+                        ),
+                      )
+                    ],
+                  ),
+                  actions: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text("Cancel"),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Phoenix.rebirth(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.orange,
+                            foregroundColor: Colors.white,
+                          ),
+                          child: const Text("Restart"),
+                        ),
+                      ],
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+          tooltip: "Restart",
+          backgroundColor: Colors.orange,
+          foregroundColor: Colors.white,
+          child: Icon(
+            Icons.restart_alt,
+            size: buttonSize * 0.5,
+          ),
+        ),
+      ),
     );
   }
 }

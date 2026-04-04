@@ -26,7 +26,7 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
 
   Future<bool> loadConfig() async {
     final result = await Future.wait([
-      FunctionUtil.config.isEnabledCacheAndHistory(),
+      FunctionUtil.storage.isEnabledCacheAndHistory(),
       FunctionUtil.display.getButtonSize(),
       FunctionUtil.display.getImageColumns()
     ]);
@@ -179,9 +179,19 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
         ],
       ),
       extendBodyBehindAppBar: true,
-      body: imageFiles.isEmpty ? const Center(
-        child: Text("No History")
-      ) : GridView.builder(
+      body: imageFiles.isEmpty ? Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.history_toggle_off,
+                size: 80,
+              ),
+              SizedBox(height: 16),
+              Text("No History"),
+            ],
+          ),
+        ) : GridView.builder(
         controller: scrollController,
         shrinkWrap: true, // 让 GridView 自适应高度
         padding: EdgeInsets.only(

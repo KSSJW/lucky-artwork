@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucky_artwork/setting/display/display_setting_function.dart';
+import 'package:lucky_artwork/util/function_util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DisplaySettingPage extends StatefulWidget {
@@ -214,7 +215,7 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
                       SizedBox(height: 8),
                       SwitchListTile(
                         title: Text("Show Latency"),
-                        secondary: Icon(Icons.network_check),
+                        secondary: Icon(Icons.speed),
                         value: showLatency,
                         onChanged: (value) {
                           setState(() {
@@ -296,7 +297,7 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
                 SizedBox(height: 100)
               ],
             ),
-            floatingActionButton: DisplaySettingFunction.item.getFloatingActionButton(context),
+            floatingActionButton: FunctionUtil.item.getRestartFloatingActionButton(context),
           );
         }
       },

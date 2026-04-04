@@ -5,7 +5,7 @@ import 'package:lucky_artwork/history/history.dart';
 import 'package:lucky_artwork/home/home.dart';
 import 'package:lucky_artwork/setting/setting.dart';
 import 'package:lucky_artwork/util/function_util.dart';
-import 'package:lucky_artwork/util/user_agreement_util.dart';
+import 'package:lucky_artwork/util/context_util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
@@ -100,7 +100,7 @@ class MainPageState extends State<MainPage> {
             return AlertDialog(
               title: const Text("User Agreement 1.0.0"),
               content: SingleChildScrollView(
-                child: UserAgreementContext().get(),
+                child: ContextUtil().getUserAgreement(),
               ),
               actions: [
                 Row(

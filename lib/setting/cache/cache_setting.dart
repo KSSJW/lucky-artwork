@@ -16,7 +16,7 @@ class CacheSettingPageState extends State<CacheSettingPage> {
 
   Future<bool> loadConfig() async {
     final result = await Future.wait([
-      FunctionUtil.config.isEnabledCacheAndHistory(),
+      FunctionUtil.storage.isEnabledCacheAndHistory(),
     ]);
 
     setState(() {
@@ -149,13 +149,15 @@ class CacheSettingPageState extends State<CacheSettingPage> {
                           );
                         },
                       ),
-                      SizedBox(height: 8),
+                      SizedBox(height: 8),                      
                     ],
                   ),
-                ),              
+                ),
+              
+                SizedBox(height: 100)
               ],
             ),
-            floatingActionButton: CacheSettingFunction.item.getFloatingActionButton(context),
+            floatingActionButton: FunctionUtil.item.getRestartFloatingActionButton(context),
           );
         }
       },

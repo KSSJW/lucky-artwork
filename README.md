@@ -15,4 +15,6 @@ A Flutter framework project that uses an API to get a random illustration.
 
 ## Cover Image
 
-[(Pixiv) 二色蓮花蝶](https://www.pixiv.net/artworks/89387820)
+[Pixiv - なかよし姉妹 - ルヒカ](https://www.pixiv.net/artworks/71108570)
+
+[Pixiv - ジュースとミルク - Dhagp](https://www.pixiv.net/artworks/67447370)

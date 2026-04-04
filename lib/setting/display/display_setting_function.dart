@@ -1,10 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DisplaySettingFunction {
   static Config config = Config();
-  static Item item = Item();
 }
 
 class Config {
@@ -58,73 +55,5 @@ class Config {
       default:
         return "Null";
     }
-  }
-}
-
-class Item {
-
-  Widget getFloatingActionButton(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        FloatingActionButton.extended(
-          heroTag: "Restart",
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: const Text("Restart"),
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Are you ready to restart?"),
-                      SizedBox(height: 8),
-                      Text("Restarting will take effect immediately,"),
-                      SizedBox(height: 8),
-                      Text(
-                        "If you have disabled caching, it is recommended that you save the necessary data before restarting.",
-                        style: TextStyle(
-                          color: Colors.orange
-                        ),
-                      )
-                    ],
-                  ),
-                  actions: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text("Cancel"),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            Phoenix.rebirth(context);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.orange,
-                            foregroundColor: Colors.white,
-                          ),
-                          child: const Text("Restart"),
-                        ),
-                      ],
-                    ),
-                  ],
-                );
-              },
-            );
-          },
-          tooltip: "Restart",
-          icon: const Icon(Icons.restart_alt),
-          label: const Text("Restart"),
-          backgroundColor: Colors.orange,
-          foregroundColor: Colors.white,
-        ),
-      ],
-    );
   }
 }

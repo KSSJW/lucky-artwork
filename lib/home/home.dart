@@ -30,7 +30,7 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
     final results = await Future.wait([
       FunctionUtil.display.isEnabledExitButton(),
       FunctionUtil.display.getButtonSize(),
-      FunctionUtil.config.isEnabledCacheAndHistory(),
+      FunctionUtil.storage.isEnabledCacheAndHistory(),
     ]);
 
     setState(() {
@@ -130,7 +130,7 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                 if (showLatency) Row(
                   children: [
                     Icon(
-                      Icons.network_check,
+                      Icons.speed,
                       color: stopwatch.elapsedMilliseconds < 3000 ? Colors.green : Colors.orange,
                     ),
                     SizedBox(width: 6),
@@ -193,7 +193,7 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
               },
               tooltip: "Exit",
               child: Icon(
-                Icons.cancel_outlined,
+                Icons.power_settings_new,
                 size: buttonSize * 0.5,
               ),
             ),

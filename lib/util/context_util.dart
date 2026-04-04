@@ -1,8 +1,10 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class UserAgreementContext {
+class ContextUtil {
   
-  Column get() {
+  Column getUserAgreement() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: const [
@@ -104,6 +106,135 @@ class UserAgreementContext {
 
         Text("Clicking \"Agree\" indicates that you have read and accepted the above terms.")
       ],
+    );
+  }
+
+  RichText getInfo(bool isDark, TextSpan version) {
+    return RichText(
+      text: TextSpan(
+        style: const TextStyle(color: Colors.black),
+        children: [
+          TextSpan(
+            text: "Version: ",
+            style: TextStyle(
+              color: isDark ? Colors.white : Colors.black
+            ),
+          ),
+          version,
+          TextSpan(text: "\n\n"),
+
+          TextSpan(
+            text: "Project: ",
+            style: TextStyle(
+              color: isDark ? Colors.white : Colors.black
+            ),
+          ),
+          TextSpan(
+            text: "lucky-artwork",
+            style: TextStyle(
+              color: Colors.blue,
+              decoration: TextDecoration.underline,
+            ),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                launchUrl(
+                  Uri.parse("https://github.com/KSSJW/lucky-artwork"),
+                  mode: LaunchMode.externalApplication,
+                );
+              },
+          ),
+          TextSpan(text: "\n"),
+          TextSpan(
+            text: "Author: ",
+            style: TextStyle(
+              color: isDark ? Colors.white : Colors.black
+            ),
+          ),
+          TextSpan(
+            text: "KSSJW",
+            style: TextStyle(
+              color: Colors.blue,
+              decoration: TextDecoration.underline,
+            ),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                launchUrl(
+                  Uri.parse("https://github.com/KSSJW"),
+                  mode: LaunchMode.externalApplication,
+                );
+              },
+          ),
+          TextSpan(text: "\n\n"),
+
+          TextSpan(
+            text: "Thanks to the API providers, who provided the soul of this software.",
+            style: TextStyle(
+              color: isDark ? Colors.white : Colors.black
+            ),
+          ),
+          TextSpan(text: "\n\n"),
+
+          TextSpan(
+            text: "ManyACG",
+            style: TextStyle(
+              color: Colors.blue,
+              decoration: TextDecoration.underline,
+            ),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                launchUrl(
+                  Uri.parse("https://manyacg.top"),
+                  mode: LaunchMode.externalApplication,
+                );
+              },
+          ),
+          TextSpan(text: "\n"),
+          TextSpan(
+            text: "ZiChenACG",
+            style: TextStyle(
+              color: Colors.blue,
+              decoration: TextDecoration.underline,
+            ),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                launchUrl(
+                  Uri.parse('https://app.zichen.zone/api/acg'),
+                  mode: LaunchMode.externalApplication,
+                );
+              },
+          ),
+          TextSpan(text: "\n"),
+          TextSpan(
+            text: "樱花二次元图片",
+            style: TextStyle(
+              color: Colors.blue,
+              decoration: TextDecoration.underline,
+            ),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                launchUrl(
+                  Uri.parse('https://www.dmoe.cc'),
+                  mode: LaunchMode.externalApplication,
+                );
+              },
+          ),
+          TextSpan(text: "\n"),
+          TextSpan(
+            text: "东方Project随机图片",
+            style: TextStyle(
+              color: Colors.blue,
+              decoration: TextDecoration.underline,
+            ),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                launchUrl(
+                  Uri.parse('https://img.paulzzh.com'),
+                  mode: LaunchMode.externalApplication,
+                );
+              },
+          ),
+        ],
+      ),
     );
   }
 }
