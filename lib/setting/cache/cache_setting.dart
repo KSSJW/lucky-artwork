@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lucky_artwork/setting/cache/cache_setting_function.dart';
 import 'package:lucky_artwork/util/function_util.dart';
@@ -11,19 +12,34 @@ class CacheSettingPage extends StatefulWidget {
 
 class CacheSettingPageState extends State<CacheSettingPage> {
   bool enabledCacheAndHistory = true;
-  int cacheSize = 0;
+  int? cacheSize;
 
   Future<bool> loadConfig() async {
     final result = await Future.wait([
       FunctionUtil.config.isEnabledCacheAndHistory(),
-      CacheSettingFunction.storage.getCacheSize()
     ]);
+
     setState(() {
-      enabledCacheAndHistory = result[0] as bool;
-      cacheSize = result[1] as int;
+      enabledCacheAndHistory = result[0];
     });
 
+    if (cacheSize == null) loadCacheSize();
+
     return true;
+  }
+
+  void loadCacheSize() async {
+    final cacheDir = await FunctionUtil.storage.getCacheDir();
+    
+    setState(() => cacheSize = null); // 先显示 loading
+
+    final size = await compute(CacheSettingFunction.storage.computeCacheSizeIsolate, cacheDir.path); // 在后台 isolate 计算
+
+    if (!mounted) return;
+    
+    setState(() {
+      cacheSize = size;
+    });
   }
 
   @override
@@ -72,8 +88,11 @@ class CacheSettingPageState extends State<CacheSettingPage> {
                       ListTile(
                         leading: Icon(Icons.cleaning_services),
                         title: Text("Clear Cache"),
-                        trailing: Text(
-                          CacheSettingFunction.util.formatBytes(cacheSize),
+                        trailing: cacheSize == null ? Text(
+                          "computing ...",
+                          style: TextStyle(fontSize: 16.0),
+                        ) : Text(
+                          CacheSettingFunction.util.formatBytes(cacheSize!),
                           style: TextStyle(fontSize: 16.0),
                         ),
                         onTap: () {
@@ -107,9 +126,14 @@ class CacheSettingPageState extends State<CacheSettingPage> {
                                         child: const Text("Cancel"),
                                       ),
                                       ElevatedButton(
-                                        onPressed: () {
-                                          CacheSettingFunction.storage.clearCache();
-                                          Navigator.of(context).pop();
+                                        onPressed: () async {
+                                          NavigatorState navigatorState = Navigator.of(context);
+                                          final cacheDir = await FunctionUtil.storage.getCacheDir();
+
+                                          await compute(CacheSettingFunction.storage.clearCacheIsolate, cacheDir.path);
+                                          navigatorState.pop();
+
+                                          loadCacheSize();
                                         },
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.red,

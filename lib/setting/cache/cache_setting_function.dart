@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
-import 'package:lucky_artwork/util/function_util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CacheSettingFunction {
@@ -23,25 +22,29 @@ class Config {
 
 class Storage {
 
-  Future<int> getCacheSize() async {
-    Directory cacheDir = await FunctionUtil.storage.getCacheDir();
+  Future<int> computeCacheSizeIsolate(String path) async {
     int size = 0;
+    final dir = Directory(path);
 
-    if (await cacheDir.exists()) {
-      await for (var entity in cacheDir.list(recursive: true, followLinks: false)) {
-        if (entity is File) size += await entity.length();
+    if (await dir.exists()) {
+      await for (var entity in dir.list(recursive: true, followLinks: false)) {
+        if (entity is File) {
+          size += await entity.length();
+        }
       }
     }
 
     return size;
   }
 
-  void clearCache() async {
-    Directory cacheDir = await FunctionUtil.storage.getCacheDir();
+  void clearCacheIsolate(String path) {
+    final dir = Directory(path);
 
-    if (await cacheDir.exists()) {
-      await for (var file in cacheDir.list(recursive: true)) {
-        if (file is File) await file.delete();
+    if (dir.existsSync()) {
+      for (var entity in dir.listSync(recursive: true, followLinks: false)) {
+        try {
+          entity.deleteSync();
+        } catch (_) {}
       }
     }
   }

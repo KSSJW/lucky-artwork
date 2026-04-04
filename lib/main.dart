@@ -114,13 +114,17 @@ class MainPageState extends State<MainPage> {
                     ),
                     ElevatedButton(
                       onPressed: () async {
+                        NavigatorState navigatorState = Navigator.of(context);
                         final messenger = ScaffoldMessenger.of(context);
+
                         await prefs.setBool("user_agreement", true);
+
                         setState(() {
                           agreed = true;
                           checked = true;
-                          Navigator.of(context).pop();
                         });
+
+                        navigatorState.pop();
                         messenger.showSnackBar(
                           const SnackBar(content: Text("You have agreed to the User Agreement")),
                         );
@@ -160,6 +164,7 @@ class MainPageState extends State<MainPage> {
         historyKey.currentState?.refreshHistory();
       }
     });
+    
     pageController.animateToPage(
       index,
       duration: const Duration(milliseconds: 300),

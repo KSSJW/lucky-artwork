@@ -30,6 +30,7 @@ class ApiSettingPageState extends State<ApiSettingPage> {
 
   Future<void> loadApi() async {
     final prefs = await SharedPreferences.getInstance();
+
     setState(() {
       customApis = prefs.getStringList("custom_apis") ?? [];
       selectedApi = prefs.getString("api_url") ?? builtInApis.first;
@@ -39,12 +40,15 @@ class ApiSettingPageState extends State<ApiSettingPage> {
 
   void addCustomApi() {
     final newApi = _controller.text.trim();
-    if (newApi.isNotEmpty &&
-        !builtInApis.contains(newApi) &&
-        !customApis.contains(newApi)) {
+    if (
+      newApi.isNotEmpty
+      && !builtInApis.contains(newApi)
+      && !customApis.contains(newApi)
+    ) {
       setState(() {
         customApis.add(newApi);
       });
+
       ApiSettingFunction.config.saveCustomApis(customApis);
     }
   }
@@ -53,6 +57,7 @@ class ApiSettingPageState extends State<ApiSettingPage> {
     setState(() {
       customApis.remove(api);
     });
+    
     ApiSettingFunction.config.saveCustomApis(customApis);
   }
 
@@ -91,6 +96,7 @@ class ApiSettingPageState extends State<ApiSettingPage> {
                         selectedApi = value!;
                         _controller.text = value;
                       });
+
                       ApiSettingFunction.config.saveApi(value!);
                     },
                     child: Radio<String>(value: api),
@@ -106,6 +112,7 @@ class ApiSettingPageState extends State<ApiSettingPage> {
                       selectedApi = api;
                       _controller.text = api;
                     });
+
                     ApiSettingFunction.config.saveApi(api);
                   },
                 );

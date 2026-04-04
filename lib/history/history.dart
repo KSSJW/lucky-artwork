@@ -30,6 +30,7 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
       FunctionUtil.display.getButtonSize(),
       FunctionUtil.display.getImageColumns()
     ]);
+
     setState(() {
       enabledCacheAndHistory = result[0] as bool;
       buttonSize = result[1] as double;
@@ -72,8 +73,7 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
     super.initState();
     refreshHistory();
     scrollController.addListener(() {
-      if (scrollController.position.pixels ==
-          scrollController.position.maxScrollExtent) {
+      if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
         setState(() {
           currentMax += pageSize;
         });
@@ -319,6 +319,7 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
                                 }
 
                                 await refreshHistory();
+                                
                                 setState(() {
                                   isSelectionMode = false;
                                   selectedIndexes.clear();

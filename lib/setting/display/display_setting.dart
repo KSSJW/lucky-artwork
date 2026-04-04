@@ -20,6 +20,7 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
 
   Future<bool> loadConfig() async {
     final prefs = await SharedPreferences.getInstance();
+    
     setState(() {
       themeMode = prefs.getInt("theme_mode") ?? 0;
       navigationBarStyle = prefs.getInt("navigation_bar_style") ?? 0;
@@ -121,7 +122,7 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
                       Divider(),
                       ListTile(
                         title: Text("Navigation Bar Style"),
-                        leading: Icon(Icons.style),
+                        leading: Icon(Icons.view_sidebar_rounded),
                       ),
                       SizedBox(height: 8),
                       SegmentedButton(
@@ -142,6 +143,7 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
                           setState(() {
                             navigationBarStyle = newSelection.first;
                           });
+                          
                           DisplaySettingFunction.config.saveNavigationBarStyle(newSelection.first);
                         },
                       ),
@@ -154,8 +156,9 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
                         onChanged: (value) {
                           setState(() {
                             wakeLock = value;
-                            DisplaySettingFunction.config.saveWakeLock(value);
                           });
+
+                          DisplaySettingFunction.config.saveWakeLock(value);
                         },
                       ),
                       Divider(),
@@ -176,8 +179,9 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
                         onChanged: (value) {
                           setState(() {
                             buttonSize = value;
-                            DisplaySettingFunction.config.saveButtonSize(value);
                           });
+
+                          DisplaySettingFunction.config.saveButtonSize(value);
                         },
                       ),
                       SizedBox(height: 8),
@@ -215,8 +219,9 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
                         onChanged: (value) {
                           setState(() {
                             showLatency = value;
-                            DisplaySettingFunction.config.saveLatency(value);
                           });
+
+                          DisplaySettingFunction.config.saveLatency(value);
                         },
                       ),
                       Divider(),
@@ -228,8 +233,9 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
                         onChanged: (value) {
                           setState(() {
                             showExitButton = value;
-                            DisplaySettingFunction.config.saveExitButton(value);
                           });
+
+                          DisplaySettingFunction.config.saveExitButton(value);
                         },
                       ),
                       SizedBox(height: 8),
@@ -277,8 +283,9 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
                         onChanged: (value) {
                           setState(() {
                             imageColumns = value;
-                            DisplaySettingFunction.config.saveImageColumns(value);
                           });
+
+                          DisplaySettingFunction.config.saveImageColumns(value);
                         },
                       ),
                       SizedBox(height: 8),
