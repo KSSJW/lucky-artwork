@@ -75,6 +75,8 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
 
     double screenWidth = MediaQuery.of(context).size.width;
     initItemSize = screenWidth / imageColumns;
+
+    if (initItemSize < 200) initItemSize = 200;
   }
 
   @override
