@@ -11,6 +11,8 @@ class CacheSettingPage extends StatefulWidget {
 }
 
 class CacheSettingPageState extends State<CacheSettingPage> {
+  late Future configLoadFuture;
+
   bool enabledCacheAndHistory = true;
   int? cacheSize;
 
@@ -43,9 +45,16 @@ class CacheSettingPageState extends State<CacheSettingPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    configLoadFuture = loadConfig();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: loadConfig(),
+      future: configLoadFuture,
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(child: CircularProgressIndicator());

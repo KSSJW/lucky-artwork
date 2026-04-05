@@ -13,6 +13,8 @@ class History extends StatefulWidget {
 }
 
 class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
+  late Future configLoadFuture;
+
   bool enabledCacheAndHistory= true;
   List<File> imageFiles = [];
   bool isSelectionMode = false;
@@ -23,6 +25,7 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
   ScrollController scrollController = ScrollController();
   int pageSize = 50;
   int currentMax = 50;
+  double initItemSize = 112;
 
   Future<bool> loadConfig() async {
     final result = await Future.wait([
@@ -31,10 +34,14 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
       FunctionUtil.display.getImageColumns()
     ]);
 
+    double rawImageColumns = result[2] as double;
+
+    if (rawImageColumns > 6) rawImageColumns = 3;
+
     setState(() {
       enabledCacheAndHistory = result[0] as bool;
       buttonSize = result[1] as double;
-      imageColumns = result[2] as double;
+      imageColumns = rawImageColumns;
     });
 
     return true;
@@ -63,6 +70,11 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
         imageFiles = files;
       });
     }
+
+    if (!mounted) return;
+
+    double screenWidth = MediaQuery.of(context).size.width;
+    initItemSize = screenWidth / imageColumns;
   }
 
   @override
@@ -71,9 +83,11 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
   @override
   void initState() {
     super.initState();
-    refreshHistory();
+    
+    configLoadFuture = loadConfig();
+
     scrollController.addListener(() {
-      if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
+      if (scrollController.position.pixels >= scrollController.position.maxScrollExtent) {
         setState(() {
           currentMax += pageSize;
         });
@@ -92,13 +106,13 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
 
     double itemSize = screenWidth / imageColumns; // 每个正方形格子的边长
 
-    int rowsPerPage = (screenHeight ~/ itemSize); // 显示行数
+    int rowsPerPage = (screenHeight ~/ itemSize) * 2; // 显示行数
     
-    int pageSize = (rowsPerPage * imageColumns.toInt() * 1.5).toInt();  // 每页数量
+    int pageSize = (rowsPerPage * imageColumns.toInt()).toInt();  // 每页数量
 
     // 如果计算结果和当前不一致，就更新
-    if (pageSize != pageSize) {
-      pageSize = pageSize;
+    if (pageSize != this.pageSize) {
+      this.pageSize = pageSize;
       currentMax = pageSize;
     }
 
@@ -193,7 +207,6 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
           ),
         ) : GridView.builder(
         controller: scrollController,
-        shrinkWrap: true, // 让 GridView 自适应高度
         padding: EdgeInsets.only(
           top: kToolbarHeight + MediaQuery.of(context).padding.top + 8,
           left: 8,
@@ -237,7 +250,7 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
               }
             },
             child: FutureBuilder(
-              future: loadConfig(),
+              future: configLoadFuture,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return Stack(
@@ -246,7 +259,11 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
                         aspectRatio: 1, // 正方形格子
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(8),
-                          child: Image.file(file, fit: BoxFit.cover),
+                          child: Image.file(
+                            file,
+                            fit: BoxFit.cover,
+                            cacheWidth: initItemSize.toInt(),
+                          ),
                         ),
                       ),
 

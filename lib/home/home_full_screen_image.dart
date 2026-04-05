@@ -37,7 +37,7 @@ class FullScreenImageState extends State<FullScreenImage> {
           });
         },
         child: InteractiveViewer(
-          maxScale: 1024.0,
+          maxScale: 16.0,
           child: SizedBox.expand(
             child: Image.memory(
               bytes,

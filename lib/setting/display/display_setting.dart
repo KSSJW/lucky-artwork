@@ -11,6 +11,8 @@ class DisplaySettingPage extends StatefulWidget {
 }
 
 class DisplaySettingPageState extends State<DisplaySettingPage> {
+  late Future configLoadFuture;
+
   int themeMode = 0;
   int navigationBarStyle = 0;
   bool wakeLock = false;
@@ -21,6 +23,13 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
 
   Future<bool> loadConfig() async {
     final prefs = await SharedPreferences.getInstance();
+
+    double rawImageColumns = prefs.getDouble("image_columns") ?? 3;
+
+    if (rawImageColumns > 6) {
+      DisplaySettingFunction.config.saveImageColumns(3);
+      rawImageColumns = 3;
+    }
     
     setState(() {
       themeMode = prefs.getInt("theme_mode") ?? 0;
@@ -29,10 +38,17 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
       buttonSize = prefs.getDouble("button_size") ?? 56.0;
       showLatency = prefs.getBool("show_latency") ?? true;
       showExitButton = prefs.getBool("show_exit_button") ?? false;
-      imageColumns = prefs.getDouble("image_columns") ?? 3;
+      imageColumns = rawImageColumns;
     });
 
     return true;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    configLoadFuture = loadConfig();
   }
 
   @override
@@ -40,7 +56,7 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
 
     return FutureBuilder(
-      future: loadConfig(),
+      future: configLoadFuture,
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(child: CircularProgressIndicator());
@@ -278,8 +294,8 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
                       Slider(
                         value: imageColumns,
                         min: 1.0,
-                        max: 12.0,
-                        divisions: 11,
+                        max: 6.0,
+                        divisions: 5,
                         label: imageColumns.toInt().toString(),
                         onChanged: (value) {
                           setState(() {
