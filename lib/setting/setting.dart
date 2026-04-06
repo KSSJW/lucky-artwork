@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart' show Phoenix;
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:lucky_artwork/setting/api/api_setting.dart';
 import 'package:lucky_artwork/setting/cache/cache_setting.dart';
 import 'package:lucky_artwork/setting/display/display_setting.dart';
 import 'package:lucky_artwork/util/function_util.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:pub_semver/pub_semver.dart';
 
 class Setting extends StatefulWidget {
   const Setting({super.key});
@@ -15,24 +16,28 @@ class Setting extends StatefulWidget {
 
 class SettingState extends State<Setting> {
   double buttonSize = 56.0;
-  
-  TextSpan getVersion() {
-    return TextSpan(
-      text: "1.3.2",
-      style: TextStyle(
-        color: Colors.green,
-      ),
-    );
-  }
+  late PackageInfo packageInfo;
 
   Future loadConfig() async {
     final results = await Future.wait([
       FunctionUtil.display.getButtonSize(),
+      FunctionUtil.item.getPackageInfo()
     ]);
 
     setState(() {
-      buttonSize = results[0];
+      buttonSize = results[0] as double;
+      packageInfo = results[1] as PackageInfo;
     });
+  }
+
+  TextSpan getVersion() {
+    Version ver = Version.parse(packageInfo.version);
+    return TextSpan(
+      text: packageInfo.version,
+      style: TextStyle(
+        color: ver.isPreRelease ? (ver.preRelease.first == "alpha" ? Colors.red : Colors.orange) : Colors.green
+      ),
+    );
   }
 
   @override
@@ -103,7 +108,7 @@ class SettingState extends State<Setting> {
                   title: Text("Update"),
                   subtitle: Text("Update ..."),
                   onTap: () => {
-                    launchUrl(Uri.parse("https://github.com/KSSJW/lucky-artwork/releases/latest"), mode: LaunchMode.externalApplication)
+                    FunctionUtil.item.showUpdateAlertDialog(context)
                   },
                 ),
                 Divider(),

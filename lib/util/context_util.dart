@@ -112,7 +112,6 @@ class ContextUtil {
   RichText getInfo(bool isDark, TextSpan version) {
     return RichText(
       text: TextSpan(
-        style: const TextStyle(color: Colors.black),
         children: [
           TextSpan(
             text: "Version: ",

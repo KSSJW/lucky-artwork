@@ -82,6 +82,7 @@ class MainPage extends StatefulWidget {
 class MainPageState extends State<MainPage> {
   bool checked = false;
   bool agreed = false;
+  bool showUpdate = true;
   int navigationBarStyle = 0;
 
   int selectedIndex = 0;
@@ -153,6 +154,8 @@ class MainPageState extends State<MainPage> {
     navigationBarStyle = await FunctionUtil.display.getNavigationBarStyle();
   }
 
+  // TODO: Automatic update check switch.
+
   Future<void> checkWakeLock() async {
     await FunctionUtil.display.isEnabledWakeLock() ? WakelockPlus.enable() : WakelockPlus.disable();
   }
@@ -174,12 +177,6 @@ class MainPageState extends State<MainPage> {
 
   final GlobalKey<HistoryState> historyKey = GlobalKey();
 
-  List<Widget> get pages => [
-    Home(),
-    History(key: historyKey),
-    Setting()
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -197,6 +194,8 @@ class MainPageState extends State<MainPage> {
     }
 
     if (agreed) {
+
+      if (showUpdate) FunctionUtil.item.showAutoCheckUpdateMessenger(ScaffoldMessenger.of(context));  // TODO: Automatic update check switch.
 
       // 底部导航栏
       if (navigationBarStyle == 0) {
