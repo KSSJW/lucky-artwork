@@ -68,6 +68,12 @@ class Storage {
 
 class Network {
 
+  Future<bool> isAutomaticUpdateCheck() async {
+    var prefs = await SharedPreferences.getInstance();
+
+    return prefs.getBool("automatic_update_check") ?? true;
+  }
+
   Future<String> getAPI() async {
     var prefs = await SharedPreferences.getInstance();
 
@@ -120,7 +126,7 @@ class Item {
     return PackageInfo.fromPlatform();
   }
 
-  Future<void> showAutoCheckUpdateMessenger(ScaffoldMessengerState messenger) async {
+  Future<void> showAutoCheckUpdateMessenger(BuildContext context, bool isDark) async {
     final info = await PackageInfo.fromPlatform();
     final currentVersion = info.version;
     final currentSemVer = Version.parse(currentVersion);
@@ -136,16 +142,44 @@ class Item {
         final latestSemVer = Version.parse(latestVersion);
 
         if (currentSemVer < latestSemVer && !latestSemVer.isPreRelease) {
-          messenger.showSnackBar(
+
+          if (!context.mounted) return;
+
+          ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text("The new version $latestVersion is available!"),
-              action: SnackBarAction(
-                textColor: Colors.green,
-                label: "Get",
-                onPressed: () {
-                  launchUrl(Uri.parse("https://github.com/KSSJW/lucky-artwork/releases/latest"), mode: LaunchMode.externalApplication);
-                },
+              duration: Duration(seconds: 5),
+              content: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      "The new version $latestVersion is available!",
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    },
+                    child: Text("Cancel"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      launchUrl(
+                        Uri.parse("https://github.com/KSSJW/lucky-artwork/releases"),
+                        mode: LaunchMode.externalApplication,
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      foregroundColor: Colors.white,
+                    ),
+                    child: Text("Get"),
+                  ),
+                ],
               ),
+              backgroundColor: Colors.green[50],
             ),
           );
         }
@@ -170,6 +204,7 @@ class Item {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         final latestVersion = data['tag_name'];
+        final changelog = data['body'];
         final latestSemVer = Version.parse(latestVersion);
 
         if (currentSemVer < latestSemVer && !latestSemVer.isPreRelease) {
@@ -189,6 +224,8 @@ class Item {
                         color: Colors.green,
                       ),
                     ),
+                    SizedBox(height: 8),
+                    Text("$changelog")
                   ],
                 ),
                 actions: [

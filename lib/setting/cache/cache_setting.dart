@@ -65,9 +65,16 @@ class CacheSettingPageState extends State<CacheSettingPage> {
               padding: EdgeInsets.all(8),
               children: [
 
-                SizedBox(height: 8),
+                Icon(
+                  Icons.storage,
+                  size: 80,
+                  color: Colors.orange,
+                ),
+
+                SizedBox(height: 16),
                 Column(
                   children: [
+                    Text("Manage software cache."),
                     Text("Some features require a restart to take effect.")
                   ],
                 ),

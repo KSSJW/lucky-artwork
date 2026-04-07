@@ -3,6 +3,7 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:lucky_artwork/setting/api/api_setting.dart';
 import 'package:lucky_artwork/setting/cache/cache_setting.dart';
 import 'package:lucky_artwork/setting/display/display_setting.dart';
+import 'package:lucky_artwork/setting/update/update_setting.dart';
 import 'package:lucky_artwork/util/function_util.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pub_semver/pub_semver.dart';
@@ -65,9 +66,12 @@ class SettingState extends State<Setting> {
 
                 SizedBox(height: 8),
                 ListTile(
-                  leading: Icon(Icons.api),
+                  leading: Icon(
+                    Icons.api,
+                    color: Colors.purpleAccent,
+                  ),
                   title: Text("API"),
-                  subtitle: Text("API ..."),
+                  subtitle: Text("Set the source of the image."),
                   onTap: () async {
                     Navigator.push(
                       context,
@@ -78,9 +82,12 @@ class SettingState extends State<Setting> {
                 Divider(),
 
                 ListTile(
-                  leading: Icon(Icons.display_settings),
+                  leading: Icon(
+                    Icons.display_settings,
+                    color: Colors.cyan,
+                  ),
                   title: Text("Display"),
-                  subtitle: Text("Display ..."),
+                  subtitle: Text("Control the interface display of the software."),
                   onTap: () async {
                     Navigator.push(
                       context,
@@ -91,9 +98,12 @@ class SettingState extends State<Setting> {
                 Divider(),
 
                 ListTile(
-                  leading: Icon(Icons.storage),
+                  leading: Icon(
+                    Icons.storage,
+                    color: Colors.orange,
+                  ),
                   title: Text("Cache"),
-                  subtitle: Text("Cache ..."),
+                  subtitle: Text("Manage software cache."),
                   onTap: () async {
                     Navigator.push(
                       context,
@@ -104,19 +114,28 @@ class SettingState extends State<Setting> {
                 Divider(),
 
                 ListTile(
-                  leading: Icon(Icons.update),
+                  leading: Icon(
+                    Icons.arrow_circle_up,
+                    color: Colors.green,
+                  ),
                   title: Text("Update"),
-                  subtitle: Text("Update ..."),
-                  onTap: () => {
-                    FunctionUtil.item.showUpdateAlertDialog(context)
+                  subtitle: Text("Get software updates."),
+                  onTap: () async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => UpdateSettingPage()),
+                    );
                   },
                 ),
                 Divider(),
 
                 ListTile(
-                  leading: Icon(Icons.info),
+                  leading: Icon(
+                    Icons.info_outline,
+                    color: Colors.blue,
+                  ),
                   title: Text("Info"),
-                  subtitle: Text("Info ..."),
+                  subtitle: Text("Information about this software."),
                   onTap: () => {
                     showDialog(
                       context: context,

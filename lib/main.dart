@@ -82,9 +82,10 @@ class MainPage extends StatefulWidget {
 class MainPageState extends State<MainPage> {
   bool checked = false;
   bool agreed = false;
-  bool showUpdate = true;
+  bool automaticUpdateCheck = true;
   int navigationBarStyle = 0;
 
+  bool promptedUpdate = false;
   int selectedIndex = 0;
   final PageController pageController = PageController();
 
@@ -154,7 +155,9 @@ class MainPageState extends State<MainPage> {
     navigationBarStyle = await FunctionUtil.display.getNavigationBarStyle();
   }
 
-  // TODO: Automatic update check switch.
+  Future<void> loadAutomaticUpdateCheck() async {
+    automaticUpdateCheck = await FunctionUtil.network.isAutomaticUpdateCheck();
+  }
 
   Future<void> checkWakeLock() async {
     await FunctionUtil.display.isEnabledWakeLock() ? WakelockPlus.enable() : WakelockPlus.disable();
@@ -182,6 +185,7 @@ class MainPageState extends State<MainPage> {
     super.initState();
     checkAgreement();
     loadNavigationBarStyle();
+    loadAutomaticUpdateCheck();
     checkWakeLock();
   }
 
@@ -195,7 +199,12 @@ class MainPageState extends State<MainPage> {
 
     if (agreed) {
 
-      if (showUpdate) FunctionUtil.item.showAutoCheckUpdateMessenger(ScaffoldMessenger.of(context));  // TODO: Automatic update check switch.
+      bool isDark = Theme.of(context).brightness == Brightness.dark;
+
+      if (automaticUpdateCheck && !promptedUpdate) {
+        FunctionUtil.item.showAutoCheckUpdateMessenger(context, isDark);
+        promptedUpdate = true;
+      }
 
       // 底部导航栏
       if (navigationBarStyle == 0) {
@@ -264,6 +273,7 @@ class MainPageState extends State<MainPage> {
                       child: PageView(
                         scrollDirection: Axis.vertical,
                         controller: pageController,
+                        physics: NeverScrollableScrollPhysics(),
                         onPageChanged: (index) {
                           setState(() {
                             selectedIndex = index;

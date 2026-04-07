@@ -67,9 +67,16 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
               padding: EdgeInsets.all(8),
               children: [
 
-                SizedBox(height: 8),
+                Icon(
+                  Icons.display_settings,
+                  size: 80,
+                  color: Colors.cyan,
+                ),
+
+                SizedBox(height: 16),
                 Column(
                   children: [
+                    Text("Control the interface display of the software."),
                     Text("Some features require a restart to take effect.")
                   ],
                 ),
