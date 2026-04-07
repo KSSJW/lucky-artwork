@@ -167,7 +167,7 @@ class Item {
                   ElevatedButton(
                     onPressed: () {
                       launchUrl(
-                        Uri.parse("https://github.com/KSSJW/lucky-artwork/releases"),
+                        Uri.parse("https://github.com/KSSJW/lucky-artwork/releases/latest"),
                         mode: LaunchMode.externalApplication,
                       );
                     },
