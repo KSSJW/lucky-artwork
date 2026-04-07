@@ -13,7 +13,7 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 void main() {
   runApp(
     Phoenix(
-      child: App(),
+      child: const App(),
     ),
   );
 }
@@ -220,18 +220,18 @@ class MainPageState extends State<MainPage> {
               });
             },
             children: [
-              Home(),
+              const Home(),
               History(key: historyKey),
-              Setting(),
+              const Setting(),
             ],
           ),
           bottomNavigationBar: NavigationBar(
             selectedIndex: selectedIndex,
             onDestinationSelected: onItemTapped,
-            destinations: const [
-              NavigationDestination(icon: Icon(Icons.home), label: "Home"),
-              NavigationDestination(icon: Icon(Icons.history), label: "History"),
-              NavigationDestination(icon: Icon(Icons.settings), label: "Setting"),
+            destinations: [
+              const NavigationDestination(icon: Icon(Icons.home), label: "Home"),
+              const NavigationDestination(icon: Icon(Icons.history), label: "History"),
+              const NavigationDestination(icon: Icon(Icons.settings), label: "Setting"),
             ],
           ),
         );
@@ -247,17 +247,17 @@ class MainPageState extends State<MainPage> {
                 onDestinationSelected: onItemTapped,
                 labelType: NavigationRailLabelType.all,
                 destinations: [
-                  NavigationRailDestination(
+                  const NavigationRailDestination(
                     padding: EdgeInsets.symmetric(vertical: 12),
                     icon: Icon(Icons.home),
                     label: Text("Home"),
                   ),
-                  NavigationRailDestination(
+                  const NavigationRailDestination(
                     padding: EdgeInsets.symmetric(vertical: 12),
                     icon: Icon(Icons.history),
                     label: Text("History"),
                   ),
-                  NavigationRailDestination(
+                  const NavigationRailDestination(
                     padding: EdgeInsets.symmetric(vertical: 12),
                     icon: Icon(Icons.settings),
                     label: Text("Setting"),
@@ -273,7 +273,7 @@ class MainPageState extends State<MainPage> {
                       child: PageView(
                         scrollDirection: Axis.vertical,
                         controller: pageController,
-                        physics: NeverScrollableScrollPhysics(),
+                        physics: const NeverScrollableScrollPhysics(),
                         onPageChanged: (index) {
                           setState(() {
                             selectedIndex = index;
@@ -283,9 +283,9 @@ class MainPageState extends State<MainPage> {
                           });
                         },
                         children: [
-                          Home(),
+                          const Home(),
                           History(key: historyKey),
-                          Setting(),
+                          const Setting(),
                         ],
                       ),
                     ),
@@ -298,11 +298,11 @@ class MainPageState extends State<MainPage> {
       }
 
       // Fallback
-      return Scaffold(
+      return const Scaffold(
         body: Text("NavigationBar Error"),
       );
     } else {
-      return Scaffold(
+      return const Scaffold(
         body: Text("Initializing ..."),
       );
     }

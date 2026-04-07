@@ -41,30 +41,30 @@ class UpdateSettingPageState extends State<UpdateSettingPage> {
       future: configLoadFuture,
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         } else {
           return Scaffold(
-            appBar: AppBar(title: Text("Update Setting")),
+            appBar: AppBar(title: const Text("Update Setting")),
             body: ListView(
-              padding: EdgeInsets.all(8),
+              padding: const EdgeInsets.all(8),
               children: [
 
-                Icon(
+                const Icon(
                   Icons.arrow_circle_up,
                   size: 80,
                   color: Colors.green,
                 ),
 
-                SizedBox(height: 16),
-                Column(
+                const SizedBox(height: 16),
+                const Column(
                   children: [
                     Text("Get software updates."),
                     Text("Some features require a restart to take effect.")
                   ],
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
 
-                Row(
+                const Row(
                   children: [
                     SizedBox(width: 20),
                     Text(
@@ -83,10 +83,10 @@ class UpdateSettingPageState extends State<UpdateSettingPage> {
                   ),
                   child: Column(
                     children: [
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       SwitchListTile(
-                        title: Text("Automatic Update Check"),
-                        secondary: Icon(Icons.tips_and_updates),
+                        title: const Text("Automatic Update Check"),
+                        secondary: const Icon(Icons.tips_and_updates),
                         value: automaticUpdateCheck,
                         onChanged: (value) {
                           setState(() {
@@ -96,23 +96,23 @@ class UpdateSettingPageState extends State<UpdateSettingPage> {
                           UpdateSettingFunction.config.saveAutomaticUpdateCheck(value);
                         },
                       ),
-                      Divider(),
+                      const Divider(),
 
                       ListTile(
-                        leading: Icon(Icons.search),
-                        title: Text("Check Update"),
+                        leading: const Icon(Icons.search),
+                        title: const Text("Check Update"),
                         onTap: () {
                           FunctionUtil.item.showUpdateAlertDialog(context);
                         },
                       ),                     
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                     ],
                   ),
                 ),
 
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
 
-                Row(
+                const Row(
                   children: [
                     SizedBox(width: 20),
                     Text(
@@ -131,21 +131,21 @@ class UpdateSettingPageState extends State<UpdateSettingPage> {
                   ),
                   child: Column(
                     children: [
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       ListTile(
-                        leading: Icon(Icons.manage_search),
-                        title: Text("Visit Releases Page"),
-                        trailing: Icon(Icons.open_in_new),
+                        leading: const Icon(Icons.manage_search),
+                        title: const Text("Visit Releases Page"),
+                        trailing: const Icon(Icons.open_in_new),
                         onTap: () {
                           launchUrl(Uri.parse("https://github.com/KSSJW/lucky-artwork/releases/latest"), mode: LaunchMode.externalApplication);
                         },
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                     ],
                   ),
                 ),
 
-                SizedBox(height: 100),
+                const SizedBox(height: 100),
               ],
             ),
             floatingActionButton: FunctionUtil.item.getRestartFloatingActionButton(context),

@@ -54,7 +54,7 @@ class SettingState extends State<Setting> {
     return Scaffold(
       appBar: AppBar(title: Text("Setting")),
       body: ListView(
-        padding: EdgeInsets.all(8),
+        padding: const EdgeInsets.all(8),
         children: [
 
           Card(
@@ -64,14 +64,14 @@ class SettingState extends State<Setting> {
             child: Column(
               children: [
 
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 ListTile(
-                  leading: Icon(
+                  leading: const Icon(
                     Icons.api,
                     color: Colors.purpleAccent,
                   ),
-                  title: Text("API"),
-                  subtitle: Text("Set the source of the image."),
+                  title: const Text("API"),
+                  subtitle: const Text("Set the source of the image."),
                   onTap: () async {
                     Navigator.push(
                       context,
@@ -79,15 +79,15 @@ class SettingState extends State<Setting> {
                     );
                   },
                 ),
-                Divider(),
+                const Divider(),
 
                 ListTile(
-                  leading: Icon(
+                  leading: const Icon(
                     Icons.display_settings,
                     color: Colors.cyan,
                   ),
-                  title: Text("Display"),
-                  subtitle: Text("Control the interface display of the software."),
+                  title: const Text("Display"),
+                  subtitle: const Text("Control the interface display of the software."),
                   onTap: () async {
                     Navigator.push(
                       context,
@@ -95,15 +95,15 @@ class SettingState extends State<Setting> {
                     );
                   },
                 ),
-                Divider(),
+                const Divider(),
 
                 ListTile(
-                  leading: Icon(
+                  leading: const Icon(
                     Icons.storage,
                     color: Colors.orange,
                   ),
-                  title: Text("Cache"),
-                  subtitle: Text("Manage software cache."),
+                  title: const Text("Cache"),
+                  subtitle: const Text("Manage software cache."),
                   onTap: () async {
                     Navigator.push(
                       context,
@@ -111,15 +111,15 @@ class SettingState extends State<Setting> {
                     );
                   },
                 ),
-                Divider(),
+                const Divider(),
 
                 ListTile(
-                  leading: Icon(
+                  leading: const Icon(
                     Icons.arrow_circle_up,
                     color: Colors.green,
                   ),
-                  title: Text("Update"),
-                  subtitle: Text("Get software updates."),
+                  title: const Text("Update"),
+                  subtitle: const Text("Get software updates."),
                   onTap: () async {
                     Navigator.push(
                       context,
@@ -127,15 +127,15 @@ class SettingState extends State<Setting> {
                     );
                   },
                 ),
-                Divider(),
+                const Divider(),
 
                 ListTile(
-                  leading: Icon(
+                  leading: const Icon(
                     Icons.info_outline,
                     color: Colors.blue,
                   ),
-                  title: Text("Info"),
-                  subtitle: Text("Information about this software."),
+                  title: const Text("Info"),
+                  subtitle: const Text("Information about this software."),
                   onTap: () => {
                     showDialog(
                       context: context,
@@ -145,7 +145,7 @@ class SettingState extends State<Setting> {
                     )
                   },
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
               ],
             ),
           ),
@@ -166,11 +166,11 @@ class SettingState extends State<Setting> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Are you ready to restart?"),
-                      SizedBox(height: 8),
-                      Text("Restarting will take effect immediately,"),
-                      SizedBox(height: 8),
-                      Text(
+                      const Text("Are you ready to restart?"),
+                      const SizedBox(height: 8),
+                      const Text("Restarting will take effect immediately,"),
+                      const SizedBox(height: 8),
+                      const Text(
                         "If you have disabled caching, it is recommended that you save the necessary data before restarting.",
                         style: TextStyle(
                           color: Colors.orange

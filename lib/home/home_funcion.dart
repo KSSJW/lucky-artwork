@@ -33,7 +33,7 @@ class Storage {
 
       if (dir == null) {
         messenger.showSnackBar(
-          SnackBar(content: Text("Failed to save image")),
+          const SnackBar(content: Text("Failed to save image")),
         );
 
         return;
@@ -60,7 +60,7 @@ class Storage {
 
         if (result['isSuccess']) {
           messenger.showSnackBar(
-            SnackBar(content: Text("Image saved to: /Pictures")),
+            const SnackBar(content: Text("Image saved to: /Pictures")),
           );
         } else {
           messenger.showSnackBar(

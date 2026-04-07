@@ -114,11 +114,11 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.error_outline,
                     size: 80,
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Text("${snapshot.error}")
                 ],
               ),
@@ -133,11 +133,11 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                       Icons.speed,
                       color: stopwatch.elapsedMilliseconds < 3000 ? Colors.green : Colors.orange,
                     ),
-                    SizedBox(width: 6),
+                    const SizedBox(width: 6),
                     Text("${stopwatch.elapsedMilliseconds} ms"),
                   ],
                 ),
-                SizedBox(height: 6),
+                const SizedBox(height: 6),
 
                 GestureDetector(
                   onTap: () {
@@ -167,12 +167,12 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.error_outline,
                     size: 80,
                   ),
-                  SizedBox(height: 16),
-                  Text("No Data")
+                  const SizedBox(height: 16),
+                  const Text("No Data")
                 ],
               ),
             );
@@ -230,7 +230,7 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
               child: SizedBox(
                 width: buttonSize * 0.5,
                 height: buttonSize * 0.5,
-                child: CircularProgressIndicator(),
+                child: const CircularProgressIndicator(),
               ),
             ) : FloatingActionButton(
               heroTag: "Next",

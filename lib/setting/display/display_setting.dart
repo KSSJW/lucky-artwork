@@ -59,30 +59,30 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
       future: configLoadFuture,
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         } else {
           return Scaffold(
-            appBar: AppBar(title: Text("Display Setting")),
+            appBar: AppBar(title: const Text("Display Setting")),
             body: ListView(
-              padding: EdgeInsets.all(8),
+              padding: const EdgeInsets.all(8),
               children: [
 
-                Icon(
+                const Icon(
                   Icons.display_settings,
                   size: 80,
                   color: Colors.cyan,
                 ),
 
-                SizedBox(height: 16),
-                Column(
+                const SizedBox(height: 16),
+                const Column(
                   children: [
                     Text("Control the interface display of the software."),
                     Text("Some features require a restart to take effect.")
                   ],
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
 
-                Row(
+                const Row(
                   children: [
                     SizedBox(width: 20),
                     Text(
@@ -102,7 +102,7 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
                   child: Column(
                     children: [
 
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       PopupMenuButton<String>(
                         onSelected: (value) {
                           switch (value) {
@@ -137,25 +137,25 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
                           ),
                         ],
                         child: ListTile(
-                          leading: isDark ? Icon(Icons.dark_mode) : Icon(Icons.light_mode),
+                          leading: isDark ? const Icon(Icons.dark_mode) : const Icon(Icons.light_mode),
                           title: const Text("Theme Mode"),
                           subtitle: Text(DisplaySettingFunction.config.getSelectedTheme(themeMode)),
                           trailing: const Icon(Icons.arrow_drop_down),
                         ),
                       ),
-                      Divider(),
-                      ListTile(
+                      const Divider(),
+                      const ListTile(
                         title: Text("Navigation Bar Style"),
                         leading: Icon(Icons.view_sidebar_rounded),
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       SegmentedButton(
                         segments: [
-                          ButtonSegment(
+                          const ButtonSegment(
                             value: 0,
                             label: Text("Bottom"),
                           ),
-                          ButtonSegment(
+                          const ButtonSegment(
                             value: 1,
                             label: Text("Left"),
                           ),
@@ -171,11 +171,11 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
                           DisplaySettingFunction.config.saveNavigationBarStyle(newSelection.first);
                         },
                       ),
-                      SizedBox(height: 16),
-                      Divider(),
+                      const SizedBox(height: 16),
+                      const Divider(),
                       SwitchListTile(
-                        title: Text("Wake Lock"),
-                        secondary: Icon(Icons.lightbulb),
+                        title: const Text("Wake Lock"),
+                        secondary: const Icon(Icons.lightbulb),
                         value: wakeLock,
                         onChanged: (value) {
                           setState(() {
@@ -185,10 +185,10 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
                           DisplaySettingFunction.config.saveWakeLock(value);
                         },
                       ),
-                      Divider(),
+                      const Divider(),
                       ListTile(
-                        title: Text("Button Size"),
-                        leading: Icon(Icons.open_in_full),
+                        title: const Text("Button Size"),
+                        leading: const Icon(Icons.open_in_full),
                         trailing: Text(
                           buttonSize.toString(),
                           style: TextStyle(fontSize: 16),
@@ -208,14 +208,14 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
                           DisplaySettingFunction.config.saveButtonSize(value);
                         },
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                     ],
                   ),
                 ),
 
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
 
-                Row(
+                const Row(
                   children: [
                     SizedBox(width: 20),
                     Text(
@@ -235,10 +235,10 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
                   child: Column(
                     children: [
 
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       SwitchListTile(
-                        title: Text("Show Latency"),
-                        secondary: Icon(Icons.speed),
+                        title: const Text("Show Latency"),
+                        secondary: const Icon(Icons.speed),
                         value: showLatency,
                         onChanged: (value) {
                           setState(() {
@@ -248,11 +248,11 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
                           DisplaySettingFunction.config.saveLatency(value);
                         },
                       ),
-                      Divider(),
+                      const Divider(),
 
                       SwitchListTile(
-                        title: Text("Show Exit Button"),
-                        secondary: Icon(Icons.power_settings_new),
+                        title: const Text("Show Exit Button"),
+                        secondary: const Icon(Icons.power_settings_new),
                         value: showExitButton,
                         onChanged: (value) {
                           setState(() {
@@ -262,14 +262,14 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
                           DisplaySettingFunction.config.saveExitButton(value);
                         },
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                     ],
                   ),
                 ),
 
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 
-                Row(
+                const Row(
                   children: [
                     SizedBox(width: 20),
                     Text(
@@ -289,13 +289,13 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
                   child: Column(
                     children: [                      
 
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       ListTile(
-                        title: Text("Image Columns"),
-                        leading: Icon(Icons.view_column),
+                        title: const Text("Image Columns"),
+                        leading: const Icon(Icons.view_column),
                         trailing: Text(
                           imageColumns.toInt().toString(),
-                          style: TextStyle(fontSize: 16),
+                          style: const TextStyle(fontSize: 16),
                         ),
                       ),
                       Slider(
@@ -312,12 +312,12 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
                           DisplaySettingFunction.config.saveImageColumns(value);
                         },
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                     ],
                   ),
                 ),
 
-                SizedBox(height: 100)
+                const SizedBox(height: 100)
               ],
             ),
             floatingActionButton: FunctionUtil.item.getRestartFloatingActionButton(context),

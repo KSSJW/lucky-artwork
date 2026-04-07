@@ -69,21 +69,21 @@ class ApiSettingPageState extends State<ApiSettingPage> {
       appBar: AppBar(title: const Text("API Settings")),
       body: Column(
         children: [
-          Icon(
+          const Icon(
             Icons.api,
             size: 80,
             color: Colors.purpleAccent,
           ),
 
-          SizedBox(height: 16),
-          Column(
+          const SizedBox(height: 16),
+          const Column(
             children: [
               Text("Set the source of the image."),
               Text("The API needs to return an image, not JSON."),
               Text("You can edit the text box to add custom APIs."),
             ],
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           
           Padding(
             padding: const EdgeInsets.all(16.0),

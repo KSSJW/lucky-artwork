@@ -147,13 +147,13 @@ class Item {
 
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              duration: Duration(seconds: 5),
+              duration: const Duration(seconds: 5),
               content: Row(
                 children: [
                   Expanded(
                     child: Text(
                       "The new version $latestVersion is available!",
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.black,
                       ),
                     ),
@@ -162,7 +162,7 @@ class Item {
                     onPressed: () {
                       ScaffoldMessenger.of(context).hideCurrentSnackBar();
                     },
-                    child: Text("Cancel"),
+                    child: const Text("Cancel"),
                   ),
                   ElevatedButton(
                     onPressed: () {
@@ -175,7 +175,7 @@ class Item {
                       backgroundColor: Colors.green,
                       foregroundColor: Colors.white,
                     ),
-                    child: Text("Get"),
+                    child: const Text("Get"),
                   ),
                 ],
               ),
@@ -213,18 +213,18 @@ class Item {
             barrierDismissible: false,
             builder: (context) {
               return AlertDialog(
-                title: Text("Get Updates"),
+                title: const Text("Get Updates"),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       "Update available: $currentVersion -> $latestVersion",
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.green,
                       ),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Text("$changelog")
                   ],
                 ),
@@ -246,7 +246,7 @@ class Item {
                           backgroundColor: Colors.green,
                           foregroundColor: Colors.white,
                         ),
-                        child: Text("Get"),
+                        child: const Text("Get"),
                       ),
                     ],
                   ),
@@ -259,12 +259,12 @@ class Item {
             context: context,
             builder: (context) {
               return AlertDialog(
-                title: Text("Get Updates"),
+                title: const Text("Get Updates"),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("You are running the latest version."),
+                    const Text("You are running the latest version."),
                   ],
                 ),
                 actions: [
@@ -289,18 +289,18 @@ class Item {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text("Get Updates"),
+            title: const Text("Get Updates"),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   "Failed to get updates.",
                   style: TextStyle(
                     color: Colors.red,
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text("$e")
               ],
             ),
@@ -320,7 +320,7 @@ class Item {
 
   AlertDialog getInfoAlertDialog(bool isDark, TextSpan version, NavigatorState navigatorState) {
     return AlertDialog (
-      title: Text("Lucky Artwork"),
+      title: const Text("Lucky Artwork"),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -352,11 +352,11 @@ class Item {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Are you ready to restart?"),
-                  SizedBox(height: 8),
-                  Text("Restarting will take effect immediately,"),
-                  SizedBox(height: 8),
-                  Text(
+                  const Text("Are you ready to restart?"),
+                  const SizedBox(height: 8),
+                  const Text("Restarting will take effect immediately,"),
+                  const SizedBox(height: 8),
+                  const Text(
                     "If you have disabled caching, it is recommended that you save the necessary data before restarting.",
                     style: TextStyle(
                       color: Colors.orange

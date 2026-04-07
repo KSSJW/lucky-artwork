@@ -120,7 +120,7 @@ class ContextUtil {
             ),
           ),
           version,
-          TextSpan(text: "\n\n"),
+          const TextSpan(text: "\n\n"),
 
           TextSpan(
             text: "Project: ",
@@ -130,7 +130,7 @@ class ContextUtil {
           ),
           TextSpan(
             text: "lucky-artwork",
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.blue,
               decoration: TextDecoration.underline,
             ),
@@ -142,7 +142,7 @@ class ContextUtil {
                 );
               },
           ),
-          TextSpan(text: "\n"),
+          const TextSpan(text: "\n"),
           TextSpan(
             text: "Author: ",
             style: TextStyle(
@@ -151,7 +151,7 @@ class ContextUtil {
           ),
           TextSpan(
             text: "KSSJW",
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.blue,
               decoration: TextDecoration.underline,
             ),
@@ -163,7 +163,7 @@ class ContextUtil {
                 );
               },
           ),
-          TextSpan(text: "\n\n"),
+          const TextSpan(text: "\n\n"),
 
           TextSpan(
             text: "Thanks to the API providers, who provided the soul of this software.",
@@ -171,11 +171,11 @@ class ContextUtil {
               color: isDark ? Colors.white : Colors.black
             ),
           ),
-          TextSpan(text: "\n\n"),
+          const TextSpan(text: "\n\n"),
 
           TextSpan(
             text: "ManyACG",
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.blue,
               decoration: TextDecoration.underline,
             ),
@@ -187,10 +187,10 @@ class ContextUtil {
                 );
               },
           ),
-          TextSpan(text: "\n"),
+          const TextSpan(text: "\n"),
           TextSpan(
             text: "ZiChenACG",
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.blue,
               decoration: TextDecoration.underline,
             ),
@@ -202,10 +202,10 @@ class ContextUtil {
                 );
               },
           ),
-          TextSpan(text: "\n"),
+          const TextSpan(text: "\n"),
           TextSpan(
             text: "樱花二次元图片",
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.blue,
               decoration: TextDecoration.underline,
             ),
@@ -217,10 +217,10 @@ class ContextUtil {
                 );
               },
           ),
-          TextSpan(text: "\n"),
+          const TextSpan(text: "\n"),
           TextSpan(
             text: "东方Project随机图片",
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.blue,
               decoration: TextDecoration.underline,
             ),

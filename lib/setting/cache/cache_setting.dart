@@ -57,28 +57,28 @@ class CacheSettingPageState extends State<CacheSettingPage> {
       future: configLoadFuture,
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         } else {
           return Scaffold(
-            appBar: AppBar(title: Text("Cache Setting")),
+            appBar: AppBar(title: const Text("Cache Setting")),
             body: ListView(
-              padding: EdgeInsets.all(8),
+              padding: const EdgeInsets.all(8),
               children: [
 
-                Icon(
+                const Icon(
                   Icons.storage,
                   size: 80,
                   color: Colors.orange,
                 ),
 
-                SizedBox(height: 16),
-                Column(
+                const SizedBox(height: 16),
+                const Column(
                   children: [
                     Text("Manage software cache."),
                     Text("Some features require a restart to take effect.")
                   ],
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
 
                 Card(
                   shape: RoundedRectangleBorder(
@@ -87,10 +87,10 @@ class CacheSettingPageState extends State<CacheSettingPage> {
                   child: Column(
                     children: [
 
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       SwitchListTile(
-                        title: Text("Enable Cache and History"),
-                        secondary: Icon(Icons.history),
+                        title: const Text("Enable Cache and History"),
+                        secondary: const Icon(Icons.history),
                         value: enabledCacheAndHistory,
                         onChanged: (value) {
                           setState(() {
@@ -99,17 +99,17 @@ class CacheSettingPageState extends State<CacheSettingPage> {
                           });
                         },
                       ),
-                      Divider(),
+                      const Divider(),
 
                       ListTile(
-                        leading: Icon(Icons.cleaning_services),
-                        title: Text("Clear Cache"),
-                        trailing: cacheSize == null ? Text(
+                        leading: const Icon(Icons.cleaning_services),
+                        title: const Text("Clear Cache"),
+                        trailing: cacheSize == null ? const Text(
                           "computing ...",
                           style: TextStyle(fontSize: 16.0),
                         ) : Text(
                           CacheSettingFunction.util.formatBytes(cacheSize!),
-                          style: TextStyle(fontSize: 16.0),
+                          style: const TextStyle(fontSize: 16.0),
                         ),
                         onTap: () {
                           showDialog(
@@ -121,9 +121,9 @@ class CacheSettingPageState extends State<CacheSettingPage> {
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text("Are you sure you want to clear the cache?"),
-                                    SizedBox(height: 8),
-                                    Text(
+                                    const Text("Are you sure you want to clear the cache?"),
+                                    const SizedBox(height: 8),
+                                    const Text(
                                       "You will be deleting the cache and history.",
                                       style: TextStyle(
                                         color: Colors.red
@@ -165,12 +165,12 @@ class CacheSettingPageState extends State<CacheSettingPage> {
                           );
                         },
                       ),
-                      SizedBox(height: 8),                      
+                      const SizedBox(height: 8),                      
                     ],
                   ),
                 ),
               
-                SizedBox(height: 100)
+                const SizedBox(height: 100)
               ],
             ),
             floatingActionButton: FunctionUtil.item.getRestartFloatingActionButton(context),

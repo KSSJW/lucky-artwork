@@ -124,12 +124,12 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
+              const Icon(
                 Icons.manage_history,
                 size: 80,
               ),
-              SizedBox(height: 16),
-              Text("Cache and History are Disabled"),
+              const SizedBox(height: 16),
+              const Text("Cache and History are Disabled"),
             ],
           ),
         ),
@@ -143,12 +143,12 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
         foregroundColor: Colors.white,
         actions: [
           if (!isSelectionMode) IconButton(
-            icon: Icon(Icons.refresh),
+            icon: const Icon(Icons.refresh),
             tooltip: "Refresh",
             onPressed: refreshHistory,
           ),
           IconButton(
-            icon: isSelectionMode ? Icon(Icons.close) : Icon(Icons.select_all),
+            icon: isSelectionMode ? const Icon(Icons.close) : const Icon(Icons.select_all),
             tooltip: isSelectionMode ? "Close" : "Selection",
             onPressed: () {
               if (!isSelectionMode) {
@@ -171,12 +171,12 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
         foregroundColor: Colors.black,
         actions: [
           if (!isSelectionMode) IconButton(
-            icon: Icon(Icons.refresh),
+            icon: const Icon(Icons.refresh),
             tooltip: "Refresh",
             onPressed: refreshHistory,
           ),
           IconButton(
-            icon: isSelectionMode ? Icon(Icons.close) : Icon(Icons.select_all),
+            icon: isSelectionMode ? const Icon(Icons.close) : const Icon(Icons.select_all),
             tooltip: isSelectionMode ? "Close" : "Selection",
             onPressed: () {
               if (!isSelectionMode) {
@@ -199,12 +199,12 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
+              const Icon(
                 Icons.history_toggle_off,
                 size: 80,
               ),
-              SizedBox(height: 16),
-              Text("No History"),
+              const SizedBox(height: 16),
+              const Text("No History"),
             ],
           ),
         ) : GridView.builder(
@@ -317,9 +317,9 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Are you sure you want to delete this record?"),
-                          SizedBox(height: 8),
-                          Text(
+                          const Text("Are you sure you want to delete this record?"),
+                          const SizedBox(height: 8),
+                          const Text(
                             "This operation will delete it from your history.",
                             style: TextStyle(
                               color: Colors.red
