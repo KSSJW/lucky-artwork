@@ -71,7 +71,7 @@ class Network {
   Future<bool> isAutomaticUpdateCheck() async {
     var prefs = await SharedPreferences.getInstance();
 
-    return prefs.getBool("automatic_update_check") ?? true;
+    return prefs.getBool("automatic_update_check") ?? false;
   }
 
   Future<String> getAPI() async {

@@ -14,12 +14,12 @@ class UpdateSettingPage extends StatefulWidget {
 class UpdateSettingPageState extends State<UpdateSettingPage> {
   late Future configLoadFuture;
 
-  bool automaticUpdateCheck = true;
+  bool automaticUpdateCheck = false;
 
   Future<bool> loadConfig() async {
     final prefs = await SharedPreferences.getInstance();
 
-    bool rawAutomaticUpdateCheck = prefs.getBool("automatic_update_check") ?? true;
+    bool rawAutomaticUpdateCheck = prefs.getBool("automatic_update_check") ?? false;
 
     setState(() {
       automaticUpdateCheck = rawAutomaticUpdateCheck;

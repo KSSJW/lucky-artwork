@@ -82,7 +82,7 @@ class MainPage extends StatefulWidget {
 class MainPageState extends State<MainPage> {
   bool checked = false;
   bool agreed = false;
-  bool automaticUpdateCheck = true;
+  bool automaticUpdateCheck = false;
   int navigationBarStyle = 0;
 
   bool promptedUpdate = false;
