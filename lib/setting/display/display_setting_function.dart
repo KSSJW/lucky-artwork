@@ -31,6 +31,11 @@ class Config {
     await prefs.setBool("show_latency", value);
   }
 
+  void saveEnableImageFadeInAnimation(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool("enable_image_fade_in_animation", value);
+  }
+
   void saveExitButton(bool value) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool("show_exit_button", value);

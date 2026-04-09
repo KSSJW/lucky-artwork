@@ -20,23 +20,27 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   Uint8List? bytes;
   late Stopwatch stopwatch;
   bool imageLoading = false;
+  double _opacity = 0.0;
 
   bool showExitButton = false;
   double buttonSize = 56.0;
   bool enabledCacheAndHistory = true;
   bool showLatency = true;
+  bool enabledImageFadeInAnimation = true;
 
   Future loadConfig() async {
     final results = await Future.wait([
       FunctionUtil.display.isEnabledExitButton(),
       FunctionUtil.display.getButtonSize(),
       FunctionUtil.storage.isEnabledCacheAndHistory(),
+      FunctionUtil.display.isEnableImageFadeInAnimation()
     ]);
 
     setState(() {
       showExitButton = results[0] as bool;
       buttonSize = results[1] as double;
       enabledCacheAndHistory = results[2] as bool;
+      enabledImageFadeInAnimation = results[3] as bool;
     });
   }
 
@@ -64,17 +68,20 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
 
         setState(() {
           imageLoading = false;
+          if (enabledImageFadeInAnimation) _opacity = 0.0;
         });
 
         return response;
       } else {
         setState(() {
           imageLoading = false;
+          if (enabledImageFadeInAnimation) _opacity = 0.0;
         });
       }
     } catch (e) {
       setState(() {
         imageLoading = false;
+        if (enabledImageFadeInAnimation) _opacity = 0.0;
       });
       throw Exception(e);
     }
@@ -103,14 +110,14 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
         builder: (context, snapshot) {
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
+            return Center(  // 加载中
               child: SpinKitSquareCircle(
                 color: isDark ? Colors.white : Colors.blueGrey,
                 duration : const Duration(milliseconds: 600),
               ),
-            ); // 加载中
+            );
           } else if (snapshot.hasError) {
-            return Center(
+            return Center(  // 错误提示
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -122,8 +129,19 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                   Text("${snapshot.error}")
                 ],
               ),
-            ); // 错误提示
-          } else if (snapshot.hasData) {            
+            );
+          } else if (snapshot.hasData) {
+
+            if (enabledImageFadeInAnimation) {
+
+              // 在当前帧的渲染完成之后
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                setState(() {
+                  _opacity = 1.0;
+                });
+              });
+            }
+
             return ListView(
               padding: const EdgeInsets.all(16),
               children: [
@@ -154,7 +172,14 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                     constraints: BoxConstraints(
                       maxHeight: MediaQuery.of(context).size.height > 224.0 ? MediaQuery.of(context).size.height - 168.0 : MediaQuery.of(context).size.height,
                     ),
-                    child: Image.memory(
+                    child: enabledImageFadeInAnimation ? AnimatedOpacity(
+                      opacity: _opacity,
+                      duration: const Duration(milliseconds: 200),
+                      child: Image.memory(
+                        bytes!,
+                        fit: BoxFit.contain
+                      ),
+                    ) : Image.memory(
                       bytes!,
                       fit: BoxFit.contain,
                     ),

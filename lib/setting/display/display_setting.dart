@@ -17,6 +17,7 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
   int navigationBarStyle = 0;
   bool wakeLock = false;
   double buttonSize = 56.0;
+  bool enabledImageFadeInAnimation = true;
   bool showLatency = true;
   bool showExitButton = false;
   double imageColumns = 3;
@@ -36,6 +37,7 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
       navigationBarStyle = prefs.getInt("navigation_bar_style") ?? 0;
       wakeLock = prefs.getBool("wake_lock") ?? false;
       buttonSize = prefs.getDouble("button_size") ?? 56.0;
+      enabledImageFadeInAnimation = prefs.getBool("enable_image_fade_in_animation") ?? true;
       showLatency = prefs.getBool("show_latency") ?? true;
       showExitButton = prefs.getBool("show_exit_button") ?? false;
       imageColumns = rawImageColumns;
@@ -107,14 +109,23 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
                         onSelected: (value) {
                           switch (value) {
                             case "system":
+                              setState(() {
+                                themeMode = 0;
+                              });
                               DisplaySettingFunction.config.saveTheme(0);
                               break;
                             
                             case "light":
+                              setState(() {
+                                themeMode = 1;
+                              });
                               DisplaySettingFunction.config.saveTheme(1);
                               break;
 
                             case "dark":
+                              setState(() {
+                                themeMode = 2;
+                              });
                               DisplaySettingFunction.config.saveTheme(2);
                               break;
                             
@@ -236,6 +247,20 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
                     children: [
 
                       const SizedBox(height: 8),
+                      SwitchListTile(
+                        title: const Text("Enable Image Fade-In Animation"),
+                        secondary: const Icon(Icons.photo_library),
+                        value: enabledImageFadeInAnimation,
+                        onChanged: (value) {
+                          setState(() {
+                            enabledImageFadeInAnimation = value;
+                          });
+
+                          DisplaySettingFunction.config.saveEnableImageFadeInAnimation(value);
+                        },
+                      ),
+                      const Divider(),
+
                       SwitchListTile(
                         title: const Text("Show Latency"),
                         secondary: const Icon(Icons.speed),

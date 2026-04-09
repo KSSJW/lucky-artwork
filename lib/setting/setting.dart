@@ -149,6 +149,8 @@ class SettingState extends State<Setting> {
               ],
             ),
           ),
+
+          const SizedBox(height: 100)
         ],
       ),
       floatingActionButton: SizedBox(

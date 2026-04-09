@@ -107,6 +107,12 @@ class Display {
     return prefs.getBool("show_latency") ?? true;
   }
 
+  Future<bool> isEnableImageFadeInAnimation() async {
+    var prefs = await SharedPreferences.getInstance();
+
+    return prefs.getBool("enable_image_fade_in_animation") ?? true;
+  }
+
   Future<bool> isEnabledExitButton() async {
     var prefs = await SharedPreferences.getInstance();
 
