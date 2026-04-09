@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucky_artwork/setting/display/display_setting_function.dart';
 import 'package:lucky_artwork/util/function_util.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class DisplaySettingPage extends StatefulWidget {
   const DisplaySettingPage({super.key});
@@ -17,15 +16,26 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
   int navigationBarStyle = 0;
   bool wakeLock = false;
   double buttonSize = 56.0;
-  bool enabledImageFadeInAnimation = true;
+  bool enabledFadeInAnimationForImage = true;
   bool showLatency = true;
   bool showExitButton = false;
   double imageColumns = 3;
 
   Future<bool> loadConfig() async {
-    final prefs = await SharedPreferences.getInstance();
+    final result = await Future.wait([
+      /* 0 */ FunctionUtil.display.getThemeMode(),
+      /* 1 */ FunctionUtil.display.getNavigationBarStyle(),
+      /* 2 */ FunctionUtil.display.isEnabledWakeLock(),
+      /* 3 */ FunctionUtil.display.getButtonSize(),
 
-    double rawImageColumns = prefs.getDouble("image_columns") ?? 3;
+      /* 4 */ FunctionUtil.display.isEnabledFadeInAnimationForImage(),
+      /* 5 */ FunctionUtil.display.isEnabledLatency(),
+      /* 6 */ FunctionUtil.display.isEnabledExitButton(),
+      
+      /* 7 */ FunctionUtil.display.getImageColumns()
+    ]);
+
+    double rawImageColumns = result[7] as double;
 
     if (rawImageColumns > 6) {
       DisplaySettingFunction.config.saveImageColumns(3);
@@ -33,13 +43,15 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
     }
     
     setState(() {
-      themeMode = prefs.getInt("theme_mode") ?? 0;
-      navigationBarStyle = prefs.getInt("navigation_bar_style") ?? 0;
-      wakeLock = prefs.getBool("wake_lock") ?? false;
-      buttonSize = prefs.getDouble("button_size") ?? 56.0;
-      enabledImageFadeInAnimation = prefs.getBool("enable_image_fade_in_animation") ?? true;
-      showLatency = prefs.getBool("show_latency") ?? true;
-      showExitButton = prefs.getBool("show_exit_button") ?? false;
+      themeMode = result[0] as int;
+      navigationBarStyle = result[1] as int;
+      wakeLock = result[2] as bool;
+      buttonSize = result[3] as double;
+
+      enabledFadeInAnimationForImage = result[4] as bool;
+      showLatency = result[5] as bool;
+      showExitButton = result[6] as bool;
+
       imageColumns = rawImageColumns;
     });
 
@@ -248,15 +260,15 @@ class DisplaySettingPageState extends State<DisplaySettingPage> {
 
                       const SizedBox(height: 8),
                       SwitchListTile(
-                        title: const Text("Enable Image Fade-In Animation"),
+                        title: const Text("Fade-In Animation For Image"),
                         secondary: const Icon(Icons.photo_library),
-                        value: enabledImageFadeInAnimation,
+                        value: enabledFadeInAnimationForImage,
                         onChanged: (value) {
                           setState(() {
-                            enabledImageFadeInAnimation = value;
+                            enabledFadeInAnimationForImage = value;
                           });
 
-                          DisplaySettingFunction.config.saveEnableImageFadeInAnimation(value);
+                          DisplaySettingFunction.config.saveFadeInAnimationForImage(value);
                         },
                       ),
                       const Divider(),

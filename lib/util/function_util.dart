@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:http/http.dart' as http;
-import 'package:lucky_artwork/util/context_util.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pub_semver/pub_semver.dart';
@@ -83,6 +82,12 @@ class Network {
 
 class Display {
 
+  Future<int>getThemeMode() async {
+    var prefs = await SharedPreferences.getInstance();
+
+    return prefs.getInt("theme_mode") ?? 0;
+  }
+
   Future<int> getNavigationBarStyle() async {
     var prefs = await SharedPreferences.getInstance();
 
@@ -101,16 +106,16 @@ class Display {
     return prefs.getDouble("button_size") ?? 56.0;
   }
 
+  Future<bool> isEnabledFadeInAnimationForImage() async {
+    var prefs = await SharedPreferences.getInstance();
+
+    return prefs.getBool("fade_in_animation_for_image") ?? true;
+  }
+
   Future<bool> isEnabledLatency() async {
     var prefs = await SharedPreferences.getInstance();
 
     return prefs.getBool("show_latency") ?? true;
-  }
-
-  Future<bool> isEnableImageFadeInAnimation() async {
-    var prefs = await SharedPreferences.getInstance();
-
-    return prefs.getBool("enable_image_fade_in_animation") ?? true;
   }
 
   Future<bool> isEnabledExitButton() async {
@@ -220,19 +225,21 @@ class Item {
             builder: (context) {
               return AlertDialog(
                 title: const Text("Get Updates"),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Update available: $currentVersion -> $latestVersion",
-                      style: const TextStyle(
-                        color: Colors.green,
+                content: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Update available: $currentVersion -> $latestVersion",
+                        style: const TextStyle(
+                          color: Colors.green,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text("$changelog")
-                  ],
+                      const SizedBox(height: 8),
+                      Text("$changelog")
+                    ],
+                  ),
                 ),
                 actions: [
                   Row(
@@ -322,27 +329,6 @@ class Item {
         }
       );
     }
-  }
-
-  AlertDialog getInfoAlertDialog(bool isDark, TextSpan version, NavigatorState navigatorState) {
-    return AlertDialog (
-      title: const Text("Lucky Artwork"),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ContextUtil().getInfo(isDark, version),
-        ],
-      ),
-      actions: [
-        ElevatedButton(
-          onPressed: () {
-            navigatorState.pop();
-          },
-          child: const Text("OK"),
-        ),
-      ],
-    );
   }
 
   Widget getRestartFloatingActionButton(BuildContext context) {

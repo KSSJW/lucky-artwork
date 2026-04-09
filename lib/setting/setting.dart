@@ -3,10 +3,10 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:lucky_artwork/setting/api/api_setting.dart';
 import 'package:lucky_artwork/setting/cache/cache_setting.dart';
 import 'package:lucky_artwork/setting/display/display_setting.dart';
+import 'package:lucky_artwork/setting/info/info.dart';
 import 'package:lucky_artwork/setting/update/update_setting.dart';
 import 'package:lucky_artwork/util/function_util.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:pub_semver/pub_semver.dart';
 
 class Setting extends StatefulWidget {
   const Setting({super.key});
@@ -22,23 +22,11 @@ class SettingState extends State<Setting> {
   Future loadConfig() async {
     final results = await Future.wait([
       FunctionUtil.display.getButtonSize(),
-      FunctionUtil.item.getPackageInfo()
     ]);
 
     setState(() {
-      buttonSize = results[0] as double;
-      packageInfo = results[1] as PackageInfo;
+      buttonSize = results[0];
     });
-  }
-
-  TextSpan getVersion() {
-    Version ver = Version.parse(packageInfo.version);
-    return TextSpan(
-      text: packageInfo.version,
-      style: TextStyle(
-        color: ver.isPreRelease ? (ver.preRelease.first == "alpha" ? Colors.red : Colors.orange) : Colors.green
-      ),
-    );
   }
 
   @override
@@ -49,8 +37,6 @@ class SettingState extends State<Setting> {
 
   @override
   Widget build(BuildContext context) {
-    bool isDark = Theme.of(context).brightness == Brightness.dark;
-
     return Scaffold(
       appBar: AppBar(title: Text("Setting")),
       body: ListView(
@@ -72,7 +58,7 @@ class SettingState extends State<Setting> {
                   ),
                   title: const Text("API"),
                   subtitle: const Text("Set the source of the image."),
-                  onTap: () async {
+                  onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => ApiSettingPage()),
@@ -88,7 +74,7 @@ class SettingState extends State<Setting> {
                   ),
                   title: const Text("Display"),
                   subtitle: const Text("Control the interface display of the software."),
-                  onTap: () async {
+                  onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => DisplaySettingPage()),
@@ -104,7 +90,7 @@ class SettingState extends State<Setting> {
                   ),
                   title: const Text("Cache"),
                   subtitle: const Text("Manage software cache."),
-                  onTap: () async {
+                  onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => CacheSettingPage()),
@@ -120,7 +106,7 @@ class SettingState extends State<Setting> {
                   ),
                   title: const Text("Update"),
                   subtitle: const Text("Get software updates."),
-                  onTap: () async {
+                  onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => UpdateSettingPage()),
@@ -136,13 +122,11 @@ class SettingState extends State<Setting> {
                   ),
                   title: const Text("Info"),
                   subtitle: const Text("Information about this software."),
-                  onTap: () => {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return FunctionUtil.item.getInfoAlertDialog(isDark, getVersion(), Navigator.of(context));
-                      },
-                    )
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => InfoPage()),
+                    );
                   },
                 ),
                 const SizedBox(height: 8),

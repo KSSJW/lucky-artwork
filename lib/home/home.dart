@@ -26,21 +26,21 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   double buttonSize = 56.0;
   bool enabledCacheAndHistory = true;
   bool showLatency = true;
-  bool enabledImageFadeInAnimation = true;
+  bool enabledFadeInAnimationForImage = true;
 
   Future loadConfig() async {
     final results = await Future.wait([
       FunctionUtil.display.isEnabledExitButton(),
       FunctionUtil.display.getButtonSize(),
       FunctionUtil.storage.isEnabledCacheAndHistory(),
-      FunctionUtil.display.isEnableImageFadeInAnimation()
+      FunctionUtil.display.isEnabledFadeInAnimationForImage()
     ]);
 
     setState(() {
       showExitButton = results[0] as bool;
       buttonSize = results[1] as double;
       enabledCacheAndHistory = results[2] as bool;
-      enabledImageFadeInAnimation = results[3] as bool;
+      enabledFadeInAnimationForImage = results[3] as bool;
     });
   }
 
@@ -68,20 +68,20 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
 
         setState(() {
           imageLoading = false;
-          if (enabledImageFadeInAnimation) _opacity = 0.0;
+          if (enabledFadeInAnimationForImage) _opacity = 0.0;
         });
 
         return response;
       } else {
         setState(() {
           imageLoading = false;
-          if (enabledImageFadeInAnimation) _opacity = 0.0;
+          if (enabledFadeInAnimationForImage) _opacity = 0.0;
         });
       }
     } catch (e) {
       setState(() {
         imageLoading = false;
-        if (enabledImageFadeInAnimation) _opacity = 0.0;
+        if (enabledFadeInAnimationForImage) _opacity = 0.0;
       });
       throw Exception(e);
     }
@@ -132,7 +132,7 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
             );
           } else if (snapshot.hasData) {
 
-            if (enabledImageFadeInAnimation) {
+            if (enabledFadeInAnimationForImage) {
 
               // 在当前帧的渲染完成之后
               WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -172,7 +172,7 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                     constraints: BoxConstraints(
                       maxHeight: MediaQuery.of(context).size.height > 224.0 ? MediaQuery.of(context).size.height - 168.0 : MediaQuery.of(context).size.height,
                     ),
-                    child: enabledImageFadeInAnimation ? AnimatedOpacity(
+                    child: enabledFadeInAnimationForImage ? AnimatedOpacity(
                       opacity: _opacity,
                       duration: const Duration(milliseconds: 200),
                       child: Image.memory(

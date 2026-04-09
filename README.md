@@ -18,3 +18,15 @@ A Flutter framework project that uses an API to get a random illustration.
 [Pixiv - なかよし姉妹 - ルヒカ](https://www.pixiv.net/artworks/71108570)
 
 [Pixiv - ジュースとミルク - Dhagp](https://www.pixiv.net/artworks/67447370)
+
+## Built-in API Providers
+
+Thanks to the API providers, who provided the soul of this software.
+
+[ManyACG](https://manyacg.top)
+
+[ZiChenACG](https://app.zichen.zone/api/acg)
+
+[樱花二次元图片](https://www.dmoe.cc)
+
+[东方Project随机图片](https://img.paulzzh.com)
