@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:lucky_artwork/setting/api/api_setting.dart';
 import 'package:lucky_artwork/setting/cache/cache_setting.dart';
+import 'package:lucky_artwork/setting/developer_options/developer_options_setting.dart';
 import 'package:lucky_artwork/setting/display/display_setting.dart';
-import 'package:lucky_artwork/setting/info/info.dart';
+import 'package:lucky_artwork/setting/about/info.dart';
 import 'package:lucky_artwork/setting/update/update_setting.dart';
 import 'package:lucky_artwork/util/function_util.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -61,7 +62,7 @@ class SettingState extends State<Setting> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ApiSettingPage()),
+                      MaterialPageRoute(builder: (context) => const ApiSettingPage()),
                     );
                   },
                 ),
@@ -77,7 +78,7 @@ class SettingState extends State<Setting> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => DisplaySettingPage()),
+                      MaterialPageRoute(builder: (context) => const DisplaySettingPage()),
                     );
                   },
                 ),
@@ -93,7 +94,7 @@ class SettingState extends State<Setting> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => CacheSettingPage()),
+                      MaterialPageRoute(builder: (context) => const CacheSettingPage()),
                     );
                   },
                 ),
@@ -109,7 +110,23 @@ class SettingState extends State<Setting> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => UpdateSettingPage()),
+                      MaterialPageRoute(builder: (context) => const UpdateSettingPage()),
+                    );
+                  },
+                ),
+                const Divider(),
+
+                ListTile(
+                  leading: const Icon(
+                    Icons.code,
+                    color: Colors.teal,
+                  ),
+                  title: const Text("Developer Options"),
+                  subtitle: const Text("Used for testing or advanced control."),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const DeveloperOptionsPage()),
                     );
                   },
                 ),
@@ -120,12 +137,12 @@ class SettingState extends State<Setting> {
                     Icons.info_outline,
                     color: Colors.blue,
                   ),
-                  title: const Text("Info"),
+                  title: const Text("About"),
                   subtitle: const Text("Information about this software."),
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => InfoPage()),
+                      MaterialPageRoute(builder: (context) => const AboutPage()),
                     );
                   },
                 ),

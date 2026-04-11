@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:lucky_artwork/home/home_full_screen_image.dart';
 import 'package:lucky_artwork/home/home_funcion.dart';
+import 'package:lucky_artwork/setting/api/api_setting.dart';
 import 'package:lucky_artwork/util/function_util.dart';
 
 class Home extends StatefulWidget {
@@ -197,7 +199,24 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                     size: 80,
                   ),
                   const SizedBox(height: 16),
-                  const Text("No Data")
+                  const Text("No Data"),
+                  Text.rich(
+                    TextSpan(
+                      text: "Try changing the API",
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                        decoration: TextDecoration.underline,
+                        decorationColor: Theme.of(context).colorScheme.primary,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const ApiSettingPage()),
+                          );
+                        }
+                    )
+                  ),
                 ],
               ),
             );

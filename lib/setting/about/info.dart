@@ -6,14 +6,14 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class InfoPage extends StatefulWidget{
-  const InfoPage({super.key});
+class AboutPage extends StatefulWidget{
+  const AboutPage({super.key});
 
   @override
-  State<StatefulWidget> createState() => InfoPageState();
+  State<StatefulWidget> createState() => AboutPageState();
 }
 
-class InfoPageState extends State<InfoPage> {
+class AboutPageState extends State<AboutPage> {
   late Future configLoadFuture;
 
   late PackageInfo packageInfo;

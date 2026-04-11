@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucky_artwork/setting/api/api_setting_function.dart';
+import 'package:lucky_artwork/setting/api/api_setting_item.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiSettingPage extends StatefulWidget {
@@ -97,8 +98,12 @@ class ApiSettingPageState extends State<ApiSettingPage> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: allApis.length,
+              itemCount: allApis.length +1,
               itemBuilder: (context, index) {
+                if (index == allApis.length) {
+                  return const SizedBox(height: 100); 
+                }
+
                 final api = allApis[index];
                 final isBuiltIn = builtInApis.contains(api);
                 return ListTile(
@@ -115,12 +120,23 @@ class ApiSettingPageState extends State<ApiSettingPage> {
                     },
                     child: Radio<String>(value: api),
                   ),
-                  trailing: isBuiltIn
-                    ? null
-                    : IconButton(
-                        icon: const Icon(Icons.delete, color: Colors.red),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+
+                      // 检查连通性按钮
+                      ApiCheckButton(api: api),
+
+                      // 删除按钮
+                      if (!isBuiltIn) IconButton(
+                        icon: const Icon(
+                          Icons.delete,
+                          color: Colors.red
+                        ),
                         onPressed: () => removeCustomApi(api),
                       ),
+                    ],
+                  ),
                   onTap: () {
                     setState(() {
                       selectedApi = api;
