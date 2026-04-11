@@ -15,7 +15,7 @@ class ApiCheckButtonState extends State<ApiCheckButton> {
 
   Future<bool> checkApiConnectivity(String apiUrl) async {
     try {
-      final response = await http.get(Uri.parse(apiUrl)).timeout(const Duration(seconds: 5));
+      final response = await http.head(Uri.parse(apiUrl)).timeout(const Duration(seconds: 8));
       return response.statusCode == 200;
     } catch (e) {
       return false;

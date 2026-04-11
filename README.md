@@ -25,6 +25,8 @@ Thanks to the API providers, who provided the soul of this software.
 
 [ManyACG](https://manyacg.top)
 
+[Yuki](https://blog.yuki.sh)
+
 [ZiChenACG](https://app.zichen.zone/api/acg)
 
 [樱花二次元图片](https://www.dmoe.cc)

@@ -16,6 +16,7 @@ class ApiSettingPageState extends State<ApiSettingPage> {
 
   final List<String> builtInApis = [
     "https://manyacg.top/sese",
+    "https://pixiv.yuki.sh/api/recommend?size=regular",
     "https://app.zichen.zone/api/acg/api.php",
     "https://www.dmoe.cc/random.php",
     "https://img.paulzzh.com/touhou/random"

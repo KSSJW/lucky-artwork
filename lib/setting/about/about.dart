@@ -324,6 +324,20 @@ class AboutPageState extends State<AboutPage> {
                       const SizedBox(height: 8),
                       ListTile(
                         leading: const Icon(Icons.api),
+                        title: const Text("Yuki"),
+                        trailing: const Icon(Icons.open_in_new),
+                        onTap: () {
+                          launchUrl(
+                            Uri.parse("https://blog.yuki.sh"),
+                            mode: LaunchMode.externalApplication,
+                          );
+                        },
+                      ),
+
+                      Divider(),
+
+                      ListTile(
+                        leading: const Icon(Icons.api),
                         title: const Text("ManyACG"),
                         trailing: const Icon(Icons.open_in_new),
                         onTap: () {
