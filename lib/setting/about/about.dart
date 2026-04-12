@@ -56,7 +56,7 @@ class AboutPageState extends State<AboutPage> {
           return const Center(child: CircularProgressIndicator());
         } else {
           return Scaffold(
-            appBar: AppBar(title: const Text("Info")),
+            appBar: AppBar(title: const Text("About")),
             body: ListView(
               padding: const EdgeInsets.all(8),
               children: [
@@ -324,11 +324,11 @@ class AboutPageState extends State<AboutPage> {
                       const SizedBox(height: 8),
                       ListTile(
                         leading: const Icon(Icons.api),
-                        title: const Text("Yuki"),
+                        title: const Text("ManyACG"),
                         trailing: const Icon(Icons.open_in_new),
                         onTap: () {
                           launchUrl(
-                            Uri.parse("https://blog.yuki.sh"),
+                            Uri.parse("https://manyacg.top"),
                             mode: LaunchMode.externalApplication,
                           );
                         },
@@ -338,11 +338,11 @@ class AboutPageState extends State<AboutPage> {
 
                       ListTile(
                         leading: const Icon(Icons.api),
-                        title: const Text("ManyACG"),
+                        title: const Text("Yuki"),
                         trailing: const Icon(Icons.open_in_new),
                         onTap: () {
                           launchUrl(
-                            Uri.parse("https://manyacg.top"),
+                            Uri.parse("https://blog.yuki.sh"),
                             mode: LaunchMode.externalApplication,
                           );
                         },

@@ -17,6 +17,15 @@ class FullScreenImage extends StatefulWidget {
 class FullScreenImageState extends State<FullScreenImage> {
   bool showUI = true;
 
+  late Future<bool> existsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    
+    existsFuture = widget.file.exists();
+  }
+
   @override
   Widget build(BuildContext context) {
     showUI ? SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge) : SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
@@ -27,8 +36,8 @@ class FullScreenImageState extends State<FullScreenImage> {
         foregroundColor: Colors.white,
       ) : null,
       extendBodyBehindAppBar: true,
-      body: FutureBuilder<Uint8List> (
-        future: widget.file.readAsBytes(),
+      body: FutureBuilder (
+        future: existsFuture,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return GestureDetector(

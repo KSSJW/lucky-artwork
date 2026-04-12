@@ -13,7 +13,17 @@ class DeveloperOptionsPage extends StatefulWidget {
 class DeveloperOptionsPageState extends State<DeveloperOptionsPage> {
   late Future configLoadFuture;
 
+  bool limitCaching = false;
+
   Future<bool> loadConfig() async {
+    final result = await Future.wait([
+      /* 0 */DeveloperOptionsFunction.config.isLimitCaching()
+    ]);
+
+    setState(() {
+      limitCaching = result[0];
+    });
+
     return true;
   }
 
@@ -123,6 +133,46 @@ class DeveloperOptionsPageState extends State<DeveloperOptionsPage> {
                               );
                             },
                           );
+                        },
+                      ),
+                      const SizedBox(height: 8),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 16),
+
+                const Row(
+                  children: [
+                    SizedBox(width: 20),
+                    Text(
+                      "Performance",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+
+                Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 8),
+                      SwitchListTile(
+                        title: const Text("Limit Caching"),
+                        subtitle: const Text("Use a more conservative caching strategy."),
+                        secondary: const Icon(Icons.memory),
+                        value: limitCaching,
+                        onChanged: (value) {
+                          setState(() {
+                            limitCaching = value;
+                          });
+
+                          DeveloperOptionsFunction.config.saveLimitCaching(value);
                         },
                       ),
                       const SizedBox(height: 8),

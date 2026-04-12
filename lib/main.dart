@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:lucky_artwork/history/history.dart';
 import 'package:lucky_artwork/home/home.dart';
+import 'package:lucky_artwork/setting/developer_options/developer_options_function.dart';
 import 'package:lucky_artwork/setting/setting.dart';
 import 'package:lucky_artwork/util/function_util.dart';
 import 'package:lucky_artwork/util/context_util.dart';
@@ -151,16 +152,32 @@ class MainPageState extends State<MainPage> {
     }
   }
 
-  Future<void> loadNavigationBarStyle() async {
-    navigationBarStyle = await FunctionUtil.display.getNavigationBarStyle();
-  }
+  Future<void> loadConfig() async {
+    final result = await Future.wait([
+      /* 0 */ FunctionUtil.display.getNavigationBarStyle(),
+      /* 1 */ FunctionUtil.network.isAutomaticUpdateCheck(),
+      /* 2 */ FunctionUtil.display.isEnabledWakeLock(),
+      /* 3 */ DeveloperOptionsFunction.config.isLimitCaching()
+    ]);
 
-  Future<void> loadAutomaticUpdateCheck() async {
-    automaticUpdateCheck = await FunctionUtil.network.isAutomaticUpdateCheck();
-  }
+    bool wakeLock = result[2] as bool;
+    bool limitCaching = result[3] as bool;
 
-  Future<void> checkWakeLock() async {
-    await FunctionUtil.display.isEnabledWakeLock() ? WakelockPlus.enable() : WakelockPlus.disable();
+    if (wakeLock) {
+      WakelockPlus.enable();
+    } else {
+      WakelockPlus.disable();
+    }
+
+    if (limitCaching) {
+      PaintingBinding.instance.imageCache.maximumSize = 50;
+      PaintingBinding.instance.imageCache.maximumSizeBytes = 50 << 20;
+    }
+
+    setState(() {
+      navigationBarStyle = result[0]as int;
+      automaticUpdateCheck = result[1] as bool;
+    });
   }
 
   void onItemTapped(int index) {
@@ -184,9 +201,7 @@ class MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     checkAgreement();
-    loadNavigationBarStyle();
-    loadAutomaticUpdateCheck();
-    checkWakeLock();
+    loadConfig();
   }
 
   @override
