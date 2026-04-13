@@ -270,13 +270,10 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
                   children: [
                     AspectRatio(
                       aspectRatio: 1, // 正方形格子
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.file(
-                          file,
-                          fit: BoxFit.cover,
-                          cacheWidth: initItemSize.toInt(),
-                        ),
+                      child: Image.file(
+                        file,
+                        fit: BoxFit.cover,
+                        cacheWidth: initItemSize.toInt(),
                       ),
                     ),
 
@@ -285,7 +282,6 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.transparent.withAlpha(100),
-                          borderRadius: BorderRadius.circular(8),
                         ),
                       ),
                     ),

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:lucky_artwork/setting/api/api_setting.dart';
@@ -62,7 +63,7 @@ class SettingState extends State<Setting> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const ApiSettingPage()),
+                      CupertinoPageRoute(builder: (context) => const ApiSettingPage()),
                     );
                   },
                 ),
@@ -78,7 +79,7 @@ class SettingState extends State<Setting> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const DisplaySettingPage()),
+                      CupertinoPageRoute(builder: (context) => const DisplaySettingPage()),
                     );
                   },
                 ),
@@ -94,7 +95,7 @@ class SettingState extends State<Setting> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const CacheSettingPage()),
+                      CupertinoPageRoute(builder: (context) => const CacheSettingPage()),
                     );
                   },
                 ),
@@ -110,7 +111,7 @@ class SettingState extends State<Setting> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const UpdateSettingPage()),
+                      CupertinoPageRoute(builder: (context) => const UpdateSettingPage()),
                     );
                   },
                 ),
@@ -126,7 +127,7 @@ class SettingState extends State<Setting> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const DeveloperOptionsPage()),
+                      CupertinoPageRoute(builder: (context) => const DeveloperOptionsPage()),
                     );
                   },
                 ),
@@ -142,7 +143,7 @@ class SettingState extends State<Setting> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const AboutPage()),
+                      CupertinoPageRoute(builder: (context) => const AboutPage()),
                     );
                   },
                 ),

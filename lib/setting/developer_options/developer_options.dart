@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:lucky_artwork/setting/developer_options/developer_options_function.dart';
@@ -12,6 +15,9 @@ class DeveloperOptionsPage extends StatefulWidget {
 
 class DeveloperOptionsPageState extends State<DeveloperOptionsPage> {
   late Future configLoadFuture;
+
+  int rssMb = 0;
+  late Timer _timer;
 
   bool limitCaching = false;
 
@@ -32,6 +38,19 @@ class DeveloperOptionsPageState extends State<DeveloperOptionsPage> {
     super.initState();
   
     configLoadFuture = loadConfig();
+
+    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      setState(() {
+        rssMb = ProcessInfo.currentRss >> 20;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+
+    super.dispose();
   }
 
   @override
@@ -162,6 +181,15 @@ class DeveloperOptionsPageState extends State<DeveloperOptionsPage> {
                   child: Column(
                     children: [
                       const SizedBox(height: 8),
+                      ListTile(
+                        leading: const Icon(Icons.data_usage),
+                        title: Text("Current Resident Set Size"),
+                        subtitle: Text("$rssMb MB"),
+                        onTap: () {},
+                      ),
+
+                      const Divider(),
+
                       SwitchListTile(
                         title: const Text("Limit Caching"),
                         subtitle: const Text("Use a more conservative caching strategy."),

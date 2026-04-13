@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -212,7 +213,7 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                         ..onTap = () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const ApiSettingPage()),
+                            CupertinoPageRoute(builder: (context) => const ApiSettingPage()),
                           );
                         }
                     )
