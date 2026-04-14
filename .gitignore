@@ -44,6 +44,9 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+# Flutter/Dart related
+devtools_options.yaml
+
 # Android related
 android/gradle-wrapper.jar
 android/.gradle

@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:lucky_artwork/setting/display/display_setting_function.dart';
 import 'package:lucky_artwork/util/function_util.dart';
 
-class DisplaySettingPage extends StatefulWidget {
-  const DisplaySettingPage({super.key});
+class DisplaySetting extends StatefulWidget {
+  const DisplaySetting({super.key});
 
   @override
-  DisplaySettingPageState createState() => DisplaySettingPageState();
+  DisplaySettingState createState() => DisplaySettingState();
 }
 
-class DisplaySettingPageState extends State<DisplaySettingPage> {
+class DisplaySettingState extends State<DisplaySetting> {
   late Future configLoadFuture;
 
   int themeMode = 0;

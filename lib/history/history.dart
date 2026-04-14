@@ -152,38 +152,25 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
         if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
 
         return Scaffold(
-          appBar: isDark ? AppBar(
+          appBar: AppBar(
             title: const Text("History"),
-            backgroundColor: Colors.transparent.withAlpha(64),
-            foregroundColor: Colors.white,
-            actions: [
-              if (!isSelectionMode) IconButton(
-                icon: const Icon(Icons.refresh),
-                tooltip: "Refresh",
-                onPressed: refreshHistory,
+            backgroundColor: Colors.transparent,
+            foregroundColor: isDark ? Colors.white : Colors.black,
+            flexibleSpace: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: isDark ? [
+                    Colors.transparent.withAlpha(192),
+                    Colors.transparent,
+                  ] : [
+                    Colors.white,
+                    Colors.white.withAlpha(0),
+                  ],
+                ),
               ),
-              IconButton(
-                icon: isSelectionMode ? const Icon(Icons.close) : const Icon(Icons.select_all),
-                tooltip: isSelectionMode ? "Close" : "Selection",
-                onPressed: () {
-                  if (!isSelectionMode) {
-                    setState(() {
-                      selectedIndexes.clear();
-                      isSelectionMode = true;
-                    });
-                  } else {
-                    setState(() {
-                      isSelectionMode = false;
-                      selectedIndexes.clear();
-                    });
-                  }
-                },
-              ),
-            ],
-          ) : AppBar(
-            title: const Text("History"),
-            backgroundColor: Colors.white.withAlpha(64),
-            foregroundColor: Colors.black,
+            ),
             actions: [
               if (!isSelectionMode) IconButton(
                 icon: const Icon(Icons.refresh),

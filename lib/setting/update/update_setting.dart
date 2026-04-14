@@ -4,14 +4,14 @@ import 'package:lucky_artwork/util/function_util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class UpdateSettingPage extends StatefulWidget {
-  const UpdateSettingPage({super.key});
+class UpdateSetting extends StatefulWidget {
+  const UpdateSetting({super.key});
 
   @override
-  State<StatefulWidget> createState() => UpdateSettingPageState();
+  State<StatefulWidget> createState() => UpdateSettingState();
 }
 
-class UpdateSettingPageState extends State<UpdateSettingPage> {
+class UpdateSettingState extends State<UpdateSetting> {
   late Future configLoadFuture;
 
   bool automaticUpdateCheck = false;

@@ -32,8 +32,20 @@ class FullScreenImageState extends State<FullScreenImage> {
 
     return Scaffold(
       appBar: showUI ? AppBar(
-        backgroundColor: Colors.transparent.withAlpha(128),
+        backgroundColor: Colors.transparent,
         foregroundColor: Colors.white,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.transparent.withAlpha(192),
+                Colors.transparent,
+              ],
+            ),
+          ),
+        ),
       ) : null,
       extendBodyBehindAppBar: true,
       body: FutureBuilder (

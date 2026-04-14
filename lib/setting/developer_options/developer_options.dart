@@ -5,18 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:lucky_artwork/setting/developer_options/developer_options_function.dart';
 import 'package:lucky_artwork/util/function_util.dart';
+import 'package:system_info2/system_info2.dart';
 
-class DeveloperOptionsPage extends StatefulWidget {
-  const DeveloperOptionsPage({super.key});
+class DeveloperOptions extends StatefulWidget {
+  const DeveloperOptions({super.key});
 
   @override
-  State<StatefulWidget> createState() => DeveloperOptionsPageState();
+  State<StatefulWidget> createState() => DeveloperOptionsState();
 }
 
-class DeveloperOptionsPageState extends State<DeveloperOptionsPage> {
+class DeveloperOptionsState extends State<DeveloperOptions> {
   late Future configLoadFuture;
 
   int rssMb = 0;
+  int maxRssMb = 0;
   late Timer _timer;
 
   bool limitCaching = false;
@@ -42,6 +44,7 @@ class DeveloperOptionsPageState extends State<DeveloperOptionsPage> {
     _timer = Timer.periodic(const Duration(seconds: 1), (_) {
       setState(() {
         rssMb = ProcessInfo.currentRss >> 20;
+        maxRssMb = ProcessInfo.maxRss >> 20;
       });
     });
   }
@@ -183,9 +186,28 @@ class DeveloperOptionsPageState extends State<DeveloperOptionsPage> {
                       const SizedBox(height: 8),
                       ListTile(
                         leading: const Icon(Icons.data_usage),
-                        title: Text("Current Resident Set Size"),
-                        subtitle: Text("$rssMb MB"),
-                        onTap: () {},
+                        title: Text("RAM Overview"),
+                        subtitle: Text("Current: $rssMb MB    Max: $maxRssMb MB    Total: ${SysInfo.getTotalPhysicalMemory() >> 20} MB"),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Stack(
+                            children: [
+                              LinearProgressIndicator(
+                                value: maxRssMb / (SysInfo.getTotalPhysicalMemory() >> 20),
+                                backgroundColor: Colors.transparent,
+                                color: Colors.orange,
+                              ),
+                              LinearProgressIndicator(
+                                value: rssMb / (SysInfo.getTotalPhysicalMemory() >> 20),
+                                backgroundColor: Theme.of(context).colorScheme.onSurface.withAlpha(64),
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
 
                       const Divider(),

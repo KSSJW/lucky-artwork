@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:lucky_artwork/setting/cache/cache_setting_function.dart';
 import 'package:lucky_artwork/util/function_util.dart';
 
-class CacheSettingPage extends StatefulWidget {
-  const CacheSettingPage({super.key});
+class CacheSetting extends StatefulWidget {
+  const CacheSetting({super.key});
 
   @override
-  CacheSettingPageState createState() => CacheSettingPageState();
+  CacheSettingState createState() => CacheSettingState();
 }
 
-class CacheSettingPageState extends State<CacheSettingPage> {
+class CacheSettingState extends State<CacheSetting> {
   late Future configLoadFuture;
 
   bool enabledCacheAndHistory = true;

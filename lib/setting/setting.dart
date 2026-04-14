@@ -63,7 +63,7 @@ class SettingState extends State<Setting> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      CupertinoPageRoute(builder: (context) => const ApiSettingPage()),
+                      CupertinoPageRoute(builder: (context) => const ApiSetting()),
                     );
                   },
                 ),
@@ -79,7 +79,7 @@ class SettingState extends State<Setting> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      CupertinoPageRoute(builder: (context) => const DisplaySettingPage()),
+                      CupertinoPageRoute(builder: (context) => const DisplaySetting()),
                     );
                   },
                 ),
@@ -95,7 +95,7 @@ class SettingState extends State<Setting> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      CupertinoPageRoute(builder: (context) => const CacheSettingPage()),
+                      CupertinoPageRoute(builder: (context) => const CacheSetting()),
                     );
                   },
                 ),
@@ -111,7 +111,7 @@ class SettingState extends State<Setting> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      CupertinoPageRoute(builder: (context) => const UpdateSettingPage()),
+                      CupertinoPageRoute(builder: (context) => const UpdateSetting()),
                     );
                   },
                 ),
@@ -127,7 +127,7 @@ class SettingState extends State<Setting> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      CupertinoPageRoute(builder: (context) => const DeveloperOptionsPage()),
+                      CupertinoPageRoute(builder: (context) => const DeveloperOptions()),
                     );
                   },
                 ),
@@ -143,7 +143,7 @@ class SettingState extends State<Setting> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      CupertinoPageRoute(builder: (context) => const AboutPage()),
+                      CupertinoPageRoute(builder: (context) => const About()),
                     );
                   },
                 ),

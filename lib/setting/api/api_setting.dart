@@ -3,14 +3,14 @@ import 'package:lucky_artwork/setting/api/api_setting_function.dart';
 import 'package:lucky_artwork/setting/api/api_setting_item.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ApiSettingPage extends StatefulWidget {
-  const ApiSettingPage({super.key});
+class ApiSetting extends StatefulWidget {
+  const ApiSetting({super.key});
 
   @override
-  ApiSettingPageState createState() => ApiSettingPageState();
+  ApiSettingState createState() => ApiSettingState();
 }
 
-class ApiSettingPageState extends State<ApiSettingPage> {
+class ApiSettingState extends State<ApiSetting> {
   final TextEditingController _controller = TextEditingController();
   String selectedApi = "";
 

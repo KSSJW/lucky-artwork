@@ -213,7 +213,7 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                         ..onTap = () {
                           Navigator.push(
                             context,
-                            CupertinoPageRoute(builder: (context) => const ApiSettingPage()),
+                            CupertinoPageRoute(builder: (context) => const ApiSetting()),
                           );
                         }
                     )
