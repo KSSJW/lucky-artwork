@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lucky_artwork/history/history_full_screen_image.dart';
@@ -22,6 +23,7 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
   Set<int> selectedIndexes = {};
   double buttonSize= 56.0;
   double imageColumns = 3.0;
+  bool showExploreButton = true;
 
   bool limitCaching = false;
 
@@ -35,7 +37,8 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
       /* 0 */ FunctionUtil.storage.isEnabledCacheAndHistory(),
       /* 1 */ FunctionUtil.display.getButtonSize(),
       /* 2 */ FunctionUtil.display.getImageColumns(),
-      /* 3 */ DeveloperOptionsFunction.config.isLimitCaching()
+      /* 3 */ FunctionUtil.display.isEnabledExploreButton(),
+      /* 4 */ DeveloperOptionsFunction.config.isLimitCaching()
     ]);
 
     double rawImageColumns = result[2] as double;
@@ -46,7 +49,8 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
       enabledCacheAndHistory = result[0] as bool;
       buttonSize = result[1] as double;
       imageColumns = rawImageColumns;
-      limitCaching = result[3] as bool;
+      showExploreButton = result[3] as bool;
+      limitCaching = result[4] as bool;
     });
 
     return true;
@@ -221,6 +225,7 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
               crossAxisCount: imageColumns.toInt(), // 列
               crossAxisSpacing: 4,
               mainAxisSpacing: 4,
+              childAspectRatio: 3 / 4,
             ),
             itemCount: (currentMax < imageFiles.length) ? currentMax : imageFiles.length,
             itemBuilder: (context, index) {
@@ -256,7 +261,7 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
                 child: Stack(
                   children: [
                     AspectRatio(
-                      aspectRatio: 1, // 正方形格子
+                      aspectRatio: 3 / 4,
                       child: Image.file(
                         file,
                         fit: BoxFit.cover,
@@ -291,6 +296,33 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
           floatingActionButton: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
+
+              if (showExploreButton && !isSelectionMode) SizedBox(
+                width: buttonSize,
+                height: buttonSize,
+                child: FloatingActionButton(
+                  heroTag: "explore",
+                  onPressed: () {
+                    int num = Random().nextInt(imageFiles.length);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => FullScreenImage(file: imageFiles[num], buttonSize: buttonSize),
+                      ),
+                    ).then((result) {
+                      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+                      if (result == null) return;
+                      if (result?["toDelete"]) refreshHistory();
+                    });
+                  },
+                  tooltip: "Explore",
+                  child: Icon(
+                    Icons.explore,
+                    size: buttonSize * 0.5,
+                  ),
+                ),
+              ),
+
               if (isSelectionMode) SizedBox(
                 width: buttonSize,
                 height: buttonSize,
@@ -367,7 +399,8 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
                   ),
                 ),
               ),
-              const SizedBox(width: 12),
+
+              if (isSelectionMode) const SizedBox(width: 12),
 
               if (isSelectionMode) SizedBox(
                 width: buttonSize,

@@ -64,4 +64,5 @@ android/**/*.jks
 
 # Linux related
 linux/flutter/ephemeral
+LuckyArtwork.AppDir/bundle/
 *.AppImage

@@ -16,10 +16,13 @@ class DisplaySettingState extends State<DisplaySetting> {
   int navigationBarStyle = 0;
   bool wakeLock = false;
   double buttonSize = 56.0;
+
   bool enabledFadeInAnimationForImage = true;
   bool showLatency = true;
   bool showExitButton = false;
+
   double imageColumns = 3;
+  bool showExploreButton = true;
 
   Future<bool> loadConfig() async {
     final result = await Future.wait([
@@ -32,7 +35,8 @@ class DisplaySettingState extends State<DisplaySetting> {
       /* 5 */ FunctionUtil.display.isEnabledLatency(),
       /* 6 */ FunctionUtil.display.isEnabledExitButton(),
       
-      /* 7 */ FunctionUtil.display.getImageColumns()
+      /* 7 */ FunctionUtil.display.getImageColumns(),
+      /* 8 */ FunctionUtil.display.isEnabledExploreButton()
     ]);
 
     double rawImageColumns = result[7] as double;
@@ -53,6 +57,7 @@ class DisplaySettingState extends State<DisplaySetting> {
       showExitButton = result[6] as bool;
 
       imageColumns = rawImageColumns;
+      showExploreButton = result[8] as bool;
     });
 
     return true;
@@ -349,6 +354,22 @@ class DisplaySettingState extends State<DisplaySetting> {
                           DisplaySettingFunction.config.saveImageColumns(value);
                         },
                       ),
+
+                      const Divider(),
+
+                      SwitchListTile(
+                        title: const Text("Show Explore Button"),
+                        secondary: const Icon(Icons.explore),
+                        value: showExploreButton,
+                        onChanged: (value) {
+                          setState(() {
+                            showExploreButton = value;
+                          });
+
+                          DisplaySettingFunction.config.saveExploreButton(value);
+                        },
+                      ),
+
                       const SizedBox(height: 8),
                     ],
                   ),

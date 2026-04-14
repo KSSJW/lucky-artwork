@@ -129,6 +129,12 @@ class Display {
 
     return prefs.getDouble("image_columns") ?? 3.0;
   }
+
+  Future<bool> isEnabledExploreButton() async {
+    var prefs = await SharedPreferences.getInstance();
+
+    return prefs.getBool("show_explore_button") ?? false;
+  }
 }
 
 class Item {

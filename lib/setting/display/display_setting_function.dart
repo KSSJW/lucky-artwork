@@ -46,6 +46,11 @@ class Config {
     await prefs.setDouble("image_columns", value);
   }
 
+  void saveExploreButton(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool("show_explore_button", value);
+  }
+
   String getSelectedTheme(int themeMode) {
     switch (themeMode) {
       case 0:

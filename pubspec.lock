@@ -573,14 +573,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.1"
-  system_info2:
+  system_info3:
     dependency: "direct main"
     description:
-      name: system_info2
-      sha256: b937736ecfa63c45b10dde1ceb6bb30e5c0c340e14c441df024150679d65ac43
+      name: system_info3
+      sha256: "82ba27fc0eb72e7affb0480fa9080eb1872f3f65f85dca59307d49f6992e3ce1"
       url: "https://pub.dev"
     source: hosted
-    version: "4.1.0"
+    version: "4.0.2"
   term_glyph:
     dependency: transitive
     description:
