@@ -301,19 +301,107 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
                 width: buttonSize,
                 height: buttonSize,
                 child: FloatingActionButton(
-                  heroTag: "explore",
+                  heroTag: "Explore",
                   onPressed: () {
-                    int num = Random().nextInt(imageFiles.length);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => FullScreenImage(file: imageFiles[num], buttonSize: buttonSize),
-                      ),
-                    ).then((result) {
-                      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-                      if (result == null) return;
-                      if (result?["toDelete"]) refreshHistory();
-                    });
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        int num = Random().nextInt(imageFiles.length);
+
+                        return StatefulBuilder(
+                          builder: (context, setState) {
+                            return Dialog.fullscreen(
+                              child: Scaffold(
+                                appBar: AppBar(
+                                  title: Text("Explore $num in ${imageFiles.length}"),
+                                  backgroundColor: Colors.transparent,
+                                  foregroundColor: Colors.white,
+                                  flexibleSpace: Container(
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        colors: [
+                                          Colors.transparent.withAlpha(192),
+                                          Colors.transparent,
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                extendBodyBehindAppBar: true,
+                                body: Center(
+                                  child: Image.file(
+                                    imageFiles[num],
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                floatingActionButton: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    SizedBox(
+                                      width: buttonSize,
+                                      height: buttonSize,
+                                      child: FloatingActionButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        tooltip: "Close",
+                                        child: Icon(
+                                          Icons.close,
+                                          size: buttonSize * 0.5,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    SizedBox(
+                                      width: buttonSize,
+                                      height: buttonSize,
+                                      child: FloatingActionButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (_) => FullScreenImage(file: imageFiles[num], buttonSize: buttonSize),
+                                            ),
+                                          ).then((result) {
+                                            SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+                                            if (result == null) return;
+                                            if (result?["toDelete"]) refreshHistory();
+                                          });
+                                        },
+                                        tooltip: "Open",
+                                        child: Icon(
+                                          Icons.zoom_out_map,
+                                          size: buttonSize * 0.5,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    SizedBox(
+                                      width: buttonSize,
+                                      height: buttonSize,
+                                      child: FloatingActionButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            num = Random().nextInt(imageFiles.length);
+                                          });
+                                        },
+                                        tooltip: "Next",
+                                        child: Icon(
+                                          Icons.refresh,
+                                          size: buttonSize * 0.5,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    );
                   },
                   tooltip: "Explore",
                   child: Icon(

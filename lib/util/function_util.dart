@@ -133,7 +133,7 @@ class Display {
   Future<bool> isEnabledExploreButton() async {
     var prefs = await SharedPreferences.getInstance();
 
-    return prefs.getBool("show_explore_button") ?? false;
+    return prefs.getBool("show_explore_button") ?? true;
   }
 }
 
