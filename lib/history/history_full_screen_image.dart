@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lucky_artwork/history/history_function.dart';
+import 'package:lucky_artwork/l10n/app_localizations.dart';
 
 class FullScreenImage extends StatefulWidget {
   final File file;
@@ -87,15 +88,15 @@ class FullScreenImageState extends State<FullScreenImage> {
                   context: context,
                   builder: (context) {
                     return AlertDialog(
-                      title: const Text("Delete"),
+                      title: Text(AppLocalizations.of(context)!.history_fullScreenImage_dialog_delete_title),
                       content: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Are you sure you want to delete this record?"),
+                          Text(AppLocalizations.of(context)!.history_fullScreenImage_dialog_delete_content1),
                           SizedBox(height: 8),
                           Text(
-                            "This operation will delete it from your history.",
+                            AppLocalizations.of(context)!.history_fullScreenImage_dialog_delete_content2,
                             style: TextStyle(
                               color: Colors.red
                             ),
@@ -110,7 +111,7 @@ class FullScreenImageState extends State<FullScreenImage> {
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                child: const Text("Cancel"),
+                                child: Text(AppLocalizations.of(context)!.history_fullScreenImage_dialog_delete_cancel),
                               ),
                               ElevatedButton(
                                 onPressed: () {
@@ -122,7 +123,7 @@ class FullScreenImageState extends State<FullScreenImage> {
                                   backgroundColor: Colors.red,
                                   foregroundColor: Colors.white,
                                 ),
-                                child: const Text("Delete"),
+                                child: Text(AppLocalizations.of(context)!.history_fullScreenImage_dialog_delete_delete),
                               ),
                           ],
                         ),
@@ -131,7 +132,7 @@ class FullScreenImageState extends State<FullScreenImage> {
                   },
                 );
               },
-              tooltip: "Delete",
+              tooltip: AppLocalizations.of(context)!.history_button_delete,
               backgroundColor: Colors.red,
               foregroundColor: Colors.white,
               child: Icon(
@@ -149,9 +150,11 @@ class FullScreenImageState extends State<FullScreenImage> {
               heroTag: "Download",
               onPressed: () async {
                 ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
-                HistoryFunction.storage.saveImageAndShowPath(widget.file, messenger);
+                AppLocalizations? locale = AppLocalizations.of(context);
+
+                HistoryFunction.storage.saveImageAndShowPath(widget.file, messenger, locale);
               },
-              tooltip: "Download",
+              tooltip: AppLocalizations.of(context)!.history_button_download,
               child: Icon(
                 Icons.download,
                 size: widget.buttonSize * 0.5,

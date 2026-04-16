@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lucky_artwork/home/home_funcion.dart';
+import 'package:lucky_artwork/l10n/app_localizations.dart';
 
 class FullScreenImage extends StatefulWidget {
   final Uint8List? bytes;
@@ -68,9 +69,11 @@ class FullScreenImageState extends State<FullScreenImage> {
               heroTag: "Download",
               onPressed: () async {
                 ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
-                HomeFuncion.storage.saveImageAndShowPath(await widget.futureResponse, messenger);
+                AppLocalizations? locale = AppLocalizations.of(context);
+                
+                HomeFuncion.storage.saveImageAndShowPath(await widget.futureResponse, messenger, locale);
               },
-              tooltip: "Download",
+              tooltip: AppLocalizations.of(context)!.home_fullScreenImage_button_download,
               child: Icon(
                 Icons.download,
                 size: widget.buttonSize * 0.5,

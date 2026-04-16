@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lucky_artwork/history/history_full_screen_image.dart';
 import 'package:lucky_artwork/history/history_function.dart';
+import 'package:lucky_artwork/l10n/app_localizations.dart';
 import 'package:lucky_artwork/setting/developer_options/developer_options_function.dart';
 import 'package:lucky_artwork/util/function_util.dart';
 
@@ -143,7 +144,7 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
                 size: 80,
               ),
               const SizedBox(height: 16),
-              const Text("Cache and History are Disabled"),
+              Text(AppLocalizations.of(context)!.history_cacheAndHistoryAreDisabled),
             ],
           ),
         ),
@@ -157,7 +158,7 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
 
         return Scaffold(
           appBar: AppBar(
-            title: const Text("History"),
+            title: Text(AppLocalizations.of(context)!.history_appbar_title),
             backgroundColor: Colors.transparent,
             foregroundColor: isDark ? Colors.white : Colors.black,
             flexibleSpace: Container(
@@ -178,12 +179,12 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
             actions: [
               if (!isSelectionMode) IconButton(
                 icon: const Icon(Icons.refresh),
-                tooltip: "Refresh",
+                tooltip: AppLocalizations.of(context)!.history_appbar_button_refresh,
                 onPressed: refreshHistory,
               ),
               IconButton(
                 icon: isSelectionMode ? const Icon(Icons.close) : const Icon(Icons.select_all),
-                tooltip: isSelectionMode ? "Close" : "Selection",
+                tooltip: isSelectionMode ? AppLocalizations.of(context)!.history_appbar_button_selection_close : AppLocalizations.of(context)!.history_appbar_button_selection,
                 onPressed: () {
                   if (!isSelectionMode) {
                     setState(() {
@@ -210,7 +211,7 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
                   size: 80,
                 ),
                 const SizedBox(height: 16),
-                const Text("No History"),
+                Text(AppLocalizations.of(context)!.history_noHistory),
               ],
             ),
           ) : GridView.builder(
@@ -313,7 +314,7 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
                             return Dialog.fullscreen(
                               child: Scaffold(
                                 appBar: AppBar(
-                                  title: Text("Explore $num in ${imageFiles.length}"),
+                                  title: Text(AppLocalizations.of(context)!.history_explore_appbar_title(imageFiles.length, num)),
                                   backgroundColor: Colors.transparent,
                                   foregroundColor: Colors.white,
                                   flexibleSpace: Container(
@@ -346,7 +347,7 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
                                         onPressed: () {
                                           Navigator.pop(context);
                                         },
-                                        tooltip: "Close",
+                                        tooltip: AppLocalizations.of(context)!.history_explore_button_close,
                                         child: Icon(
                                           Icons.close,
                                           size: buttonSize * 0.5,
@@ -370,7 +371,7 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
                                             if (result?["toDelete"]) refreshHistory();
                                           });
                                         },
-                                        tooltip: "Open",
+                                        tooltip: AppLocalizations.of(context)!.history_explore_button_open,
                                         child: Icon(
                                           Icons.zoom_out_map,
                                           size: buttonSize * 0.5,
@@ -387,7 +388,7 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
                                             num = Random().nextInt(imageFiles.length);
                                           });
                                         },
-                                        tooltip: "Next",
+                                        tooltip: AppLocalizations.of(context)!.history_explore_button_next,
                                         child: Icon(
                                           Icons.refresh,
                                           size: buttonSize * 0.5,
@@ -403,7 +404,7 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
                       },
                     );
                   },
-                  tooltip: "Explore",
+                  tooltip: AppLocalizations.of(context)!.history_button_explore,
                   child: Icon(
                     Icons.explore,
                     size: buttonSize * 0.5,
@@ -421,15 +422,15 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
                       context: context,
                       builder: (context) {
                         return AlertDialog(
-                          title: const Text("Delete"),
+                          title: Text(AppLocalizations.of(context)!.history_dialog_delete_title),
                           content: Column(
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text("Are you sure you want to delete this record?"),
+                              Text(AppLocalizations.of(context)!.history_dialog_delete_content1),
                               const SizedBox(height: 8),
-                              const Text(
-                                "This operation will delete it from your history.",
+                              Text(
+                                AppLocalizations.of(context)!.history_dialog_delete_content2,
                                 style: TextStyle(
                                   color: Colors.red
                                 ),
@@ -444,7 +445,7 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text("Cancel"),
+                                  child: Text(AppLocalizations.of(context)!.history_dialog_delete_cancel),
                                 ),
                                 ElevatedButton(
                                   onPressed: () async {
@@ -469,7 +470,7 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
                                     backgroundColor: Colors.red,
                                     foregroundColor: Colors.white,
                                   ),
-                                  child: const Text("Delete"),
+                                  child: Text(AppLocalizations.of(context)!.history_dialog_delete_delete),
                                 ),
                               ],
                             ),
@@ -478,7 +479,7 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
                       },
                     );
                   },
-                  tooltip: "Delete",
+                  tooltip: AppLocalizations.of(context)!.history_button_delete,
                   backgroundColor: Colors.red,
                   foregroundColor: Colors.white,
                   child: Icon(
@@ -498,6 +499,7 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
                   onPressed: () async {
                     final navigator = Navigator.of(context);
                     final message = ScaffoldMessenger.of(context);
+                    AppLocalizations? locale = AppLocalizations.of(context);
                     int status = -1;
                     int total = selectedIndexes.length;
                     final progress = ValueNotifier<int>(0);
@@ -507,7 +509,7 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
                       barrierDismissible: false,
                       builder: (_) {
                         return AlertDialog(
-                          title: const Text("Saving Images"),
+                          title: Text(AppLocalizations.of(context)!.history_dialog_saving),
                           content: ValueListenableBuilder<int>(
                             valueListenable: progress,
                             builder: (context, current, _) {
@@ -532,14 +534,14 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
                     }
 
                     navigator.pop();
-                    HistoryFunction.display.showSnackBar(message, status);
+                    HistoryFunction.display.showSnackBar(message, status, locale);
                     
                     setState(() {
                       isSelectionMode = false;
                       selectedIndexes.clear();
                     });
                   },
-                  tooltip: "Download",
+                  tooltip: AppLocalizations.of(context)!.history_button_download,
                   child: Icon(
                     Icons.download,
                     size: buttonSize * 0.5,

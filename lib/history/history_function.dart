@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
+import 'package:lucky_artwork/l10n/app_localizations.dart';
 import 'package:lucky_artwork/util/function_util.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -51,14 +52,14 @@ class Storage {
     return -1; // Fallback
   }
 
-  Future<void> saveImageAndShowPath(File file, ScaffoldMessengerState messenger) async {
+  Future<void> saveImageAndShowPath(File file, ScaffoldMessengerState messenger, AppLocalizations? locale) async {
     
     if (Platform.isLinux) {
       final dir = await getDownloadsDirectory();
 
       if (dir == null) {
         messenger.showSnackBar(
-          SnackBar(content: Text("Failed to save image")),
+          SnackBar(content: Text(locale!.history_snackbar_saveFailed)),
         );
 
         return;
@@ -68,7 +69,7 @@ class Storage {
       final newPath = "${dir.path}/image_${DateTime.now().millisecondsSinceEpoch}$ext";
       await file.copy(newPath);
       messenger.showSnackBar(
-        SnackBar(content: Text("Image saved to: $newPath")),
+        SnackBar(content: Text("${locale!.history_snackbar_saved}: $newPath")),
       );
 
       return;
@@ -89,11 +90,11 @@ class Storage {
 
         if (result['isSuccess']) {
           messenger.showSnackBar(
-            SnackBar(content: Text("Image saved to: /Pictures")),
+            SnackBar(content: Text("${locale!.history_snackbar_saved}: /Pictures")),
           );
         } else {
           messenger.showSnackBar(
-            const SnackBar(content: Text("Failed to save image")),
+            SnackBar(content: Text(locale!.history_snackbar_saveFailed)),
           );
         }
 
@@ -107,24 +108,24 @@ class Storage {
 
 class Display {
 
-  void showSnackBar(ScaffoldMessengerState message, int status) {
+  void showSnackBar(ScaffoldMessengerState message, int status, AppLocalizations? locale) {
     switch (status) {
       case 1:
         if (Platform.isLinux) {
           message.showSnackBar(
-            SnackBar(content: Text("Images saved to: /Downloads")),
+            SnackBar(content: Text("${locale!.history_snackbar_saved}: /Downloads")),
           );
         }
         if (Platform.isAndroid) {
           message.showSnackBar(
-            SnackBar(content: Text("Images saved to: /Pictures")),
+            SnackBar(content: Text("${locale!.history_snackbar_saved}: /Pictures")),
           );
         }
         break;
 
       case -1:
         message.showSnackBar(
-          SnackBar(content: Text("Failed to save images")),
+          SnackBar(content: Text(locale!.history_snackbar_saveFailed)),
         );
         break;
 

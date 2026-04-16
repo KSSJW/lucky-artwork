@@ -1,0 +1,53 @@
+{
+  "navigation_home": "Home",
+  "navigation_history": "History",
+  "navigation_setting": "Setting",
+
+  "home_noData": "No Data",
+  "home_tryChangingTheApi": "Try changing the API",
+
+  "home_button_next": "Next",
+  "home_button_download": "Download",
+  "home_button_download_loading": "Loading",
+  "home_button_exit": "Exit",
+
+  "home_fullScreenImage_button_download": "Download",
+
+  "home_snackbar_saved": "Image saved to",
+  "home_snackbar_saveFailed": "Failed to save image",
+
+  "history_appbar_title": "History",
+  "history_appbar_button_refresh": "Refresh",
+  "history_appbar_button_selection": "Selection",
+  "history_appbar_button_selection_close": "Close",
+
+  "history_cacheAndHistoryAreDisabled": "Cache and History are Disabled",
+  "history_noHistory": "No History",
+
+  "history_button_explore": "Explore",
+  "history_button_download": "Download",
+  "history_button_delete": "Delete",
+
+  "history_fullScreenImage_button_download": "Download",
+  "history_fullScreenImage_button_delete": "Delete",
+  "history_fullScreenImage_dialog_delete_title": "Delete",
+  "history_fullScreenImage_dialog_delete_content1": "Are you sure you want to delete these record?",
+  "history_fullScreenImage_dialog_delete_content2": "This operation will delete them from your history.",
+  "history_fullScreenImage_dialog_delete_cancel": "Cancel",
+  "history_fullScreenImage_dialog_delete_delete": "Delete",
+
+  "history_explore_appbar_title": "Explore {num} in {count}",
+  "history_explore_button_next": "Next",
+  "history_explore_button_open": "Open",
+  "history_explore_button_close": "Close",
+
+  "history_dialog_delete_title": "Delete",
+  "history_dialog_delete_content1": "Are you sure you want to delete these record?",
+  "history_dialog_delete_content2": "This operation will delete them from your history.",
+  "history_dialog_delete_cancel": "Cancel",
+  "history_dialog_delete_delete": "Delete",
+  "history_dialog_saving": "Saving Images",
+
+  "history_snackbar_saved": "Images saved to",
+  "history_snackbar_saveFailed": "Failed to save images"
+}

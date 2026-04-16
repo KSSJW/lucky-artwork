@@ -82,7 +82,22 @@ class Network {
 
 class Display {
 
-  Future<int>getThemeMode() async {
+  Future<Locale> getLocale() async {
+    var prefs = await SharedPreferences.getInstance();
+
+    String str = prefs.getString("locale") ?? "en_US";
+
+    final parts = str.split('_');
+    if (parts.length == 1) {
+      return Locale(parts[0]); // 只有语言
+    } else if (parts.length == 2) {
+      return Locale(parts[0], parts[1]); // 语言 + 国家/地区
+    } else {
+      throw FormatException("Invalid locale format: $str");
+    }    
+  }
+
+  Future<int> getThemeMode() async {
     var prefs = await SharedPreferences.getInstance();
 
     return prefs.getInt("theme_mode") ?? 0;

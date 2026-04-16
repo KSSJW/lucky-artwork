@@ -8,6 +8,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:lucky_artwork/home/home_full_screen_image.dart';
 import 'package:lucky_artwork/home/home_funcion.dart';
+import 'package:lucky_artwork/l10n/app_localizations.dart';
 import 'package:lucky_artwork/setting/api/api_setting.dart';
 import 'package:lucky_artwork/util/function_util.dart';
 
@@ -200,10 +201,10 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                     size: 80,
                   ),
                   const SizedBox(height: 16),
-                  const Text("No Data"),
+                  Text(AppLocalizations.of(context)!.home_noData),
                   Text.rich(
                     TextSpan(
-                      text: "Try changing the API",
+                      text: AppLocalizations.of(context)!.home_tryChangingTheApi,
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.primary,
                         decoration: TextDecoration.underline,
@@ -236,7 +237,7 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
               onPressed: () {
                 exit(0);  // 退出
               },
-              tooltip: "Exit",
+              tooltip: AppLocalizations.of(context)!.home_button_exit,
               child: Icon(
                 Icons.power_settings_new,
                 size: buttonSize * 0.5,
@@ -254,9 +255,11 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                 if (imageLoading) return;
 
                 ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
-                HomeFuncion.storage.saveImageAndShowPath(await futureResponse, messenger);
+                AppLocalizations? locale = AppLocalizations.of(context);
+                
+                HomeFuncion.storage.saveImageAndShowPath(await futureResponse, messenger, locale);
               },
-              tooltip: "Download",
+              tooltip: AppLocalizations.of(context)!.home_button_download,
               child: Icon(
                 Icons.download,
                 size: buttonSize * 0.5,
@@ -271,7 +274,7 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
             child: imageLoading ? FloatingActionButton(
               heroTag: "Loading",
               onPressed: () {},
-              tooltip: "Loading",
+              tooltip: AppLocalizations.of(context)!.home_button_download_loading,
               child: SizedBox(
                 width: buttonSize * 0.5,
                 height: buttonSize * 0.5,
@@ -284,7 +287,7 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                   futureResponse = fetchData(); // 刷新
                 });
               },
-              tooltip: "Next",
+              tooltip: AppLocalizations.of(context)!.home_button_next,
               child: Icon(
                 Icons.refresh,
                 size: buttonSize * 0.5,

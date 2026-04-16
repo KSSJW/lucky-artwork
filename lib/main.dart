@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:lucky_artwork/history/history.dart';
 import 'package:lucky_artwork/home/home.dart';
+import 'package:lucky_artwork/l10n/app_localizations.dart';
 import 'package:lucky_artwork/setting/developer_options/developer_options_function.dart';
 import 'package:lucky_artwork/setting/setting.dart';
 import 'package:lucky_artwork/util/function_util.dart';
@@ -20,13 +21,15 @@ void main() {
 }
 
 int themeMode = 0;
+Locale locale = Locale("en", "US");
 
 class App extends StatelessWidget {
   const App({super.key});
 
-  Future<void> loadThemeMode() async {
+  Future<void> loadConfig() async {
     var prefs = await SharedPreferences.getInstance();
     themeMode = prefs.getInt("theme_mode") ?? 0;
+    locale = await FunctionUtil.display.getLocale();
   }
 
   ThemeMode getThemeMode() {
@@ -48,7 +51,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: loadThemeMode(),
+      future: loadConfig(),
       builder: (context, snapshot) {
         return MaterialApp(
           theme: ThemeData(
@@ -65,7 +68,10 @@ class App extends StatelessWidget {
             ),
             useMaterial3: true,
           ),
+          locale: locale,
           themeMode: getThemeMode(),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           home: const MainPage(),
         );
       },
@@ -244,9 +250,9 @@ class MainPageState extends State<MainPage> {
             selectedIndex: selectedIndex,
             onDestinationSelected: onItemTapped,
             destinations: [
-              const NavigationDestination(icon: Icon(Icons.home), label: "Home"),
-              const NavigationDestination(icon: Icon(Icons.history), label: "History"),
-              const NavigationDestination(icon: Icon(Icons.settings), label: "Setting"),
+              NavigationDestination(icon: const Icon(Icons.home), label: AppLocalizations.of(context)!.navigation_home),
+              NavigationDestination(icon: const Icon(Icons.history), label: AppLocalizations.of(context)!.navigation_history),
+              NavigationDestination(icon: const Icon(Icons.settings), label: AppLocalizations.of(context)!.navigation_setting),
             ],
           ),
         );
@@ -262,20 +268,20 @@ class MainPageState extends State<MainPage> {
                 onDestinationSelected: onItemTapped,
                 labelType: NavigationRailLabelType.all,
                 destinations: [
-                  const NavigationRailDestination(
-                    padding: EdgeInsets.symmetric(vertical: 12),
-                    icon: Icon(Icons.home),
-                    label: Text("Home"),
+                  NavigationRailDestination(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    icon: const Icon(Icons.home),
+                    label: Text(AppLocalizations.of(context)!.navigation_home),
                   ),
-                  const NavigationRailDestination(
-                    padding: EdgeInsets.symmetric(vertical: 12),
-                    icon: Icon(Icons.history),
-                    label: Text("History"),
+                  NavigationRailDestination(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    icon: const Icon(Icons.history),
+                    label: Text(AppLocalizations.of(context)!.navigation_history),
                   ),
-                  const NavigationRailDestination(
-                    padding: EdgeInsets.symmetric(vertical: 12),
-                    icon: Icon(Icons.settings),
-                    label: Text("Setting"),
+                  NavigationRailDestination(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    icon: const Icon(Icons.settings),
+                    label: Text(AppLocalizations.of(context)!.navigation_setting),
                   ),
                 ],
               ),

@@ -6,6 +6,11 @@ class DisplaySettingFunction {
 
 class Config {
 
+  void saveLocale(String value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString("locale", value);
+  }
+
   void saveTheme(int value) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt("theme_mode", value);

@@ -12,6 +12,7 @@ class DisplaySetting extends StatefulWidget {
 class DisplaySettingState extends State<DisplaySetting> {
   late Future configLoadFuture;
 
+  Locale locale = Locale("en", "US");
   int themeMode = 0;
   int navigationBarStyle = 0;
   bool wakeLock = false;
@@ -26,20 +27,21 @@ class DisplaySettingState extends State<DisplaySetting> {
 
   Future<bool> loadConfig() async {
     final result = await Future.wait([
-      /* 0 */ FunctionUtil.display.getThemeMode(),
-      /* 1 */ FunctionUtil.display.getNavigationBarStyle(),
-      /* 2 */ FunctionUtil.display.isEnabledWakeLock(),
-      /* 3 */ FunctionUtil.display.getButtonSize(),
+      /* 0 */ FunctionUtil.display.getLocale(),
+      /* 1 */ FunctionUtil.display.getThemeMode(),
+      /* 2 */ FunctionUtil.display.getNavigationBarStyle(),
+      /* 3 */ FunctionUtil.display.isEnabledWakeLock(),
+      /* 4 */ FunctionUtil.display.getButtonSize(),
 
-      /* 4 */ FunctionUtil.display.isEnabledFadeInAnimationForImage(),
-      /* 5 */ FunctionUtil.display.isEnabledLatency(),
-      /* 6 */ FunctionUtil.display.isEnabledExitButton(),
-      
-      /* 7 */ FunctionUtil.display.getImageColumns(),
-      /* 8 */ FunctionUtil.display.isEnabledExploreButton()
+      /* 5 */ FunctionUtil.display.isEnabledFadeInAnimationForImage(),
+      /* 6 */ FunctionUtil.display.isEnabledLatency(),
+      /* 7 */ FunctionUtil.display.isEnabledExitButton(),
+
+      /* 8 */ FunctionUtil.display.getImageColumns(),
+      /* 9 */ FunctionUtil.display.isEnabledExploreButton()
     ]);
 
-    double rawImageColumns = result[7] as double;
+    double rawImageColumns = result[8] as double;
 
     if (rawImageColumns > 6) {
       DisplaySettingFunction.config.saveImageColumns(3);
@@ -47,17 +49,18 @@ class DisplaySettingState extends State<DisplaySetting> {
     }
     
     setState(() {
-      themeMode = result[0] as int;
-      navigationBarStyle = result[1] as int;
-      wakeLock = result[2] as bool;
-      buttonSize = result[3] as double;
+      locale = result[0] as Locale;
+      themeMode = result[1] as int;
+      navigationBarStyle = result[2] as int;
+      wakeLock = result[3] as bool;
+      buttonSize = result[4] as double;
 
-      enabledFadeInAnimationForImage = result[4] as bool;
-      showLatency = result[5] as bool;
-      showExitButton = result[6] as bool;
+      enabledFadeInAnimationForImage = result[5] as bool;
+      showLatency = result[6] as bool;
+      showExitButton = result[7] as bool;
 
       imageColumns = rawImageColumns;
-      showExploreButton = result[8] as bool;
+      showExploreButton = result[9] as bool;
     });
 
     return true;
@@ -122,6 +125,32 @@ class DisplaySettingState extends State<DisplaySetting> {
                     children: [
 
                       const SizedBox(height: 8),
+                      PopupMenuButton<Locale>(
+                        onSelected: (value) {
+                          setState(() {
+                            locale = value;
+                          });
+
+                          DisplaySettingFunction.config.saveLocale(value.toString());
+                        },
+                        itemBuilder: (BuildContext context) => <PopupMenuEntry<Locale>>[
+                          const PopupMenuItem<Locale>(
+                            value: Locale("en", "US"),
+                            child: Text("English (US)"),
+                          ),
+                          const PopupMenuItem<Locale>(
+                            value: Locale("zh", "CN"),
+                            child: Text("简体中文 (中国)"),
+                          ),
+                        ],
+                        child: ListTile(
+                          leading: Icon(Icons.language),
+                          title: const Text("Language"),
+                          subtitle: Text(locale.toString()),
+                          trailing: const Icon(Icons.arrow_drop_down),
+                        ),
+                      ),
+                      const Divider(),
                       PopupMenuButton<String>(
                         onSelected: (value) {
                           switch (value) {
