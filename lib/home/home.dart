@@ -200,7 +200,7 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                 Center(
                   child: ListView(
                     padding: EdgeInsets.only(
-                      top: (kToolbarHeight + MediaQuery.of(context).padding.top) * 0.5,
+                      top: 8 + (kToolbarHeight + MediaQuery.of(context).padding.top) * 0.5,
                       left: 8,
                       right: 8,
                       bottom: 8,

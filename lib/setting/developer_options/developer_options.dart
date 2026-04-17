@@ -21,16 +21,14 @@ class DeveloperOptionsState extends State<DeveloperOptions> {
   final rssNotifier = ValueNotifier<int>(0);
   final maxRssNotifier = ValueNotifier<int>(0);
 
-  bool limitCaching = false;
+  final limitCachingNotifier = ValueNotifier<bool>(false);
 
   Future<bool> loadConfig() async {
     final result = await Future.wait([
       /* 0 */DeveloperOptionsFunction.config.isLimitCaching()
     ]);
 
-    setState(() {
-      limitCaching = result[0];
-    });
+    limitCachingNotifier.value = result[0];
 
     return true;
   }
@@ -229,19 +227,19 @@ class DeveloperOptionsState extends State<DeveloperOptions> {
 
                         const Divider(),
 
-                        SwitchListTile(
-                          title: const Text("Limit Caching"),
-                          subtitle: const Text("Use a more conservative caching strategy."),
-                          secondary: const Icon(Icons.memory),
-                          value: limitCaching,
-                          onChanged: (value) {
-                            setState(() {
-                              limitCaching = value;
-                            });
+                        ValueListenableBuilder(valueListenable: limitCachingNotifier, builder: (_, limitCaching, _) {
+                          return SwitchListTile(
+                            title: const Text("Limit Caching"),
+                            subtitle: const Text("Use a more conservative caching strategy."),
+                            secondary: const Icon(Icons.memory),
+                            value: limitCaching,
+                            onChanged: (value) {
+                              limitCachingNotifier.value = value;
 
-                            DeveloperOptionsFunction.config.saveLimitCaching(value);
-                          },
-                        ),
+                              DeveloperOptionsFunction.config.saveLimitCaching(value);
+                            },
+                          );
+                        }),
                         const SizedBox(height: 8),
                       ],
                     ),
