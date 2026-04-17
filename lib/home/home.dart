@@ -138,9 +138,25 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
 
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(  // 加载中
-              child: SpinKitSquareCircle(
-                color: isDark ? Colors.white : Colors.blueGrey,
-                duration : const Duration(milliseconds: 600),
+              child: Stack(
+                children: [
+                  if (bytes != null) SizedBox.expand(
+                    child: Image.memory(
+                      bytes!,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  
+                  if (bytes != null) BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                    child: Container(color: isDark ? Colors.transparent.withAlpha(128) : Colors.transparent.withAlpha(64)),
+                  ),
+
+                  SpinKitSquareCircle(
+                    color: isDark ? Colors.white : Colors.blueGrey,
+                    duration : const Duration(milliseconds: 600),
+                  ),
+                ],
               ),
             );
           } else if (snapshot.hasError) {
@@ -184,7 +200,7 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                 Center(
                   child: ListView(
                     padding: EdgeInsets.only(
-                      top: (kToolbarHeight + MediaQuery.of(context).padding.top) * 0.75,
+                      top: (kToolbarHeight + MediaQuery.of(context).padding.top) * 0.5,
                       left: 8,
                       right: 8,
                       bottom: 8,

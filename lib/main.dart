@@ -324,7 +324,7 @@ class MainPageState extends State<MainPage> {
               Align(
                 alignment: Alignment.centerRight,
                 child: SizedBox(
-                  height: navigationBarLables ? 280.0 : 220.0,
+                  height: navigationBarLables ? 350.0 : 320.0,
                   width: 80.0,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(24), // 圆角
