@@ -294,261 +294,264 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
               );
             },
           ),
-          floatingActionButton: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
+          floatingActionButton: Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
 
-              if (showExploreButton && !isSelectionMode) SizedBox(
-                width: buttonSize,
-                height: buttonSize,
-                child: FloatingActionButton(
-                  heroTag: "Explore",
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        int num = Random().nextInt(imageFiles.length);
+                if (showExploreButton && !isSelectionMode) SizedBox(
+                  width: buttonSize,
+                  height: buttonSize,
+                  child: FloatingActionButton(
+                    heroTag: "Explore",
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          int num = Random().nextInt(imageFiles.length);
 
-                        return StatefulBuilder(
-                          builder: (context, setState) {
-                            return Dialog.fullscreen(
-                              child: Scaffold(
-                                appBar: AppBar(
-                                  title: Text(AppLocalizations.of(context)!.history_explore_appbar_title(imageFiles.length, num)),
-                                  backgroundColor: Colors.transparent,
-                                  foregroundColor: Colors.white,
-                                  flexibleSpace: Container(
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        begin: Alignment.topCenter,
-                                        end: Alignment.bottomCenter,
-                                        colors: [
-                                          Colors.transparent.withAlpha(192),
-                                          Colors.transparent,
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                extendBodyBehindAppBar: true,
-                                body: Center(
-                                  child: Image.file(
-                                    imageFiles[num],
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                floatingActionButton: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    SizedBox(
-                                      width: buttonSize,
-                                      height: buttonSize,
-                                      child: FloatingActionButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        tooltip: AppLocalizations.of(context)!.history_explore_button_close,
-                                        child: Icon(
-                                          Icons.close,
-                                          size: buttonSize * 0.5,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 12),
-                                    SizedBox(
-                                      width: buttonSize,
-                                      height: buttonSize,
-                                      child: FloatingActionButton(
-                                        onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (_) => FullScreenImage(file: imageFiles[num], buttonSize: buttonSize),
-                                            ),
-                                          ).then((result) {
-                                            SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-                                            if (result == null) return;
-                                            if (result?["toDelete"]) refreshHistory();
-                                          });
-                                        },
-                                        tooltip: AppLocalizations.of(context)!.history_explore_button_open,
-                                        child: Icon(
-                                          Icons.zoom_out_map,
-                                          size: buttonSize * 0.5,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 12),
-                                    SizedBox(
-                                      width: buttonSize,
-                                      height: buttonSize,
-                                      child: FloatingActionButton(
-                                        onPressed: () {
-                                          setState(() {
-                                            num = Random().nextInt(imageFiles.length);
-                                          });
-                                        },
-                                        tooltip: AppLocalizations.of(context)!.history_explore_button_next,
-                                        child: Icon(
-                                          Icons.refresh,
-                                          size: buttonSize * 0.5,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    );
-                  },
-                  tooltip: AppLocalizations.of(context)!.history_button_explore,
-                  child: Icon(
-                    Icons.explore,
-                    size: buttonSize * 0.5,
-                  ),
-                ),
-              ),
-
-              if (isSelectionMode) SizedBox(
-                width: buttonSize,
-                height: buttonSize,
-                child: FloatingActionButton(
-                  heroTag: "Delete",
-                  onPressed: () async {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: Text(AppLocalizations.of(context)!.history_dialog_delete_title),
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(AppLocalizations.of(context)!.history_dialog_delete_content1),
-                              const SizedBox(height: 8),
-                              Text(
-                                AppLocalizations.of(context)!.history_dialog_delete_content2,
-                                style: TextStyle(
-                                  color: Colors.red
-                                ),
-                              )
-                            ],
-                          ),
-                          actions: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Text(AppLocalizations.of(context)!.history_dialog_delete_cancel),
-                                ),
-                                ElevatedButton(
-                                  onPressed: () async {
-                                    final navigator = Navigator.of(context);
-
-                                    for (var index in selectedIndexes) {
-                                      final file = imageFiles[index];
-                                      
-                                      if (await file.exists()) file.delete();
-                                    }
-
-                                    await refreshHistory();
-                                    
-                                    setState(() {
-                                      isSelectionMode = false;
-                                      selectedIndexes.clear();
-                                    });
-
-                                    navigator.pop();
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.red,
+                          return StatefulBuilder(
+                            builder: (context, setState) {
+                              return Dialog.fullscreen(
+                                child: Scaffold(
+                                  appBar: AppBar(
+                                    title: Text(AppLocalizations.of(context)!.history_explore_appbar_title(imageFiles.length, num)),
+                                    backgroundColor: Colors.transparent,
                                     foregroundColor: Colors.white,
+                                    flexibleSpace: Container(
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter,
+                                          colors: [
+                                            Colors.transparent.withAlpha(192),
+                                            Colors.transparent,
+                                          ],
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                  child: Text(AppLocalizations.of(context)!.history_dialog_delete_delete),
+                                  extendBodyBehindAppBar: true,
+                                  body: Center(
+                                    child: Image.file(
+                                      imageFiles[num],
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  floatingActionButton: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      SizedBox(
+                                        width: buttonSize,
+                                        height: buttonSize,
+                                        child: FloatingActionButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          tooltip: AppLocalizations.of(context)!.history_explore_button_close,
+                                          child: Icon(
+                                            Icons.close,
+                                            size: buttonSize * 0.5,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 12),
+                                      SizedBox(
+                                        width: buttonSize,
+                                        height: buttonSize,
+                                        child: FloatingActionButton(
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (_) => FullScreenImage(file: imageFiles[num], buttonSize: buttonSize),
+                                              ),
+                                            ).then((result) {
+                                              SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+                                              if (result == null) return;
+                                              if (result?["toDelete"]) refreshHistory();
+                                            });
+                                          },
+                                          tooltip: AppLocalizations.of(context)!.history_explore_button_open,
+                                          child: Icon(
+                                            Icons.zoom_out_map,
+                                            size: buttonSize * 0.5,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 12),
+                                      SizedBox(
+                                        width: buttonSize,
+                                        height: buttonSize,
+                                        child: FloatingActionButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              num = Random().nextInt(imageFiles.length);
+                                            });
+                                          },
+                                          tooltip: AppLocalizations.of(context)!.history_explore_button_next,
+                                          child: Icon(
+                                            Icons.refresh,
+                                            size: buttonSize * 0.5,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ],
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                  tooltip: AppLocalizations.of(context)!.history_button_delete,
-                  backgroundColor: Colors.red,
-                  foregroundColor: Colors.white,
-                  child: Icon(
-                    Icons.delete,
-                    size: buttonSize * 0.5,
-                  ),
-                ),
-              ),
-
-              if (isSelectionMode) const SizedBox(width: 12),
-
-              if (isSelectionMode) SizedBox(
-                width: buttonSize,
-                height: buttonSize,
-                child: FloatingActionButton(
-                  heroTag: "Download",
-                  onPressed: () async {
-                    final navigator = Navigator.of(context);
-                    final message = ScaffoldMessenger.of(context);
-                    AppLocalizations? locale = AppLocalizations.of(context);
-                    int status = -1;
-                    int total = selectedIndexes.length;
-                    final progress = ValueNotifier<int>(0);
-
-                    showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (_) {
-                        return AlertDialog(
-                          title: Text(AppLocalizations.of(context)!.history_dialog_saving),
-                          content: ValueListenableBuilder<int>(
-                            valueListenable: progress,
-                            builder: (context, current, _) {
-                              return Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  LinearProgressIndicator(value: total == 0 ? 0 : current / total),
-                                  Text("$current / $total"),
-                                ],
                               );
                             },
-                          ),
-                        );
-                      },
-                    );
-
-                    for (var index in selectedIndexes) {
-                      final file = imageFiles[index];
-                      
-                      if (await file.exists()) status = await HistoryFunction.storage.saveImage(file);
-                      progress.value++;
-                    }
-
-                    navigator.pop();
-                    HistoryFunction.display.showSnackBar(message, status, locale);
-                    
-                    setState(() {
-                      isSelectionMode = false;
-                      selectedIndexes.clear();
-                    });
-                  },
-                  tooltip: AppLocalizations.of(context)!.history_button_download,
-                  child: Icon(
-                    Icons.download,
-                    size: buttonSize * 0.5,
+                          );
+                        },
+                      );
+                    },
+                    tooltip: AppLocalizations.of(context)!.history_button_explore,
+                    child: Icon(
+                      Icons.explore,
+                      size: buttonSize * 0.5,
+                    ),
                   ),
                 ),
-              ),
-            ]
+
+                if (isSelectionMode) SizedBox(
+                  width: buttonSize,
+                  height: buttonSize,
+                  child: FloatingActionButton(
+                    heroTag: "Delete",
+                    onPressed: () async {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text(AppLocalizations.of(context)!.history_dialog_delete_title),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(AppLocalizations.of(context)!.history_dialog_delete_content1),
+                                const SizedBox(height: 8),
+                                Text(
+                                  AppLocalizations.of(context)!.history_dialog_delete_content2,
+                                  style: TextStyle(
+                                    color: Colors.red
+                                  ),
+                                )
+                              ],
+                            ),
+                            actions: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text(AppLocalizations.of(context)!.history_dialog_delete_cancel),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () async {
+                                      final navigator = Navigator.of(context);
+
+                                      for (var index in selectedIndexes) {
+                                        final file = imageFiles[index];
+                                        
+                                        if (await file.exists()) file.delete();
+                                      }
+
+                                      await refreshHistory();
+                                      
+                                      setState(() {
+                                        isSelectionMode = false;
+                                        selectedIndexes.clear();
+                                      });
+
+                                      navigator.pop();
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.red,
+                                      foregroundColor: Colors.white,
+                                    ),
+                                    child: Text(AppLocalizations.of(context)!.history_dialog_delete_delete),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    tooltip: AppLocalizations.of(context)!.history_button_delete,
+                    backgroundColor: Colors.red,
+                    foregroundColor: Colors.white,
+                    child: Icon(
+                      Icons.delete,
+                      size: buttonSize * 0.5,
+                    ),
+                  ),
+                ),
+
+                if (isSelectionMode) const SizedBox(width: 12),
+
+                if (isSelectionMode) SizedBox(
+                  width: buttonSize,
+                  height: buttonSize,
+                  child: FloatingActionButton(
+                    heroTag: "Download",
+                    onPressed: () async {
+                      final navigator = Navigator.of(context);
+                      final message = ScaffoldMessenger.of(context);
+                      AppLocalizations? locale = AppLocalizations.of(context);
+                      int status = -1;
+                      int total = selectedIndexes.length;
+                      final progress = ValueNotifier<int>(0);
+
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (_) {
+                          return AlertDialog(
+                            title: Text(AppLocalizations.of(context)!.history_dialog_saving),
+                            content: ValueListenableBuilder<int>(
+                              valueListenable: progress,
+                              builder: (context, current, _) {
+                                return Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    LinearProgressIndicator(value: total == 0 ? 0 : current / total),
+                                    Text("$current / $total"),
+                                  ],
+                                );
+                              },
+                            ),
+                          );
+                        },
+                      );
+
+                      for (var index in selectedIndexes) {
+                        final file = imageFiles[index];
+                        
+                        if (await file.exists()) status = await HistoryFunction.storage.saveImage(file);
+                        progress.value++;
+                      }
+
+                      navigator.pop();
+                      HistoryFunction.display.showSnackBar(message, status, locale);
+                      
+                      setState(() {
+                        isSelectionMode = false;
+                        selectedIndexes.clear();
+                      });
+                    },
+                    tooltip: AppLocalizations.of(context)!.history_button_download,
+                    child: Icon(
+                      Icons.download,
+                      size: buttonSize * 0.5,
+                    ),
+                  ),
+                ),
+              ]
+            ),
           ),
         );
       },

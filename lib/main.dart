@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:lucky_artwork/history/history.dart';
@@ -230,6 +231,7 @@ class MainPageState extends State<MainPage> {
       // 底部导航栏
       if (navigationBarStyle == 0) {
         return Scaffold(
+          extendBody: true,
           body: PageView(
             controller: pageController,
             onPageChanged: (index) {
@@ -246,73 +248,126 @@ class MainPageState extends State<MainPage> {
               const Setting(),
             ],
           ),
-          bottomNavigationBar: NavigationBar(
-            selectedIndex: selectedIndex,
-            onDestinationSelected: onItemTapped,
-            destinations: [
-              NavigationDestination(icon: const Icon(Icons.home), label: AppLocalizations.of(context)!.navigation_home),
-              NavigationDestination(icon: const Icon(Icons.history), label: AppLocalizations.of(context)!.navigation_history),
-              NavigationDestination(icon: const Icon(Icons.settings), label: AppLocalizations.of(context)!.navigation_setting),
-            ],
+          bottomNavigationBar: Padding(
+            padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 12.0 + MediaQuery.of(context).padding.bottom),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(24),
+              child: Align(
+                alignment: Alignment.topCenter,
+                heightFactor: MediaQuery.of(context).padding.bottom == 0.0 ? 1.0 : 0.75, // 只显示上半部分
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.white.withAlpha(36),
+                          Colors.white.withAlpha(12)
+                        ],
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                      ),
+                    ),
+                    child: NavigationBar(
+                      backgroundColor: Colors.transparent,
+                      surfaceTintColor: Colors.white,
+                      selectedIndex: selectedIndex,
+                      onDestinationSelected: onItemTapped,
+                      labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+                      labelTextStyle: WidgetStateProperty.all(
+                        TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      destinations: [
+                        NavigationDestination(icon: const Icon(Icons.home), label: AppLocalizations.of(context)!.navigation_home),
+                        NavigationDestination(icon: const Icon(Icons.history), label: AppLocalizations.of(context)!.navigation_history),
+                        NavigationDestination(icon: const Icon(Icons.settings), label: AppLocalizations.of(context)!.navigation_setting),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ),
         );
       }
 
-      // 左侧导航栏
+      // 右侧导航栏
       if (navigationBarStyle == 1) {
         return Scaffold(
-          body: Row(
+          body: Stack(
             children: [
-              NavigationRail(
-                selectedIndex: selectedIndex,
-                onDestinationSelected: onItemTapped,
-                labelType: NavigationRailLabelType.all,
-                destinations: [
-                  NavigationRailDestination(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    icon: const Icon(Icons.home),
-                    label: Text(AppLocalizations.of(context)!.navigation_home),
-                  ),
-                  NavigationRailDestination(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    icon: const Icon(Icons.history),
-                    label: Text(AppLocalizations.of(context)!.navigation_history),
-                  ),
-                  NavigationRailDestination(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    icon: const Icon(Icons.settings),
-                    label: Text(AppLocalizations.of(context)!.navigation_setting),
-                  ),
-                ],
-              ),
 
               // 主内容区域
-              Expanded(
-                child: Column(
+              Positioned.fill(
+                child: PageView(
+                  scrollDirection: Axis.vertical,
+                  controller: pageController,
+                  physics: const NeverScrollableScrollPhysics(),
+                  onPageChanged: (index) {
+                    setState(() {
+                      selectedIndex = index;
+                      if (index == 1) {
+                        historyKey.currentState?.refreshHistory();
+                      }
+                    });
+                  },
                   children: [
-                    Expanded(
-                      child: PageView(
-                        scrollDirection: Axis.vertical,
-                        controller: pageController,
-                        physics: const NeverScrollableScrollPhysics(),
-                        onPageChanged: (index) {
-                          setState(() {
-                            selectedIndex = index;
-                            if (index == 1) {
-                              historyKey.currentState?.refreshHistory();
-                            }
-                          });
-                        },
-                        children: [
-                          const Home(),
-                          History(key: historyKey),
-                          const Setting(),
-                        ],
-                      ),
-                    ),
+                    const Home(),
+                    History(key: historyKey),
+                    const Setting(),
                   ],
                 ),
               ),
+
+              Align(
+                alignment: Alignment.centerRight,
+                child: SizedBox(
+                  height: 320.0,
+                  width: 80.0,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(24), // 圆角
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15), // 毛玻璃模糊
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Colors.white.withAlpha(36),
+                              Colors.white.withAlpha(12)
+                            ],
+                            begin: Alignment.bottomRight,
+                            end: Alignment.bottomLeft,
+                          ),
+                        ),
+                        child: NavigationRail(
+                          backgroundColor: Colors.transparent,
+                          selectedIndex: selectedIndex,
+                          onDestinationSelected: onItemTapped,
+                          labelType: NavigationRailLabelType.all,
+                          groupAlignment: 0.0,
+                          destinations: [
+                            NavigationRailDestination(
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              icon: const Icon(Icons.home),
+                              label: Text(AppLocalizations.of(context)!.navigation_home),
+                            ),
+                            NavigationRailDestination(
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              icon: const Icon(Icons.history),
+                              label: Text(AppLocalizations.of(context)!.navigation_history),
+                            ),
+                            NavigationRailDestination(
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              icon: const Icon(Icons.settings),
+                              label: Text(AppLocalizations.of(context)!.navigation_setting),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              )
             ],
           ),
         );

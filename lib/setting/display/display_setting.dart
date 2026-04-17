@@ -214,7 +214,7 @@ class DisplaySettingState extends State<DisplaySetting> {
                           ),
                           const ButtonSegment(
                             value: 1,
-                            label: Text("Left"),
+                            label: Text("Right"),
                           ),
                         ],
                         selected: {

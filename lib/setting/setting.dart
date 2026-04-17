@@ -155,66 +155,69 @@ class SettingState extends State<Setting> {
           const SizedBox(height: 100)
         ],
       ),
-      floatingActionButton: SizedBox(
-        width: buttonSize,
-        height: buttonSize,
-        child: FloatingActionButton(
-          heroTag: null,
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: const Text("Restart"),
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text("Are you ready to restart?"),
-                      const SizedBox(height: 8),
-                      const Text("Restarting will take effect immediately,"),
-                      const SizedBox(height: 8),
-                      const Text(
-                        "If you have disabled caching, it is recommended that you save the necessary data before restarting.",
-                        style: TextStyle(
-                          color: Colors.orange
-                        ),
-                      )
-                    ],
-                  ),
-                  actions: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      floatingActionButton: Padding(
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+        child: SizedBox(
+          width: buttonSize,
+          height: buttonSize,
+          child: FloatingActionButton(
+            heroTag: null,
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text("Restart"),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text("Cancel"),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            Phoenix.rebirth(context);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.orange,
-                            foregroundColor: Colors.white,
+                        const Text("Are you ready to restart?"),
+                        const SizedBox(height: 8),
+                        const Text("Restarting will take effect immediately,"),
+                        const SizedBox(height: 8),
+                        const Text(
+                          "If you have disabled caching, it is recommended that you save the necessary data before restarting.",
+                          style: TextStyle(
+                            color: Colors.orange
                           ),
-                          child: const Text("Restart"),
-                        ),
+                        )
                       ],
                     ),
-                  ],
-                );
-              },
-            );
-          },
-          tooltip: "Restart",
-          backgroundColor: Colors.orange,
-          foregroundColor: Colors.white,
-          child: Icon(
-            Icons.restart_alt,
-            size: buttonSize * 0.5,
+                    actions: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text("Cancel"),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              Phoenix.rebirth(context);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.orange,
+                              foregroundColor: Colors.white,
+                            ),
+                            child: const Text("Restart"),
+                          ),
+                        ],
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            tooltip: "Restart",
+            backgroundColor: Colors.orange,
+            foregroundColor: Colors.white,
+            child: Icon(
+              Icons.restart_alt,
+              size: buttonSize * 0.5,
+            ),
           ),
         ),
       ),
