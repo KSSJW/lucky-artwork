@@ -23,14 +23,15 @@ void main() {
 
 int themeMode = 0;
 Locale locale = Locale("en", "US");
+bool navigationBarLables = true;
 
 class App extends StatelessWidget {
   const App({super.key});
 
   Future<void> loadConfig() async {
-    var prefs = await SharedPreferences.getInstance();
-    themeMode = prefs.getInt("theme_mode") ?? 0;
+    themeMode = await FunctionUtil.display.getThemeMode();
     locale = await FunctionUtil.display.getLocale();
+    navigationBarLables = await FunctionUtil.display.isEnabledNavigationBarLabels();
   }
 
   ThemeMode getThemeMode() {
@@ -269,11 +270,12 @@ class MainPageState extends State<MainPage> {
                       ),
                     ),
                     child: NavigationBar(
+                      height: navigationBarLables ? null : 45.0,
                       backgroundColor: Colors.transparent,
                       surfaceTintColor: Colors.white,
                       selectedIndex: selectedIndex,
                       onDestinationSelected: onItemTapped,
-                      labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+                      labelBehavior: navigationBarLables ? NavigationDestinationLabelBehavior.onlyShowSelected : NavigationDestinationLabelBehavior.alwaysHide,
                       labelTextStyle: WidgetStateProperty.all(
                         TextStyle(fontWeight: FontWeight.bold),
                       ),
@@ -322,7 +324,7 @@ class MainPageState extends State<MainPage> {
               Align(
                 alignment: Alignment.centerRight,
                 child: SizedBox(
-                  height: 320.0,
+                  height: navigationBarLables ? 280.0 : 220.0,
                   width: 80.0,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(24), // 圆角
@@ -343,7 +345,7 @@ class MainPageState extends State<MainPage> {
                           backgroundColor: Colors.transparent,
                           selectedIndex: selectedIndex,
                           onDestinationSelected: onItemTapped,
-                          labelType: NavigationRailLabelType.all,
+                          labelType: navigationBarLables ? NavigationRailLabelType.all : NavigationRailLabelType.none,
                           groupAlignment: 0.0,
                           destinations: [
                             NavigationRailDestination(

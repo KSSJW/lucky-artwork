@@ -109,6 +109,12 @@ class Display {
     return prefs.getInt("navigation_bar_style") ?? 0;
   }
 
+  Future<bool> isEnabledNavigationBarLabels() async {
+    var prefs = await SharedPreferences.getInstance();
+
+    return prefs.getBool("navigation_bar_labels") ?? true;
+  }
+
   Future<bool> isEnabledWakeLock() async {
     var prefs = await SharedPreferences.getInstance();
 
@@ -136,7 +142,7 @@ class Display {
   Future<bool> isEnabledExitButton() async {
     var prefs = await SharedPreferences.getInstance();
 
-    return prefs.getBool("show_exit_button") ?? false;
+    return prefs.getBool("exit_button") ?? false;
   }
 
   Future<double> getImageColumns() async {
@@ -148,7 +154,7 @@ class Display {
   Future<bool> isEnabledExploreButton() async {
     var prefs = await SharedPreferences.getInstance();
 
-    return prefs.getBool("show_explore_button") ?? true;
+    return prefs.getBool("explore_button") ?? true;
   }
 }
 

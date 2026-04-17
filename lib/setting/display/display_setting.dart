@@ -15,33 +15,35 @@ class DisplaySettingState extends State<DisplaySetting> {
   Locale locale = Locale("en", "US");
   int themeMode = 0;
   int navigationBarStyle = 0;
+  bool navigationBarLables = true;
   bool wakeLock = false;
   double buttonSize = 56.0;
 
-  bool enabledFadeInAnimationForImage = true;
+  bool fadeInAnimationForImage = true;
   bool showLatency = true;
-  bool showExitButton = false;
+  bool exitButton = false;
 
   double imageColumns = 3;
-  bool showExploreButton = true;
+  bool exploreButton = true;
 
   Future<bool> loadConfig() async {
     final result = await Future.wait([
       /* 0 */ FunctionUtil.display.getLocale(),
       /* 1 */ FunctionUtil.display.getThemeMode(),
       /* 2 */ FunctionUtil.display.getNavigationBarStyle(),
-      /* 3 */ FunctionUtil.display.isEnabledWakeLock(),
-      /* 4 */ FunctionUtil.display.getButtonSize(),
+      /* 3 */ FunctionUtil.display.isEnabledNavigationBarLabels(),
+      /* 4 */ FunctionUtil.display.isEnabledWakeLock(),
+      /* 5 */ FunctionUtil.display.getButtonSize(),
 
-      /* 5 */ FunctionUtil.display.isEnabledFadeInAnimationForImage(),
-      /* 6 */ FunctionUtil.display.isEnabledLatency(),
-      /* 7 */ FunctionUtil.display.isEnabledExitButton(),
+      /* 6 */ FunctionUtil.display.isEnabledFadeInAnimationForImage(),
+      /* 7 */ FunctionUtil.display.isEnabledLatency(),
+      /* 8 */ FunctionUtil.display.isEnabledExitButton(),
 
-      /* 8 */ FunctionUtil.display.getImageColumns(),
-      /* 9 */ FunctionUtil.display.isEnabledExploreButton()
+      /* 9 */ FunctionUtil.display.getImageColumns(),
+      /* 10 */ FunctionUtil.display.isEnabledExploreButton()
     ]);
 
-    double rawImageColumns = result[8] as double;
+    double rawImageColumns = result[9] as double;
 
     if (rawImageColumns > 6) {
       DisplaySettingFunction.config.saveImageColumns(3);
@@ -52,15 +54,16 @@ class DisplaySettingState extends State<DisplaySetting> {
       locale = result[0] as Locale;
       themeMode = result[1] as int;
       navigationBarStyle = result[2] as int;
-      wakeLock = result[3] as bool;
-      buttonSize = result[4] as double;
+      navigationBarLables = result[3] as bool;
+      wakeLock = result[4] as bool;
+      buttonSize = result[5] as double;
 
-      enabledFadeInAnimationForImage = result[5] as bool;
-      showLatency = result[6] as bool;
-      showExitButton = result[7] as bool;
+      fadeInAnimationForImage = result[6] as bool;
+      showLatency = result[7] as bool;
+      exitButton = result[8] as bool;
 
       imageColumns = rawImageColumns;
-      showExploreButton = result[9] as bool;
+      exploreButton = result[10] as bool;
     });
 
     return true;
@@ -231,6 +234,19 @@ class DisplaySettingState extends State<DisplaySetting> {
                       const SizedBox(height: 16),
                       const Divider(),
                       SwitchListTile(
+                        title: const Text("Navigation Bar Labels"),
+                        secondary: const Icon(Icons.label),
+                        value: navigationBarLables,
+                        onChanged: (value) {
+                          setState(() {
+                            navigationBarLables = value;
+                          });
+
+                          DisplaySettingFunction.config.saveNavigationBarLabels(value);
+                        },
+                      ),
+                      const Divider(),
+                      SwitchListTile(
                         title: const Text("Wake Lock"),
                         secondary: const Icon(Icons.lightbulb),
                         value: wakeLock,
@@ -296,10 +312,10 @@ class DisplaySettingState extends State<DisplaySetting> {
                       SwitchListTile(
                         title: const Text("Fade-In Animation For Image"),
                         secondary: const Icon(Icons.photo_library),
-                        value: enabledFadeInAnimationForImage,
+                        value: fadeInAnimationForImage,
                         onChanged: (value) {
                           setState(() {
-                            enabledFadeInAnimationForImage = value;
+                            fadeInAnimationForImage = value;
                           });
 
                           DisplaySettingFunction.config.saveFadeInAnimationForImage(value);
@@ -322,12 +338,12 @@ class DisplaySettingState extends State<DisplaySetting> {
                       const Divider(),
 
                       SwitchListTile(
-                        title: const Text("Show Exit Button"),
+                        title: const Text("Exit Button"),
                         secondary: const Icon(Icons.power_settings_new),
-                        value: showExitButton,
+                        value: exitButton,
                         onChanged: (value) {
                           setState(() {
-                            showExitButton = value;
+                            exitButton = value;
                           });
 
                           DisplaySettingFunction.config.saveExitButton(value);
@@ -387,12 +403,12 @@ class DisplaySettingState extends State<DisplaySetting> {
                       const Divider(),
 
                       SwitchListTile(
-                        title: const Text("Show Explore Button"),
+                        title: const Text("Explore Button"),
                         secondary: const Icon(Icons.explore),
-                        value: showExploreButton,
+                        value: exploreButton,
                         onChanged: (value) {
                           setState(() {
-                            showExploreButton = value;
+                            exploreButton = value;
                           });
 
                           DisplaySettingFunction.config.saveExploreButton(value);

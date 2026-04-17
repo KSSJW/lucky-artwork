@@ -21,6 +21,11 @@ class Config {
     await prefs.setInt("navigation_bar_style", value);
   }
 
+  void saveNavigationBarLabels(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool("navigation_bar_labels", value);
+  }
+
   void saveWakeLock(bool value) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool("wake_lock", value);
@@ -43,7 +48,7 @@ class Config {
 
   void saveExitButton(bool value) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool("show_exit_button", value);
+    await prefs.setBool("exit_button", value);
   }
 
   void saveImageColumns(double value) async {
@@ -53,7 +58,7 @@ class Config {
 
   void saveExploreButton(bool value) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool("show_explore_button", value);
+    await prefs.setBool("explore_button", value);
   }
 
   String getSelectedTheme(int themeMode) {
