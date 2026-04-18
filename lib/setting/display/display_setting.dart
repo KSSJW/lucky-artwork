@@ -213,10 +213,14 @@ class DisplaySettingState extends State<DisplaySetting> {
                         segments: [
                           const ButtonSegment(
                             value: 0,
-                            label: Text("Bottom"),
+                            label: Text("Auto"),
                           ),
                           const ButtonSegment(
                             value: 1,
+                            label: Text("Bottom"),
+                          ),
+                          const ButtonSegment(
+                            value: 2,
                             label: Text("Right"),
                           ),
                         ],

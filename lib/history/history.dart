@@ -220,7 +220,7 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
               top: kToolbarHeight + MediaQuery.of(context).padding.top + 8,
               left: 8,
               right: 8,
-              bottom: 8,
+              bottom: 100,
             ),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: imageColumns.toInt(), // 列

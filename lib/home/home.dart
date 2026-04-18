@@ -152,7 +152,7 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                     child: Image.memory(
                       bytes!,
                       fit: BoxFit.cover,
-                      cacheWidth: MediaQuery.of(context).size.width.toInt(),
+                      cacheWidth: 100,
                     ),
                   ),
                   
@@ -193,12 +193,12 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                     child: Image.memory(
                       bytes!,
                       fit: BoxFit.cover,
-                      cacheWidth: MediaQuery.of(context).size.width.toInt(),
+                      cacheWidth: 100,
                     ),
                   ) : Image.memory(
                     bytes!,
                     fit: BoxFit.cover,
-                    cacheWidth: MediaQuery.of(context).size.width.toInt(),
+                    cacheWidth: 100,
                   ),
                 ),
 

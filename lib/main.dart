@@ -95,6 +95,7 @@ class MainPageState extends State<MainPage> {
   int navigationBarStyle = 0;
 
   bool promptedUpdate = false;
+  int navigationBarPos = 1;
   int selectedIndex = 0;
   final PageController pageController = PageController();
 
@@ -186,6 +187,18 @@ class MainPageState extends State<MainPage> {
       navigationBarStyle = result[0]as int;
       automaticUpdateCheck = result[1] as bool;
     });
+
+    if (mounted && navigationBarStyle == 0) {
+      final size = MediaQuery.of(context).size;
+
+      setState(() {
+        navigationBarPos = size.width >= size.height ? 2 : 1;
+      });
+    } else {
+      setState(() {
+        navigationBarPos = navigationBarStyle;
+      });
+    }
   }
 
   void onItemTapped(int index) {
@@ -213,6 +226,19 @@ class MainPageState extends State<MainPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (navigationBarStyle == 0) {
+      final size = MediaQuery.of(context).size;
+
+      setState(() {
+        navigationBarPos = size.width >= size.height ? 2 : 1;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     if (!checked) {
       return const Scaffold(
@@ -229,100 +255,36 @@ class MainPageState extends State<MainPage> {
         promptedUpdate = true;
       }
 
-      // 底部导航栏
-      if (navigationBarStyle == 0) {
-        return Scaffold(
-          extendBody: true,
-          body: PageView(
-            controller: pageController,
-            onPageChanged: (index) {
-              setState(() {
-                selectedIndex = index;
-                if (index == 1) {
-                  historyKey.currentState?.refreshHistory();
-                }
-              });
-            },
-            children: [
-              const Home(),
-              History(key: historyKey),
-              const Setting(),
-            ],
-          ),
-          bottomNavigationBar: Padding(
-            padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 12.0 + MediaQuery.of(context).padding.bottom),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(24),
-              child: Align(
-                alignment: Alignment.topCenter,
-                heightFactor: MediaQuery.of(context).padding.bottom == 0.0 ? 1.0 : 0.75, // 只显示上半部分
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          Colors.white.withAlpha(36),
-                          Colors.white.withAlpha(12)
-                        ],
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.topCenter,
-                      ),
-                    ),
-                    child: NavigationBar(
-                      height: navigationBarLables ? null : 45.0,
-                      backgroundColor: Colors.transparent,
-                      surfaceTintColor: Colors.white,
-                      selectedIndex: selectedIndex,
-                      onDestinationSelected: onItemTapped,
-                      labelBehavior: navigationBarLables ? NavigationDestinationLabelBehavior.onlyShowSelected : NavigationDestinationLabelBehavior.alwaysHide,
-                      labelTextStyle: WidgetStateProperty.all(
-                        TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      destinations: [
-                        NavigationDestination(icon: const Icon(Icons.home), label: AppLocalizations.of(context)!.navigation_home),
-                        NavigationDestination(icon: const Icon(Icons.history), label: AppLocalizations.of(context)!.navigation_history),
-                        NavigationDestination(icon: const Icon(Icons.settings), label: AppLocalizations.of(context)!.navigation_setting),
-                      ],
-                    ),
-                  ),
-                ),
+      return Scaffold(
+        extendBody: true,
+        body: Stack(
+          children: [
+
+            Positioned.fill(
+              child: PageView(
+                scrollDirection: navigationBarPos == 2 ? Axis.vertical : Axis.horizontal,
+                controller: pageController,
+                physics: navigationBarPos == 2 ? const NeverScrollableScrollPhysics() : null,
+                onPageChanged: (index) {
+                  setState(() {
+                    selectedIndex = index;
+                    if (index == 1) {
+                      historyKey.currentState?.refreshHistory();
+                    }
+                  });
+                },
+                children: [
+                  const Home(),
+                  History(key: historyKey),
+                  const Setting(),
+                ],
               ),
             ),
-          ),
-        );
-      }
 
-      // 右侧导航栏
-      if (navigationBarStyle == 1) {
-        return Scaffold(
-          body: Stack(
-            children: [
-
-              // 主内容区域
-              Positioned.fill(
-                child: PageView(
-                  scrollDirection: Axis.vertical,
-                  controller: pageController,
-                  physics: const NeverScrollableScrollPhysics(),
-                  onPageChanged: (index) {
-                    setState(() {
-                      selectedIndex = index;
-                      if (index == 1) {
-                        historyKey.currentState?.refreshHistory();
-                      }
-                    });
-                  },
-                  children: [
-                    const Home(),
-                    History(key: historyKey),
-                    const Setting(),
-                  ],
-                ),
-              ),
-
-              Align(
-                alignment: Alignment.centerRight,
+            if (navigationBarPos == 2) Align(
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding: EdgeInsets.only(right: 16),
                 child: SizedBox(
                   height: navigationBarLables ? 350.0 : 320.0,
                   width: 80.0,
@@ -369,15 +331,51 @@ class MainPageState extends State<MainPage> {
                     ),
                   ),
                 ),
-              )
-            ],
+              ),
+            )
+          ],
+        ),
+        bottomNavigationBar: navigationBarPos == 1 ? Padding(
+          padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 12.0 + MediaQuery.of(context).padding.bottom),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(24),
+            child: Align(
+              alignment: Alignment.topCenter,
+              heightFactor: MediaQuery.of(context).padding.bottom == 0.0 ? 1.0 : 0.75, // 只显示上半部分
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.white.withAlpha(36),
+                        Colors.white.withAlpha(12)
+                      ],
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                    ),
+                  ),
+                  child: NavigationBar(
+                    height: navigationBarLables ? null : 45.0,
+                    backgroundColor: Colors.transparent,
+                    surfaceTintColor: Colors.white,
+                    selectedIndex: selectedIndex,
+                    onDestinationSelected: onItemTapped,
+                    labelBehavior: navigationBarLables ? NavigationDestinationLabelBehavior.onlyShowSelected : NavigationDestinationLabelBehavior.alwaysHide,
+                    labelTextStyle: WidgetStateProperty.all(
+                      TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    destinations: [
+                      NavigationDestination(icon: const Icon(Icons.home), label: AppLocalizations.of(context)!.navigation_home),
+                      NavigationDestination(icon: const Icon(Icons.history), label: AppLocalizations.of(context)!.navigation_history),
+                      NavigationDestination(icon: const Icon(Icons.settings), label: AppLocalizations.of(context)!.navigation_setting),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ),
-        );
-      }
-
-      // Fallback
-      return const Scaffold(
-        body: Text("NavigationBar Error"),
+        ) : null,
       );
     } else {
       return const Scaffold(
