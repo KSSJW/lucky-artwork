@@ -50,7 +50,10 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   }
 
   Future fetchData() async {
-    setState(() => imageLoading = true);
+    setState(() {
+      imageLoading = true;
+      if (enabledFadeInAnimationForImage) _opacity = 0.0;
+    });
 
     try {
       var api = await FunctionUtil.network.getAPI();
@@ -73,20 +76,25 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
 
         setState(() {
           imageLoading = false;
-          if (enabledFadeInAnimationForImage) _opacity = 0.0;
         });
+
+        if (enabledFadeInAnimationForImage) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            setState(() {
+              _opacity = 1.0;
+            });
+          });
+        }
 
         return response;
       } else {
         setState(() {
           imageLoading = false;
-          if (enabledFadeInAnimationForImage) _opacity = 0.0;
         });
       }
     } catch (e) {
       setState(() {
         imageLoading = false;
-        if (enabledFadeInAnimationForImage) _opacity = 0.0;
       });
       throw Exception(e);
     }
@@ -144,6 +152,7 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                     child: Image.memory(
                       bytes!,
                       fit: BoxFit.cover,
+                      cacheWidth: MediaQuery.of(context).size.width.toInt(),
                     ),
                   ),
                   
@@ -174,29 +183,30 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
               ),
             );
           } else if (snapshot.hasData) {
-
-            if (enabledFadeInAnimationForImage) {
-
-              // 在当前帧的渲染完成之后
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                setState(() {
-                  _opacity = 1.0;
-                });
-              });
-            }
-
             return Stack(
               children: [
+
                 SizedBox.expand(
-                  child: Image.memory(
+                  child: enabledFadeInAnimationForImage ? AnimatedOpacity(
+                    opacity: _opacity,
+                    duration: const Duration(milliseconds: 500),
+                    child: Image.memory(
+                      bytes!,
+                      fit: BoxFit.cover,
+                      cacheWidth: MediaQuery.of(context).size.width.toInt(),
+                    ),
+                  ) : Image.memory(
                     bytes!,
                     fit: BoxFit.cover,
+                    cacheWidth: MediaQuery.of(context).size.width.toInt(),
                   ),
                 ),
+
                 BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                   child: Container(color: isDark ? Colors.transparent.withAlpha(128) : Colors.transparent.withAlpha(64)),
                 ),
+
                 Center(
                   child: ListView(
                     padding: EdgeInsets.only(
@@ -235,7 +245,7 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                           ),
                           child: enabledFadeInAnimationForImage ? AnimatedOpacity(
                             opacity: _opacity,
-                            duration: const Duration(milliseconds: 200),
+                            duration: const Duration(milliseconds: 500),
                             child: Image.memory(
                               bytes!,
                               fit: BoxFit.contain
