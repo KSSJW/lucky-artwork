@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:lucky_artwork/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DisplaySettingFunction {
@@ -61,16 +63,16 @@ class Config {
     await prefs.setBool("explore_button", value);
   }
 
-  String getSelectedTheme(int themeMode) {
+  String getSelectedTheme(int themeMode, BuildContext context) {
     switch (themeMode) {
       case 0:
-        return "System";
+        return AppLocalizations.of(context)!.displaySetting_global_themeMode_system;
       
       case 1:
-        return "Light";
+        return AppLocalizations.of(context)!.displaySetting_global_themeMode_light;
 
       case 2:
-        return "Dark";
+        return AppLocalizations.of(context)!.displaySetting_global_themeMode_dark;
 
       default:
         return "Null";

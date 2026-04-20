@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:lucky_artwork/l10n/app_localizations.dart';
 import 'package:lucky_artwork/setting/api/api_setting.dart';
 import 'package:lucky_artwork/setting/cache/cache_setting.dart';
 import 'package:lucky_artwork/setting/developer_options/developer_options.dart';
@@ -40,7 +41,7 @@ class SettingState extends State<Setting> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Setting")),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.setting_appbar_title)),
       body: ListView(
         padding: const EdgeInsets.all(8),
         children: [
@@ -59,7 +60,7 @@ class SettingState extends State<Setting> {
                     color: Colors.purpleAccent,
                   ),
                   title: const Text("API"),
-                  subtitle: const Text("Set the source of the image."),
+                  subtitle: Text(AppLocalizations.of(context)!.setting_list_api_desc),
                   onTap: () {
                     Navigator.push(
                       context,
@@ -74,8 +75,8 @@ class SettingState extends State<Setting> {
                     Icons.display_settings,
                     color: Colors.cyan,
                   ),
-                  title: const Text("Display"),
-                  subtitle: const Text("Control the interface display of the software."),
+                  title: Text(AppLocalizations.of(context)!.setting_list_display),
+                  subtitle: Text(AppLocalizations.of(context)!.setting_list_display_desc),
                   onTap: () {
                     Navigator.push(
                       context,
@@ -90,8 +91,8 @@ class SettingState extends State<Setting> {
                     Icons.storage,
                     color: Colors.orange,
                   ),
-                  title: const Text("Cache"),
-                  subtitle: const Text("Manage software cache."),
+                  title: Text(AppLocalizations.of(context)!.setting_list_cache),
+                  subtitle: Text(AppLocalizations.of(context)!.setting_list_cache_desc),
                   onTap: () {
                     Navigator.push(
                       context,
@@ -106,8 +107,8 @@ class SettingState extends State<Setting> {
                     Icons.arrow_circle_up,
                     color: Colors.green,
                   ),
-                  title: const Text("Update"),
-                  subtitle: const Text("Get software updates."),
+                  title: Text(AppLocalizations.of(context)!.setting_list_update),
+                  subtitle: Text(AppLocalizations.of(context)!.setting_list_update_desc),
                   onTap: () {
                     Navigator.push(
                       context,
@@ -122,8 +123,8 @@ class SettingState extends State<Setting> {
                     Icons.code,
                     color: Colors.teal,
                   ),
-                  title: const Text("Developer Options"),
-                  subtitle: const Text("Used for testing or advanced control."),
+                  title: Text(AppLocalizations.of(context)!.setting_list_developerOptions),
+                  subtitle: Text(AppLocalizations.of(context)!.setting_list_developerOptions_desc),
                   onTap: () {
                     Navigator.push(
                       context,
@@ -138,8 +139,8 @@ class SettingState extends State<Setting> {
                     Icons.info_outline,
                     color: Colors.blue,
                   ),
-                  title: const Text("About"),
-                  subtitle: const Text("Information about this software."),
+                  title: Text(AppLocalizations.of(context)!.setting_list_about),
+                  subtitle: Text(AppLocalizations.of(context)!.setting_list_about_desc),
                   onTap: () {
                     Navigator.push(
                       context,
@@ -167,18 +168,18 @@ class SettingState extends State<Setting> {
                 context: context,
                 builder: (context) {
                   return AlertDialog(
-                    title: const Text("Restart"),
+                    title: Text(AppLocalizations.of(context)!.setting_dialog_restart_title),
                     content: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text("Are you ready to restart?"),
+                        Text(AppLocalizations.of(context)!.setting_dialog_restart_content1),
                         const SizedBox(height: 8),
-                        const Text("Restarting will take effect immediately,"),
+                        Text(AppLocalizations.of(context)!.setting_dialog_restart_content2),
                         const SizedBox(height: 8),
-                        const Text(
-                          "If you have disabled caching, it is recommended that you save the necessary data before restarting.",
-                          style: TextStyle(
+                        Text(
+                          AppLocalizations.of(context)!.setting_dialog_restart_content3,
+                          style: const TextStyle(
                             color: Colors.orange
                           ),
                         )
@@ -192,7 +193,7 @@ class SettingState extends State<Setting> {
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
-                            child: const Text("Cancel"),
+                            child: Text(AppLocalizations.of(context)!.setting_dialog_restart_cancel),
                           ),
                           ElevatedButton(
                             onPressed: () {
@@ -202,7 +203,7 @@ class SettingState extends State<Setting> {
                               backgroundColor: Colors.orange,
                               foregroundColor: Colors.white,
                             ),
-                            child: const Text("Restart"),
+                            child: Text(AppLocalizations.of(context)!.setting_dialog_restart_restart),
                           ),
                         ],
                       ),
@@ -211,7 +212,7 @@ class SettingState extends State<Setting> {
                 },
               );
             },
-            tooltip: "Restart",
+            tooltip: AppLocalizations.of(context)!.setting_button_restart,
             backgroundColor: Colors.orange,
             foregroundColor: Colors.white,
             child: Icon(

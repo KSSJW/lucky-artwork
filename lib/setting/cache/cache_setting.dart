@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:lucky_artwork/l10n/app_localizations.dart';
 import 'package:lucky_artwork/setting/cache/cache_setting_function.dart';
 import 'package:lucky_artwork/util/function_util.dart';
 
@@ -60,7 +61,7 @@ class CacheSettingState extends State<CacheSetting> {
           return const Center(child: CircularProgressIndicator());
         } else {
           return Scaffold(
-            appBar: AppBar(title: const Text("Cache Setting")),
+            appBar: AppBar(title: Text(AppLocalizations.of(context)!.cacheSetting_appbar_title)),
             body: ListView(
               padding: const EdgeInsets.all(8),
               children: [
@@ -72,10 +73,10 @@ class CacheSettingState extends State<CacheSetting> {
                 ),
 
                 const SizedBox(height: 16),
-                const Column(
+                Column(
                   children: [
-                    Text("Manage software cache."),
-                    Text("Some features require a restart to take effect.")
+                    Text(AppLocalizations.of(context)!.cacheSetting_desc_content1),
+                    Text(AppLocalizations.of(context)!.cacheSetting_desc_content2)
                   ],
                 ),
                 const SizedBox(height: 16),
@@ -89,7 +90,7 @@ class CacheSettingState extends State<CacheSetting> {
 
                       const SizedBox(height: 8),
                       SwitchListTile(
-                        title: const Text("Enable Cache and History"),
+                        title: Text(AppLocalizations.of(context)!.cacheSetting_enableCacheAndHistory),
                         secondary: const Icon(Icons.history),
                         value: enabledCacheAndHistory,
                         onChanged: (value) {
@@ -103,9 +104,9 @@ class CacheSettingState extends State<CacheSetting> {
 
                       ListTile(
                         leading: const Icon(Icons.cleaning_services),
-                        title: const Text("Clear Cache"),
+                        title: Text(AppLocalizations.of(context)!.cacheSetting_clearCache),
                         trailing: cacheSize == null ? const Text(
-                          "computing ...",
+                          "...",
                           style: TextStyle(fontSize: 16.0),
                         ) : Text(
                           CacheSettingFunction.util.formatBytes(cacheSize!),
@@ -116,15 +117,15 @@ class CacheSettingState extends State<CacheSetting> {
                             context: context,
                             builder: (context) {
                               return AlertDialog(
-                                title: const Text("Clear Cache"),
+                                title: Text(AppLocalizations.of(context)!.cacheSetting_dialog_clearCache_title),
                                 content: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text("Are you sure you want to clear the cache?"),
+                                    Text(AppLocalizations.of(context)!.cacheSetting_dialog_clearCache_content1),
                                     const SizedBox(height: 8),
-                                    const Text(
-                                      "You will be deleting the cache and history.",
+                                    Text(
+                                      AppLocalizations.of(context)!.cacheSetting_dialog_clearCache_content2,
                                       style: TextStyle(
                                         color: Colors.red
                                       ),
@@ -139,7 +140,7 @@ class CacheSettingState extends State<CacheSetting> {
                                         onPressed: () {
                                           Navigator.of(context).pop();
                                         },
-                                        child: const Text("Cancel"),
+                                        child: Text(AppLocalizations.of(context)!.cacheSetting_dialog_clearCache_cacnel),
                                       ),
                                       ElevatedButton(
                                         onPressed: () async {
@@ -155,7 +156,7 @@ class CacheSettingState extends State<CacheSetting> {
                                           backgroundColor: Colors.red,
                                           foregroundColor: Colors.white,
                                         ),
-                                        child: const Text("Clear"),
+                                        child: Text(AppLocalizations.of(context)!.cacheSetting_dialog_clearCache_clear),
                                       ),
                                     ],
                                   ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucky_artwork/l10n/app_localizations.dart';
 import 'package:lucky_artwork/setting/display/display_setting_function.dart';
 import 'package:lucky_artwork/util/function_util.dart';
 
@@ -87,7 +88,7 @@ class DisplaySettingState extends State<DisplaySetting> {
           return const Center(child: CircularProgressIndicator());
         } else {
           return Scaffold(
-            appBar: AppBar(title: const Text("Display Setting")),
+            appBar: AppBar(title: Text(AppLocalizations.of(context)!.displaySetting_appbar_title)),
             body: ListView(
               padding: const EdgeInsets.all(8),
               children: [
@@ -99,20 +100,20 @@ class DisplaySettingState extends State<DisplaySetting> {
                 ),
 
                 const SizedBox(height: 16),
-                const Column(
+                Column(
                   children: [
-                    Text("Control the interface display of the software."),
-                    Text("Some features require a restart to take effect.")
+                    Text(AppLocalizations.of(context)!.displaySetting_desc_content1),
+                    Text(AppLocalizations.of(context)!.displaySetting_desc_content2)
                   ],
                 ),
                 const SizedBox(height: 16),
 
-                const Row(
+                Row(
                   children: [
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     Text(
-                      "Global",
-                      style: TextStyle(
+                      AppLocalizations.of(context)!.displaySetting_list_global,
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
@@ -148,7 +149,7 @@ class DisplaySettingState extends State<DisplaySetting> {
                         ],
                         child: ListTile(
                           leading: Icon(Icons.language),
-                          title: const Text("Language"),
+                          title: Text(AppLocalizations.of(context)!.displaySetting_global_language),
                           subtitle: Text(locale.toString()),
                           trailing: const Icon(Icons.arrow_drop_down),
                         ),
@@ -183,45 +184,45 @@ class DisplaySettingState extends State<DisplaySetting> {
                           }
                         },
                         itemBuilder: (context) => [
-                          const PopupMenuItem(
+                          PopupMenuItem(
                             value: "system",
-                            child: Text("System"),
+                            child: Text(AppLocalizations.of(context)!.displaySetting_global_themeMode_system),
                           ),
-                          const PopupMenuItem(
+                          PopupMenuItem(
                             value: "light",
-                            child: Text("Light"),
+                            child: Text(AppLocalizations.of(context)!.displaySetting_global_themeMode_light),
                           ),
-                          const PopupMenuItem(
+                          PopupMenuItem(
                             value: "dark",
-                            child: Text("Dark"),
+                            child: Text(AppLocalizations.of(context)!.displaySetting_global_themeMode_dark),
                           ),
                         ],
                         child: ListTile(
                           leading: isDark ? const Icon(Icons.dark_mode) : const Icon(Icons.light_mode),
-                          title: const Text("Theme Mode"),
-                          subtitle: Text(DisplaySettingFunction.config.getSelectedTheme(themeMode)),
+                          title: Text(AppLocalizations.of(context)!.displaySetting_global_themeMode),
+                          subtitle: Text(DisplaySettingFunction.config.getSelectedTheme(themeMode, context)),
                           trailing: const Icon(Icons.arrow_drop_down),
                         ),
                       ),
                       const Divider(),
-                      const ListTile(
-                        title: Text("Navigation Bar Style"),
-                        leading: Icon(Icons.view_sidebar_rounded),
+                      ListTile(
+                        title: Text(AppLocalizations.of(context)!.displaySetting_global_navigationBarStyle),
+                        leading: const Icon(Icons.view_sidebar_rounded),
                       ),
                       const SizedBox(height: 8),
                       SegmentedButton(
                         segments: [
-                          const ButtonSegment(
+                          ButtonSegment(
                             value: 0,
-                            label: Text("Auto"),
+                            label: Text(AppLocalizations.of(context)!.displaySetting_global_navigationBarStyle_auto),
                           ),
-                          const ButtonSegment(
+                          ButtonSegment(
                             value: 1,
-                            label: Text("Bottom"),
+                            label: Text(AppLocalizations.of(context)!.displaySetting_global_navigationBarStyle_button),
                           ),
-                          const ButtonSegment(
+                          ButtonSegment(
                             value: 2,
-                            label: Text("Right"),
+                            label: Text(AppLocalizations.of(context)!.displaySetting_global_navigationBarStyle_right),
                           ),
                         ],
                         selected: {
@@ -238,7 +239,7 @@ class DisplaySettingState extends State<DisplaySetting> {
                       const SizedBox(height: 16),
                       const Divider(),
                       SwitchListTile(
-                        title: const Text("Navigation Bar Labels"),
+                        title: Text(AppLocalizations.of(context)!.displaySetting_global_navigationBarLabels),
                         secondary: const Icon(Icons.label),
                         value: navigationBarLables,
                         onChanged: (value) {
@@ -251,7 +252,7 @@ class DisplaySettingState extends State<DisplaySetting> {
                       ),
                       const Divider(),
                       SwitchListTile(
-                        title: const Text("Wake Lock"),
+                        title: Text(AppLocalizations.of(context)!.displaySetting_global_wakeLock),
                         secondary: const Icon(Icons.lightbulb),
                         value: wakeLock,
                         onChanged: (value) {
@@ -264,7 +265,7 @@ class DisplaySettingState extends State<DisplaySetting> {
                       ),
                       const Divider(),
                       ListTile(
-                        title: const Text("Button Size"),
+                        title: Text(AppLocalizations.of(context)!.displaySetting_global_buttonSize),
                         leading: const Icon(Icons.open_in_full),
                         trailing: Text(
                           buttonSize.toString(),
@@ -292,12 +293,12 @@ class DisplaySettingState extends State<DisplaySetting> {
 
                 const SizedBox(height: 16),
 
-                const Row(
+                Row(
                   children: [
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     Text(
-                      "Home",
-                      style: TextStyle(
+                      AppLocalizations.of(context)!.displaySetting_list_home,
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
@@ -314,7 +315,7 @@ class DisplaySettingState extends State<DisplaySetting> {
 
                       const SizedBox(height: 8),
                       SwitchListTile(
-                        title: const Text("Fade-In Animation For Image"),
+                        title: Text(AppLocalizations.of(context)!.displaySetting_home_fadeInAnimationForImage),
                         secondary: const Icon(Icons.photo_library),
                         value: fadeInAnimationForImage,
                         onChanged: (value) {
@@ -328,7 +329,7 @@ class DisplaySettingState extends State<DisplaySetting> {
                       const Divider(),
 
                       SwitchListTile(
-                        title: const Text("Show Latency"),
+                        title: Text(AppLocalizations.of(context)!.displaySetting_home_showLatency),
                         secondary: const Icon(Icons.speed),
                         value: showLatency,
                         onChanged: (value) {
@@ -342,7 +343,7 @@ class DisplaySettingState extends State<DisplaySetting> {
                       const Divider(),
 
                       SwitchListTile(
-                        title: const Text("Exit Button"),
+                        title: Text(AppLocalizations.of(context)!.displaySetting_home_exitButton),
                         secondary: const Icon(Icons.power_settings_new),
                         value: exitButton,
                         onChanged: (value) {
@@ -360,12 +361,12 @@ class DisplaySettingState extends State<DisplaySetting> {
 
                 const SizedBox(height: 16),
                 
-                const Row(
+                Row(
                   children: [
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     Text(
-                      "History",
-                      style: TextStyle(
+                      AppLocalizations.of(context)!.displaySetting_list_history,
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
@@ -382,7 +383,7 @@ class DisplaySettingState extends State<DisplaySetting> {
 
                       const SizedBox(height: 8),
                       ListTile(
-                        title: const Text("Image Columns"),
+                        title: Text(AppLocalizations.of(context)!.displaySetting_history_imageColumns),
                         leading: const Icon(Icons.view_column),
                         trailing: Text(
                           imageColumns.toInt().toString(),
@@ -407,7 +408,7 @@ class DisplaySettingState extends State<DisplaySetting> {
                       const Divider(),
 
                       SwitchListTile(
-                        title: const Text("Explore Button"),
+                        title: Text(AppLocalizations.of(context)!.displaySetting_history_exploreButton),
                         secondary: const Icon(Icons.explore),
                         value: exploreButton,
                         onChanged: (value) {

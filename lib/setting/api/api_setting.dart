@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucky_artwork/l10n/app_localizations.dart';
 import 'package:lucky_artwork/setting/api/api_setting_function.dart';
 import 'package:lucky_artwork/setting/api/api_setting_item.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -68,7 +69,7 @@ class ApiSettingState extends State<ApiSetting> {
     final allApis = [...builtInApis, ...customApis];
 
     return Scaffold(
-      appBar: AppBar(title: const Text("API Settings")),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.apiSetting_appbar_title)),
       body: Column(
         children: [
           const Icon(
@@ -78,11 +79,11 @@ class ApiSettingState extends State<ApiSetting> {
           ),
 
           const SizedBox(height: 16),
-          const Column(
+          Column(
             children: [
-              Text("Set the source of the image."),
-              Text("The API needs to return an image, not JSON."),
-              Text("You can edit the text box to add custom APIs."),
+              Text(AppLocalizations.of(context)!.apiSetting_desc_content1),
+              Text(AppLocalizations.of(context)!.apiSetting_desc_content2),
+              Text(AppLocalizations.of(context)!.apiSetting_desc_content3),
             ],
           ),
           const SizedBox(height: 16),
@@ -91,9 +92,9 @@ class ApiSettingState extends State<ApiSetting> {
             padding: const EdgeInsets.all(16.0),
             child: TextField(
               controller: _controller,
-              decoration: const InputDecoration(
-                labelText: "Custom API URL",
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context)!.apiSetting_inputDecoration_label,
+                border: const OutlineInputBorder(),
               ),
             ),
           ),
@@ -168,7 +169,7 @@ class ApiSettingState extends State<ApiSetting> {
           }
         },
         icon: const Icon(Icons.save),
-        label: const Text("Save"),
+        label: Text(AppLocalizations.of(context)!.apiSetting_button_save),
       ),
     );
   }

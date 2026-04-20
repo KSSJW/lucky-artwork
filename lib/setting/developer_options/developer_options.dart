@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:lucky_artwork/l10n/app_localizations.dart';
 import 'package:lucky_artwork/setting/developer_options/developer_options_function.dart';
 import 'package:lucky_artwork/util/function_util.dart';
 import 'package:system_info3/system_info3.dart';
@@ -39,7 +40,7 @@ class DeveloperOptionsState extends State<DeveloperOptions> {
   
     configLoadFuture = loadConfig();
 
-    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
+    _timer = Timer.periodic(const Duration(seconds: 2), (_) {
       rssNotifier.value = ProcessInfo.currentRss >> 20;
       maxRssNotifier.value = ProcessInfo.maxRss >> 20;
     });
@@ -65,7 +66,7 @@ class DeveloperOptionsState extends State<DeveloperOptions> {
             return const Center(child: CircularProgressIndicator());
           } else {
             return Scaffold(
-              appBar: AppBar(title: const Text("Developer Options")),
+              appBar: AppBar(title: Text(AppLocalizations.of(context)!.developerOptions_appbar_title)),
               body: ListView(
                 padding: const EdgeInsets.all(8),
                 children: [
@@ -77,20 +78,20 @@ class DeveloperOptionsState extends State<DeveloperOptions> {
                   ),
 
                   const SizedBox(height: 16),
-                  const Column(
+                  Column(
                     children: [
-                      Text("Used for testing or advanced control."),
-                      Text("Some features require a restart to take effect.")
+                      Text(AppLocalizations.of(context)!.developerOptions_desc_content1),
+                      Text(AppLocalizations.of(context)!.developerOptions_desc_content2)
                     ],
                   ),
                   const SizedBox(height: 16),
 
-                  const Row(
+                  Row(
                     children: [
-                      SizedBox(width: 20),
+                      const SizedBox(width: 20),
                       Text(
-                        "Configuration",
-                        style: TextStyle(
+                        AppLocalizations.of(context)!.developerOptions_list_configuration,
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
@@ -107,21 +108,21 @@ class DeveloperOptionsState extends State<DeveloperOptions> {
                         const SizedBox(height: 8),
                         ListTile(
                           leading: const Icon(Icons.settings_backup_restore),
-                          title: const Text("Reset Configuration"),
+                          title: Text(AppLocalizations.of(context)!.developerOptions_configuration_reset),
                           onTap: () {
                             showDialog(
                               context: context,
                               builder: (context) {
                                 return AlertDialog(
-                                  title: const Text("Reset Configuration"),
+                                  title: Text(AppLocalizations.of(context)!.developerOptions_dialog_resetConfiguration_title),
                                   content: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      const Text("Are you sure you want to reset the configuration?"),
+                                      Text(AppLocalizations.of(context)!.developerOptions_dialog_resetConfiguration_content1),
                                       const SizedBox(height: 8),
-                                      const Text(
-                                        "The software configuration will be reset, but the history will still be retained.",
+                                      Text(
+                                        AppLocalizations.of(context)!.developerOptions_dialog_resetConfiguration_content2,
                                         style: TextStyle(
                                           color: Colors.orange
                                         ),
@@ -136,7 +137,7 @@ class DeveloperOptionsState extends State<DeveloperOptions> {
                                           onPressed: () {
                                             Navigator.of(context).pop();
                                           },
-                                          child: const Text("Cancel"),
+                                          child: Text(AppLocalizations.of(context)!.developerOptions_dialog_resetConfiguration_cancel),
                                         ),
                                         ElevatedButton(
                                           onPressed: () async {
@@ -147,7 +148,7 @@ class DeveloperOptionsState extends State<DeveloperOptions> {
                                             backgroundColor: Colors.orange,
                                             foregroundColor: Colors.white,
                                           ),
-                                          child: const Text("Reset"),
+                                          child: Text(AppLocalizations.of(context)!.developerOptions_dialog_resetConfiguration_reset),
                                         ),
                                       ],
                                     ),
@@ -164,12 +165,12 @@ class DeveloperOptionsState extends State<DeveloperOptions> {
 
                   const SizedBox(height: 16),
 
-                  const Row(
+                  Row(
                     children: [
-                      SizedBox(width: 20),
+                      const SizedBox(width: 20),
                       Text(
-                        "Performance",
-                        style: TextStyle(
+                        AppLocalizations.of(context)!.developerOptions_list_performance,
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
@@ -186,11 +187,11 @@ class DeveloperOptionsState extends State<DeveloperOptions> {
                         const SizedBox(height: 8),
                         ListTile(
                           leading: const Icon(Icons.data_usage),
-                          title: Text("RAM Overview"),
+                          title: Text(AppLocalizations.of(context)!.developerOptions_performance_ramOverview),
                           subtitle: ValueListenableBuilder<int>(
                             valueListenable: rssNotifier,
                             builder: (_, rssMb, _) {
-                              return Text("$rssMb MB / ${(SysInfo.getAvailablePhysicalMemory() >> 20) + rssMb} MB    Max: ${maxRssNotifier.value} MB");
+                              return rssMb == 0 ? Text("...") : Text("$rssMb MB / ${(SysInfo.getAvailablePhysicalMemory() >> 20) + rssMb} MB    Max: ${maxRssNotifier.value} MB");
                             },
                           ),
                         ),
@@ -205,7 +206,7 @@ class DeveloperOptionsState extends State<DeveloperOptions> {
                                   builder: (_, rssMb, _) {
                                     return LinearProgressIndicator(
                                       value: maxRssNotifier.value / ((SysInfo.getAvailablePhysicalMemory() >> 20) + rssMb),
-                                      backgroundColor: Colors.transparent,
+                                      backgroundColor: Theme.of(context).colorScheme.onSurface.withAlpha(64),
                                       color: Colors.orange,
                                     );
                                   },
@@ -215,7 +216,7 @@ class DeveloperOptionsState extends State<DeveloperOptions> {
                                   builder: (_, rssMb, _) {
                                     return LinearProgressIndicator(
                                       value: rssMb / ((SysInfo.getAvailablePhysicalMemory() >> 20) + rssMb),
-                                      backgroundColor: Theme.of(context).colorScheme.onSurface.withAlpha(64),
+                                      backgroundColor: Colors.transparent,
                                       color: Theme.of(context).colorScheme.primary,
                                     );
                                   },
@@ -229,8 +230,8 @@ class DeveloperOptionsState extends State<DeveloperOptions> {
 
                         ValueListenableBuilder(valueListenable: limitCachingNotifier, builder: (_, limitCaching, _) {
                           return SwitchListTile(
-                            title: const Text("Limit Caching"),
-                            subtitle: const Text("Use a more conservative caching strategy."),
+                            title: Text(AppLocalizations.of(context)!.developerOptions_performance_limitCaching),
+                            subtitle: Text(AppLocalizations.of(context)!.developerOptions_performance_limitCaching_desc),
                             secondary: const Icon(Icons.memory),
                             value: limitCaching,
                             onChanged: (value) {

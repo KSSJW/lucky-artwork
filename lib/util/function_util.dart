@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:http/http.dart' as http;
+import 'package:lucky_artwork/l10n/app_localizations.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pub_semver/pub_semver.dart';
@@ -227,137 +228,6 @@ class Item {
     }
   }
 
-  Future<void> showUpdateAlertDialog(BuildContext context) async {
-    final info = await PackageInfo.fromPlatform();
-    final currentVersion = info.version;
-    final currentSemVer = Version.parse(currentVersion);
-
-    try {
-      final response = await http.get(
-        Uri.parse("https://api.github.com/repos/KSSJW/lucky-artwork/releases/latest"),
-      );
-
-      if (!context.mounted) return;
-
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        final latestVersion = data['tag_name'];
-        final changelog = data['body'];
-        final latestSemVer = Version.parse(latestVersion);
-
-        if (currentSemVer < latestSemVer && !latestSemVer.isPreRelease) {
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (context) {
-              return AlertDialog(
-                title: const Text("Get Updates"),
-                content: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Update available: $currentVersion -> $latestVersion",
-                        style: const TextStyle(
-                          color: Colors.green,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text("$changelog")
-                    ],
-                  ),
-                ),
-                actions: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text("Cancel"),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          launchUrl(Uri.parse("https://github.com/KSSJW/lucky-artwork/releases/latest"), mode: LaunchMode.externalApplication);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green,
-                          foregroundColor: Colors.white,
-                        ),
-                        child: const Text("Get"),
-                      ),
-                    ],
-                  ),
-                ],
-              );
-            },
-          );
-        } else {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: const Text("Get Updates"),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text("You are running the latest version."),
-                  ],
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text("OK"),
-                  ),
-                ],
-              );  
-            },
-          );
-        }
-      } else {
-        throw Exception("Requests are too frequent or the version server cannot be connected.");
-      }
-    } catch(e) {
-      if (!context.mounted) return;
-
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text("Get Updates"),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "Failed to get updates.",
-                  style: TextStyle(
-                    color: Colors.red,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text("$e")
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text("OK"),
-              ),
-            ],
-          );
-        }
-      );
-    }
-  }
-
   Widget getRestartFloatingActionButton(BuildContext context) {
     return FloatingActionButton.extended(
       heroTag: "Restart",
@@ -366,18 +236,18 @@ class Item {
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: const Text("Restart"),
+              title: Text(AppLocalizations.of(context)!.setting_button_restart),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text("Are you ready to restart?"),
+                  Text(AppLocalizations.of(context)!.setting_dialog_restart_content1),
                   const SizedBox(height: 8),
-                  const Text("Restarting will take effect immediately,"),
+                  Text(AppLocalizations.of(context)!.setting_dialog_restart_content2),
                   const SizedBox(height: 8),
-                  const Text(
-                    "If you have disabled caching, it is recommended that you save the necessary data before restarting.",
-                    style: TextStyle(
+                  Text(
+                    AppLocalizations.of(context)!.setting_dialog_restart_content3,
+                    style: const TextStyle(
                       color: Colors.orange
                     ),
                   )
@@ -391,7 +261,7 @@ class Item {
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: const Text("Cancel"),
+                      child: Text(AppLocalizations.of(context)!.setting_dialog_restart_cancel),
                     ),
                     ElevatedButton(
                       onPressed: () {
@@ -401,7 +271,7 @@ class Item {
                         backgroundColor: Colors.orange,
                         foregroundColor: Colors.white,
                       ),
-                      child: const Text("Restart"),
+                      child: Text(AppLocalizations.of(context)!.setting_dialog_restart_restart),
                     ),
                   ],
                 ),
@@ -410,9 +280,8 @@ class Item {
           },
         );
       },
-      tooltip: "Restart",
       icon: const Icon(Icons.restart_alt),
-      label: const Text("Restart"),
+      label: Text(AppLocalizations.of(context)!.setting_button_restart),
       backgroundColor: Colors.orange,
       foregroundColor: Colors.white,
     );

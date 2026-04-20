@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:lucky_artwork/l10n/app_localizations.dart';
 import 'package:lucky_artwork/util/function_util.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pub_semver/pub_semver.dart';
@@ -56,7 +57,7 @@ class AboutState extends State<About> {
           return const Center(child: CircularProgressIndicator());
         } else {
           return Scaffold(
-            appBar: AppBar(title: const Text("About")),
+            appBar: AppBar(title: Text(AppLocalizations.of(context)!.about_appbar_title)),
             body: ListView(
               padding: const EdgeInsets.all(8),
               children: [
@@ -68,19 +69,19 @@ class AboutState extends State<About> {
                 ),
 
                 const SizedBox(height: 16),
-                const Column(
+                Column(
                   children: [
-                    Text("Information about this software."),
+                    Text(AppLocalizations.of(context)!.about_desc),
                   ],
                 ),
                 const SizedBox(height: 16),
 
-                const Row(
+                Row(
                   children: [
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     Text(
-                      "Version",
-                      style: TextStyle(
+                      AppLocalizations.of(context)!.about_list_version,
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
@@ -105,7 +106,7 @@ class AboutState extends State<About> {
                             context: context,
                             builder: (context) {
                               return AlertDialog(
-                                title: const Text("Version"),
+                                title: Text(AppLocalizations.of(context)!.about_dialog_version_title),
                                 content: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,7 +119,7 @@ class AboutState extends State<About> {
                                     onPressed: () {
                                       Navigator.of(context).pop();
                                     },
-                                    child: const Text("OK"),
+                                    child: Text(AppLocalizations.of(context)!.about_dialog_version_ok),
                                   ),
                                 ],
                               );  
@@ -133,12 +134,12 @@ class AboutState extends State<About> {
 
                 const SizedBox(height: 16),
 
-                const Row(
+                Row(
                   children: [
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     Text(
-                      "Environment",
-                      style: TextStyle(
+                      AppLocalizations.of(context)!.about_list_environment,
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
@@ -163,7 +164,7 @@ class AboutState extends State<About> {
                             context: context,
                             builder: (context) {
                               return AlertDialog(
-                                title: const Text("Environment"),
+                                title: Text(AppLocalizations.of(context)!.about_dialog_environment_title),
                                 content: SingleChildScrollView(
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
@@ -180,7 +181,7 @@ class AboutState extends State<About> {
                                     onPressed: () {
                                       Navigator.of(context).pop();
                                     },
-                                    child: const Text("OK"),
+                                    child: Text(AppLocalizations.of(context)!.about_dialog_environment_ok),
                                   ),
                                 ],
                               );  
@@ -195,12 +196,12 @@ class AboutState extends State<About> {
 
                 const SizedBox(height: 16),
 
-                const Row(
+                Row(
                   children: [
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     Text(
-                      "Project",
-                      style: TextStyle(
+                      AppLocalizations.of(context)!.about_list_project,
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
@@ -218,7 +219,7 @@ class AboutState extends State<About> {
                       const SizedBox(height: 8),
                       ListTile(
                         leading: const Icon(Icons.code),
-                        title: const Text("Project Page"),
+                        title: Text(AppLocalizations.of(context)!.about_project_page),
                         subtitle: Text("GitHub"),
                         trailing: const Icon(Icons.open_in_new),
                         onTap: () {
@@ -233,7 +234,7 @@ class AboutState extends State<About> {
 
                       ListTile(
                         leading: const Icon(Icons.bug_report),
-                        title: const Text("Report Bugs"),
+                        title: Text(AppLocalizations.of(context)!.about_project_bugs),
                         subtitle: Text("GitHub"),
                         trailing: const Icon(Icons.open_in_new),
                         onTap: () {
@@ -250,12 +251,12 @@ class AboutState extends State<About> {
 
                 const SizedBox(height: 16),
 
-                const Row(
+                Row(
                   children: [
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     Text(
-                      "Developer",
-                      style: TextStyle(
+                      AppLocalizations.of(context)!.about_list_developer,
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
@@ -290,12 +291,12 @@ class AboutState extends State<About> {
 
                 const SizedBox(height: 16),
 
-                const Row(
+                Row(
                   children: [
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     Text(
-                      "API Providers",
-                      style: TextStyle(
+                      AppLocalizations.of(context)!.about_list_apiProviders,
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
@@ -305,11 +306,11 @@ class AboutState extends State<About> {
 
                 const SizedBox(height: 8),
 
-                const Row(
+                Row(
                   children: [
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     Expanded(
-                      child: Text("Thanks to the API providers, who provided the soul of this software."),
+                      child: Text(AppLocalizations.of(context)!.about_apiProviders_thanks),
                     ),
                   ],
                 ),

@@ -49,5 +49,147 @@
   "history_dialog_saving": "Saving Images",
 
   "history_snackbar_saved": "Images saved to",
-  "history_snackbar_saveFailed": "Failed to save images"
+  "history_snackbar_saveFailed": "Failed to save images",
+
+  "setting_appbar_title": "Setting",
+
+  "setting_list_api_desc": "Set the source of the image.",
+  "setting_list_display": "Display",
+  "setting_list_display_desc": "Control the interface display of the software.",
+  "setting_list_cache": "Cache",
+  "setting_list_cache_desc": "Manage software cache.",
+  "setting_list_update": "Update",
+  "setting_list_update_desc": "Get software updates.",
+  "setting_list_developerOptions": "Developer Options",
+  "setting_list_developerOptions_desc": "Used for testing or advanced control.",
+  "setting_list_about": "About",
+  "setting_list_about_desc": "Information about this software.",
+
+  "setting_button_restart": "Restart",
+
+  "setting_dialog_restart_title": "Restart",
+  "setting_dialog_restart_content1": "Are you ready to restart?",
+  "setting_dialog_restart_content2": "Restarting will take effect immediately,",
+  "setting_dialog_restart_content3": "If you have disabled caching, it is recommended that you save the necessary data before restarting.",
+  "setting_dialog_restart_cancel": "Cancel",
+  "setting_dialog_restart_restart": "Restart",
+
+  "apiSetting_appbar_title": "API Setting",
+
+  "apiSetting_desc_content1": "Set the source of the image.",
+  "apiSetting_desc_content2": "The API needs to return an image, not JSON.",
+  "apiSetting_desc_content3": "You can edit the text box to add custom APIs.",
+
+  "apiSetting_inputDecoration_label": "Custom API URL",
+
+  "apiSetting_button_save": "Save",
+
+  "displaySetting_appbar_title": "Display Setting",
+
+  "displaySetting_desc_content1": "Control the interface display of the software.",
+  "displaySetting_desc_content2": "Some features require a restart to take effect.",
+
+  "displaySetting_list_global": "Global",
+  "displaySetting_list_home": "Home",
+  "displaySetting_list_history": "History",
+
+  "displaySetting_global_language": "Language",
+
+  "displaySetting_global_themeMode": "Theme Mode",
+  "displaySetting_global_themeMode_system": "System",
+  "displaySetting_global_themeMode_light": "Light",
+  "displaySetting_global_themeMode_dark": "Dark",
+
+  "displaySetting_global_navigationBarStyle": "Navigation Bar Style",
+  "displaySetting_global_navigationBarStyle_auto": "Auto",
+  "displaySetting_global_navigationBarStyle_button": "Button",
+  "displaySetting_global_navigationBarStyle_right": "Right",
+
+  "displaySetting_global_navigationBarLabels": "Navigation Bar Labels",
+  "displaySetting_global_wakeLock": "Wake Lock",
+
+  "displaySetting_global_buttonSize": "Button Size",
+
+  "displaySetting_home_fadeInAnimationForImage": "Fade-In Animation For Image",
+  "displaySetting_home_showLatency": "Show Latency",
+  "displaySetting_home_exitButton": "Exit Button",
+
+  "displaySetting_history_imageColumns": "Image Columns",
+  "displaySetting_history_exploreButton": "Explore Button",
+
+  "cacheSetting_appbar_title": "Cache Setting",
+
+  "cacheSetting_desc_content1": "Manage software cache.",
+  "cacheSetting_desc_content2": "Some features require a restart to take effect.",
+
+  "cacheSetting_enableCacheAndHistory": "Enable Cache and History",
+  "cacheSetting_clearCache": "Clear Cache",
+
+  "cacheSetting_dialog_clearCache_title": "Clear Cache",
+  "cacheSetting_dialog_clearCache_content1": "Are you sure you want to clear the cache?",
+  "cacheSetting_dialog_clearCache_content2": "You will be deleting the cache and history.",
+  "cacheSetting_dialog_clearCache_cacnel": "Cancel",
+  "cacheSetting_dialog_clearCache_clear": "Clear",
+
+  "updateSetting_appbar_title": "Update Setting",
+
+  "updateSetting_desc_content1": "Get software updates.",
+  "updateSetting_desc_content2": "Some features require a restart to take effect.",
+
+  "updateSetting_list_updateInspector": "Update Inspector",
+  "updateSetting_list_manualUpdate": "Manual Update",
+
+  "updateSetting_updateInspector_automaticUpdateCheck": "Automatic Update Check",
+  "updateSetting_updateInspector_checkUpdate": "Check Update",
+
+  "updateSetting_manualUpdate_visitReleasesPage": "Visit Releases Page",
+
+  "updateSetting_dialog_getUpdate_title": "Get Updates",
+  "updateSetting_dialog_getUpdate_available": "Update available",
+  "updateSetting_dialog_getUpdate_runningTheLatest": "You are running the latest version.",
+  "updateSetting_dialog_getUpdate_failed": "Failed to get updates.",
+  "updateSetting_dialog_getUpdate_tooFrequent": "Requests are too frequent or the version server cannot be connected.",
+  "updateSetting_dialog_getUpdate_cancel": "Cancel",
+  "updateSetting_dialog_getUpdate_get": "Get",
+  "updateSetting_dialog_getUpdate_ok": "OK",
+
+  "developerOptions_appbar_title": "Developer Options",
+
+  "developerOptions_desc_content1": "Used for testing or advanced control.",
+  "developerOptions_desc_content2": "Some features require a restart to take effect.",
+
+  "developerOptions_list_configuration": "Configuration",
+  "developerOptions_list_performance": "Performance",
+
+  "developerOptions_configuration_reset": "Reset Configuration",
+
+  "developerOptions_performance_ramOverview": "RAM Overview",
+
+  "developerOptions_performance_limitCaching": "Limit Caching",
+  "developerOptions_performance_limitCaching_desc": "Use a more conservative caching strategy.",
+
+  "developerOptions_dialog_resetConfiguration_title": "Reset Configuration",
+  "developerOptions_dialog_resetConfiguration_content1": "Are you sure you want to reset the configuration?",
+  "developerOptions_dialog_resetConfiguration_content2": "The software configuration will be reset.",
+  "developerOptions_dialog_resetConfiguration_cancel": "Cancel",
+  "developerOptions_dialog_resetConfiguration_reset": "Reset",
+
+  "about_appbar_title": "About",
+  "about_desc": "Information about this software.",
+  
+  "about_list_version": "Version",
+  "about_list_environment": "Environment",
+  "about_list_project": "Project",
+  "about_list_developer": "Developer",
+  "about_list_apiProviders": "API Providers",
+
+  "about_project_page": "Project Page",
+  "about_project_bugs": "Report Bugs",
+
+  "about_apiProviders_thanks": "Thanks to the API providers, who provided the soul of this software.",
+
+  "about_dialog_version_title": "Version",
+  "about_dialog_version_ok": "OK",
+  "about_dialog_environment_title": "Environment",
+  "about_dialog_environment_ok": "OK"
 }

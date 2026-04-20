@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucky_artwork/l10n/app_localizations.dart';
 import 'package:lucky_artwork/setting/update/update_setting_function.dart';
 import 'package:lucky_artwork/util/function_util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -44,7 +45,7 @@ class UpdateSettingState extends State<UpdateSetting> {
           return const Center(child: CircularProgressIndicator());
         } else {
           return Scaffold(
-            appBar: AppBar(title: const Text("Update Setting")),
+            appBar: AppBar(title: Text(AppLocalizations.of(context)!.updateSetting_appbar_title)),
             body: ListView(
               padding: const EdgeInsets.all(8),
               children: [
@@ -56,20 +57,20 @@ class UpdateSettingState extends State<UpdateSetting> {
                 ),
 
                 const SizedBox(height: 16),
-                const Column(
+                Column(
                   children: [
-                    Text("Get software updates."),
-                    Text("Some features require a restart to take effect.")
+                    Text(AppLocalizations.of(context)!.updateSetting_desc_content1),
+                    Text(AppLocalizations.of(context)!.updateSetting_desc_content2)
                   ],
                 ),
                 const SizedBox(height: 16),
 
-                const Row(
+                Row(
                   children: [
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     Text(
-                      "Update Inspector",
-                      style: TextStyle(
+                      AppLocalizations.of(context)!.updateSetting_list_updateInspector,
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
@@ -85,7 +86,7 @@ class UpdateSettingState extends State<UpdateSetting> {
                     children: [
                       const SizedBox(height: 8),
                       SwitchListTile(
-                        title: const Text("Automatic Update Check"),
+                        title: Text(AppLocalizations.of(context)!.updateSetting_updateInspector_automaticUpdateCheck),
                         secondary: const Icon(Icons.tips_and_updates),
                         value: automaticUpdateCheck,
                         onChanged: (value) {
@@ -100,9 +101,9 @@ class UpdateSettingState extends State<UpdateSetting> {
 
                       ListTile(
                         leading: const Icon(Icons.search),
-                        title: const Text("Check Update"),
+                        title: Text(AppLocalizations.of(context)!.updateSetting_updateInspector_checkUpdate),
                         onTap: () {
-                          FunctionUtil.item.showUpdateAlertDialog(context);
+                          UpdateSettingFunction.item.showUpdateAlertDialog(context);
                         },
                       ),                     
                       const SizedBox(height: 8),
@@ -112,12 +113,12 @@ class UpdateSettingState extends State<UpdateSetting> {
 
                 const SizedBox(height: 16),
 
-                const Row(
+                Row(
                   children: [
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     Text(
-                      "Manual Update",
-                      style: TextStyle(
+                      AppLocalizations.of(context)!.updateSetting_list_manualUpdate,
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
@@ -134,7 +135,7 @@ class UpdateSettingState extends State<UpdateSetting> {
                       const SizedBox(height: 8),
                       ListTile(
                         leading: const Icon(Icons.manage_search),
-                        title: const Text("Visit Releases Page"),
+                        title: Text(AppLocalizations.of(context)!.updateSetting_manualUpdate_visitReleasesPage),
                         trailing: const Icon(Icons.open_in_new),
                         onTap: () {
                           launchUrl(Uri.parse("https://github.com/KSSJW/lucky-artwork/releases/latest"), mode: LaunchMode.externalApplication);
