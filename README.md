@@ -15,9 +15,9 @@ A Flutter framework project that uses an API to get a random illustration.
 
 ## Cover Image
 
-[Pixiv - なかよし姉妹 - ルヒカ](https://www.pixiv.net/artworks/71108570)
+[Pixiv - 夏の博麗神社 - DanGo](https://www.pixiv.net/artworks/57086640)
 
-[Pixiv - ジュースとミルク - Dhagp](https://www.pixiv.net/artworks/67447370)
+[Pixiv - おひるね - おひるね](https://www.pixiv.net/artworks/88210047)
 
 ## Built-in API Providers
 

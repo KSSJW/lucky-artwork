@@ -9,6 +9,17 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String snackBar_update_content(Object latestVersion) {
+    return 'The new version $latestVersion is available!';
+  }
+
+  @override
+  String get snackBar_update_cancel => 'Cancel';
+
+  @override
+  String get snackBar_update_get => 'Get';
+
+  @override
   String get navigation_home => 'Home';
 
   @override
@@ -470,6 +481,17 @@ class AppLocalizationsEn extends AppLocalizations {
 /// The translations for English, as used in the United States (`en_US`).
 class AppLocalizationsEnUs extends AppLocalizationsEn {
   AppLocalizationsEnUs() : super('en_US');
+
+  @override
+  String snackBar_update_content(Object latestVersion) {
+    return 'The new version $latestVersion is available!';
+  }
+
+  @override
+  String get snackBar_update_cancel => 'Cancel';
+
+  @override
+  String get snackBar_update_get => 'Get';
 
   @override
   String get navigation_home => 'Home';

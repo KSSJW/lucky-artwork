@@ -191,7 +191,7 @@ class Item {
                 children: [
                   Expanded(
                     child: Text(
-                      "The new version $latestVersion is available!",
+                      AppLocalizations.of(context)!.snackBar_update_content(latestVersion),
                       style: const TextStyle(
                         color: Colors.black,
                       ),
@@ -201,7 +201,7 @@ class Item {
                     onPressed: () {
                       ScaffoldMessenger.of(context).hideCurrentSnackBar();
                     },
-                    child: const Text("Cancel"),
+                    child: Text(AppLocalizations.of(context)!.snackBar_update_cancel),
                   ),
                   ElevatedButton(
                     onPressed: () {
@@ -214,7 +214,7 @@ class Item {
                       backgroundColor: Colors.green,
                       foregroundColor: Colors.white,
                     ),
-                    child: const Text("Get"),
+                    child: Text(AppLocalizations.of(context)!.snackBar_update_get),
                   ),
                 ],
               ),

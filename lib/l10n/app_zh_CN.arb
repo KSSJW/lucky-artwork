@@ -1,4 +1,8 @@
 {
+  "snackBar_update_content": "新版本 {latestVersion} 可用！",
+  "snackBar_update_cancel": "取消",
+  "snackBar_update_get": "获取",
+
   "navigation_home": "主页",
   "navigation_history": "历史",
   "navigation_setting": "设置",
@@ -184,7 +188,7 @@
   "about_list_apiProviders": "API供应者",
 
   "about_project_page": "项目页面",
-  "about_project_bugs": "报告Bugs",
+  "about_project_bugs": "报告错误",
 
   "about_apiProviders_thanks": "感谢API供应者，他们提供了软件的灵魂。",
 

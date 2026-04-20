@@ -1,4 +1,8 @@
 {
+  "snackBar_update_content": "The new version {latestVersion} is available!",
+  "snackBar_update_cancel": "Cancel",
+  "snackBar_update_get": "Get",
+
   "navigation_home": "Home",
   "navigation_history": "History",
   "navigation_setting": "Setting",

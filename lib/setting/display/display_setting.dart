@@ -144,7 +144,15 @@ class DisplaySettingState extends State<DisplaySetting> {
                           ),
                           const PopupMenuItem<Locale>(
                             value: Locale("zh", "CN"),
-                            child: Text("简体中文 (中国)"),
+                            child: Text("简体中文 (中国大陆)"),
+                          ),
+                          const PopupMenuItem<Locale>(
+                            value: Locale("zh", "HK"),
+                            child: Text("繁體中文 (香港)"),
+                          ),
+                          const PopupMenuItem<Locale>(
+                            value: Locale("zh", "TW"),
+                            child: Text("繁體中文 (台灣)"),
                           ),
                         ],
                         child: ListTile(

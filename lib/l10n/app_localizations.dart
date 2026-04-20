@@ -98,7 +98,27 @@ abstract class AppLocalizations {
     Locale('en', 'US'),
     Locale('zh'),
     Locale('zh', 'CN'),
+    Locale('zh', 'HK'),
+    Locale('zh', 'TW'),
   ];
+
+  /// No description provided for @snackBar_update_content.
+  ///
+  /// In en_US, this message translates to:
+  /// **'The new version {latestVersion} is available!'**
+  String snackBar_update_content(Object latestVersion);
+
+  /// No description provided for @snackBar_update_cancel.
+  ///
+  /// In en_US, this message translates to:
+  /// **'Cancel'**
+  String get snackBar_update_cancel;
+
+  /// No description provided for @snackBar_update_get.
+  ///
+  /// In en_US, this message translates to:
+  /// **'Get'**
+  String get snackBar_update_get;
 
   /// No description provided for @navigation_home.
   ///
@@ -986,6 +1006,10 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
         switch (locale.countryCode) {
           case 'CN':
             return AppLocalizationsZhCn();
+          case 'HK':
+            return AppLocalizationsZhHk();
+          case 'TW':
+            return AppLocalizationsZhTw();
         }
         break;
       }

@@ -9,6 +9,17 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
+  String snackBar_update_content(Object latestVersion) {
+    return 'The new version $latestVersion is available!';
+  }
+
+  @override
+  String get snackBar_update_cancel => 'Cancel';
+
+  @override
+  String get snackBar_update_get => 'Get';
+
+  @override
   String get navigation_home => 'Home';
 
   @override
@@ -472,6 +483,17 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   AppLocalizationsZhCn() : super('zh_CN');
 
   @override
+  String snackBar_update_content(Object latestVersion) {
+    return '新版本 $latestVersion 可用！';
+  }
+
+  @override
+  String get snackBar_update_cancel => '取消';
+
+  @override
+  String get snackBar_update_get => '获取';
+
+  @override
   String get navigation_home => '主页';
 
   @override
@@ -885,7 +907,7 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String get about_project_page => '项目页面';
 
   @override
-  String get about_project_bugs => '报告Bugs';
+  String get about_project_bugs => '报告错误';
 
   @override
   String get about_apiProviders_thanks => '感谢API供应者，他们提供了软件的灵魂。';
@@ -898,6 +920,900 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 
   @override
   String get about_dialog_environment_title => '环境';
+
+  @override
+  String get about_dialog_environment_ok => '好的';
+}
+
+/// The translations for Chinese, as used in Hong Kong (`zh_HK`).
+class AppLocalizationsZhHk extends AppLocalizationsZh {
+  AppLocalizationsZhHk() : super('zh_HK');
+
+  @override
+  String snackBar_update_content(Object latestVersion) {
+    return '新版本 $latestVersion 可用！';
+  }
+
+  @override
+  String get snackBar_update_cancel => '取消';
+
+  @override
+  String get snackBar_update_get => '取得';
+
+  @override
+  String get navigation_home => '主頁';
+
+  @override
+  String get navigation_history => '歷史';
+
+  @override
+  String get navigation_setting => '設定';
+
+  @override
+  String get home_noData => '無資料';
+
+  @override
+  String get home_tryChangingTheApi => '嘗試更改API';
+
+  @override
+  String get home_button_next => '重新整理';
+
+  @override
+  String get home_button_download => '下載';
+
+  @override
+  String get home_button_download_loading => '載入中';
+
+  @override
+  String get home_button_exit => '退出';
+
+  @override
+  String get home_fullScreenImage_button_download => '下載';
+
+  @override
+  String get home_snackbar_saved => '圖片已儲存至';
+
+  @override
+  String get home_snackbar_saveFailed => '圖片儲存失敗';
+
+  @override
+  String get history_appbar_title => '歷史';
+
+  @override
+  String get history_appbar_button_refresh => '重新整理';
+
+  @override
+  String get history_appbar_button_selection => '選擇';
+
+  @override
+  String get history_appbar_button_selection_close => '關閉';
+
+  @override
+  String get history_cacheAndHistoryAreDisabled => '快取與歷史已關閉';
+
+  @override
+  String get history_noHistory => '無歷史';
+
+  @override
+  String get history_button_explore => '探索';
+
+  @override
+  String get history_button_download => '下載';
+
+  @override
+  String get history_button_delete => '刪除';
+
+  @override
+  String get history_fullScreenImage_button_download => '下載';
+
+  @override
+  String get history_fullScreenImage_button_delete => '刪除';
+
+  @override
+  String get history_fullScreenImage_dialog_delete_title => '刪除';
+
+  @override
+  String get history_fullScreenImage_dialog_delete_content1 => '您確定要刪除這條記錄嗎？';
+
+  @override
+  String get history_fullScreenImage_dialog_delete_content2 =>
+      '此操作會將其從您的歷史中刪除。';
+
+  @override
+  String get history_fullScreenImage_dialog_delete_cancel => '取消';
+
+  @override
+  String get history_fullScreenImage_dialog_delete_delete => '刪除';
+
+  @override
+  String history_explore_appbar_title(Object count, Object num) {
+    return '探索 $count 中的 $num';
+  }
+
+  @override
+  String get history_explore_button_next => '重新整理';
+
+  @override
+  String get history_explore_button_open => '打開';
+
+  @override
+  String get history_explore_button_close => '關閉';
+
+  @override
+  String get history_dialog_delete_title => '刪除';
+
+  @override
+  String get history_dialog_delete_content1 => '您確定要刪除這些記錄嗎？';
+
+  @override
+  String get history_dialog_delete_content2 => '此操作會將其從您的歷史中刪除。';
+
+  @override
+  String get history_dialog_delete_cancel => '取消';
+
+  @override
+  String get history_dialog_delete_delete => '刪除';
+
+  @override
+  String get history_dialog_saving => '儲存圖片中';
+
+  @override
+  String get history_snackbar_saved => '圖片已儲存至';
+
+  @override
+  String get history_snackbar_saveFailed => '圖片儲存失敗';
+
+  @override
+  String get setting_appbar_title => '設定';
+
+  @override
+  String get setting_list_api_desc => '設定圖源。';
+
+  @override
+  String get setting_list_display => '顯示';
+
+  @override
+  String get setting_list_display_desc => '控制軟件的顯示介面。';
+
+  @override
+  String get setting_list_cache => '快取';
+
+  @override
+  String get setting_list_cache_desc => '管理軟件快取。';
+
+  @override
+  String get setting_list_update => '更新';
+
+  @override
+  String get setting_list_update_desc => '獲取軟件更新。';
+
+  @override
+  String get setting_list_developerOptions => '開發者選項';
+
+  @override
+  String get setting_list_developerOptions_desc => '用於測試或高級控制。';
+
+  @override
+  String get setting_list_about => '關於';
+
+  @override
+  String get setting_list_about_desc => '關於軟件的資訊。';
+
+  @override
+  String get setting_button_restart => '重新啟動';
+
+  @override
+  String get setting_dialog_restart_title => '重新啟動';
+
+  @override
+  String get setting_dialog_restart_content1 => '確定要重新啟動嗎？';
+
+  @override
+  String get setting_dialog_restart_content2 => '重新啟動會立即生效，';
+
+  @override
+  String get setting_dialog_restart_content3 => '如果您關閉了快取，建議您在重新啟動前儲存必要的資料。';
+
+  @override
+  String get setting_dialog_restart_cancel => '取消';
+
+  @override
+  String get setting_dialog_restart_restart => '重新啟動';
+
+  @override
+  String get apiSetting_appbar_title => 'API 設定';
+
+  @override
+  String get apiSetting_desc_content1 => '設定圖源。';
+
+  @override
+  String get apiSetting_desc_content2 => 'API需要返回一張圖片，而不是JSON。';
+
+  @override
+  String get apiSetting_desc_content3 => '您可以編輯文本框來添加自訂API。';
+
+  @override
+  String get apiSetting_inputDecoration_label => '自訂 API URL';
+
+  @override
+  String get apiSetting_button_save => '儲存';
+
+  @override
+  String get displaySetting_appbar_title => '顯示設定';
+
+  @override
+  String get displaySetting_desc_content1 => '控制軟件的顯示介面。';
+
+  @override
+  String get displaySetting_desc_content2 => '部分特性需要重新啟動以生效。';
+
+  @override
+  String get displaySetting_list_global => '全域';
+
+  @override
+  String get displaySetting_list_home => '主頁';
+
+  @override
+  String get displaySetting_list_history => '歷史';
+
+  @override
+  String get displaySetting_global_language => '語言';
+
+  @override
+  String get displaySetting_global_themeMode => '主題模式';
+
+  @override
+  String get displaySetting_global_themeMode_system => '系統';
+
+  @override
+  String get displaySetting_global_themeMode_light => '淺色';
+
+  @override
+  String get displaySetting_global_themeMode_dark => '深色';
+
+  @override
+  String get displaySetting_global_navigationBarStyle => '導航欄樣式';
+
+  @override
+  String get displaySetting_global_navigationBarStyle_auto => '自動';
+
+  @override
+  String get displaySetting_global_navigationBarStyle_button => '底部';
+
+  @override
+  String get displaySetting_global_navigationBarStyle_right => '右側';
+
+  @override
+  String get displaySetting_global_navigationBarLabels => '導航欄標籤';
+
+  @override
+  String get displaySetting_global_wakeLock => '喚醒鎖';
+
+  @override
+  String get displaySetting_global_buttonSize => '按鈕大小';
+
+  @override
+  String get displaySetting_home_fadeInAnimationForImage => '圖片淡入動畫';
+
+  @override
+  String get displaySetting_home_showLatency => '顯示延遲';
+
+  @override
+  String get displaySetting_home_exitButton => '退出按鈕';
+
+  @override
+  String get displaySetting_history_imageColumns => '圖片列數';
+
+  @override
+  String get displaySetting_history_exploreButton => '探索按鈕';
+
+  @override
+  String get cacheSetting_appbar_title => '快取設定';
+
+  @override
+  String get cacheSetting_desc_content1 => '管理軟件快取。';
+
+  @override
+  String get cacheSetting_desc_content2 => '部分特性需要重新啟動以生效。';
+
+  @override
+  String get cacheSetting_enableCacheAndHistory => '啟用快取和歷史';
+
+  @override
+  String get cacheSetting_clearCache => '清理快取';
+
+  @override
+  String get cacheSetting_dialog_clearCache_title => '清理快取';
+
+  @override
+  String get cacheSetting_dialog_clearCache_content1 => '您確定要清理快取嗎？';
+
+  @override
+  String get cacheSetting_dialog_clearCache_content2 => '您將會刪除快取和歷史。';
+
+  @override
+  String get cacheSetting_dialog_clearCache_cacnel => '取消';
+
+  @override
+  String get cacheSetting_dialog_clearCache_clear => '清理';
+
+  @override
+  String get updateSetting_appbar_title => '更新設定';
+
+  @override
+  String get updateSetting_desc_content1 => '獲取軟件更新。';
+
+  @override
+  String get updateSetting_desc_content2 => '部分特性需要重新啟動以生效。';
+
+  @override
+  String get updateSetting_list_updateInspector => '更新提示器';
+
+  @override
+  String get updateSetting_list_manualUpdate => '手動更新';
+
+  @override
+  String get updateSetting_updateInspector_automaticUpdateCheck => '自動檢查更新';
+
+  @override
+  String get updateSetting_updateInspector_checkUpdate => '檢查更新';
+
+  @override
+  String get updateSetting_manualUpdate_visitReleasesPage => '訪問發佈頁面';
+
+  @override
+  String get updateSetting_dialog_getUpdate_title => '獲取更新';
+
+  @override
+  String get updateSetting_dialog_getUpdate_available => '可用更新';
+
+  @override
+  String get updateSetting_dialog_getUpdate_runningTheLatest => '您正在運行最新版本。';
+
+  @override
+  String get updateSetting_dialog_getUpdate_failed => '獲取更新失敗。';
+
+  @override
+  String get updateSetting_dialog_getUpdate_tooFrequent => '請求過於頻繁或版本伺服器不可達。';
+
+  @override
+  String get updateSetting_dialog_getUpdate_cancel => '取消';
+
+  @override
+  String get updateSetting_dialog_getUpdate_get => '獲取';
+
+  @override
+  String get updateSetting_dialog_getUpdate_ok => '好的';
+
+  @override
+  String get developerOptions_appbar_title => '開發者選項';
+
+  @override
+  String get developerOptions_desc_content1 => '用於測試或高級控制。';
+
+  @override
+  String get developerOptions_desc_content2 => '部分特性需要重新啟動以生效。';
+
+  @override
+  String get developerOptions_list_configuration => '配置';
+
+  @override
+  String get developerOptions_list_performance => '效能';
+
+  @override
+  String get developerOptions_configuration_reset => '重置配置';
+
+  @override
+  String get developerOptions_performance_ramOverview => 'RAM概況';
+
+  @override
+  String get developerOptions_performance_limitCaching => '限制快取';
+
+  @override
+  String get developerOptions_performance_limitCaching_desc => '使用更加保守的快取策略。';
+
+  @override
+  String get developerOptions_dialog_resetConfiguration_title => '重置配置';
+
+  @override
+  String get developerOptions_dialog_resetConfiguration_content1 =>
+      '您確定要重置配置嗎？';
+
+  @override
+  String get developerOptions_dialog_resetConfiguration_content2 =>
+      '軟件配置將會被重置。';
+
+  @override
+  String get developerOptions_dialog_resetConfiguration_cancel => '取消';
+
+  @override
+  String get developerOptions_dialog_resetConfiguration_reset => '重置';
+
+  @override
+  String get about_appbar_title => '關於';
+
+  @override
+  String get about_desc => '關於軟件的資訊。';
+
+  @override
+  String get about_list_version => '版本';
+
+  @override
+  String get about_list_environment => '環境';
+
+  @override
+  String get about_list_project => '項目';
+
+  @override
+  String get about_list_developer => '開發者';
+
+  @override
+  String get about_list_apiProviders => 'API供應者';
+
+  @override
+  String get about_project_page => '項目頁面';
+
+  @override
+  String get about_project_bugs => '報告錯誤';
+
+  @override
+  String get about_apiProviders_thanks => '感謝API供應者，他們提供了軟件的靈魂。';
+
+  @override
+  String get about_dialog_version_title => '版本';
+
+  @override
+  String get about_dialog_version_ok => '好的';
+
+  @override
+  String get about_dialog_environment_title => '環境';
+
+  @override
+  String get about_dialog_environment_ok => '好的';
+}
+
+/// The translations for Chinese, as used in Taiwan (`zh_TW`).
+class AppLocalizationsZhTw extends AppLocalizationsZh {
+  AppLocalizationsZhTw() : super('zh_TW');
+
+  @override
+  String snackBar_update_content(Object latestVersion) {
+    return '新版本 $latestVersion 可用！';
+  }
+
+  @override
+  String get snackBar_update_cancel => '取消';
+
+  @override
+  String get snackBar_update_get => '取得';
+
+  @override
+  String get navigation_home => '主頁';
+
+  @override
+  String get navigation_history => '歷史';
+
+  @override
+  String get navigation_setting => '設定';
+
+  @override
+  String get home_noData => '無資料';
+
+  @override
+  String get home_tryChangingTheApi => '嘗試更改 API';
+
+  @override
+  String get home_button_next => '重新整理';
+
+  @override
+  String get home_button_download => '下載';
+
+  @override
+  String get home_button_download_loading => '載入中';
+
+  @override
+  String get home_button_exit => '退出';
+
+  @override
+  String get home_fullScreenImage_button_download => '下載';
+
+  @override
+  String get home_snackbar_saved => '圖片已儲存至';
+
+  @override
+  String get home_snackbar_saveFailed => '圖片儲存失敗';
+
+  @override
+  String get history_appbar_title => '歷史';
+
+  @override
+  String get history_appbar_button_refresh => '重新整理';
+
+  @override
+  String get history_appbar_button_selection => '選擇';
+
+  @override
+  String get history_appbar_button_selection_close => '關閉';
+
+  @override
+  String get history_cacheAndHistoryAreDisabled => '快取與歷史已關閉';
+
+  @override
+  String get history_noHistory => '無歷史';
+
+  @override
+  String get history_button_explore => '探索';
+
+  @override
+  String get history_button_download => '下載';
+
+  @override
+  String get history_button_delete => '刪除';
+
+  @override
+  String get history_fullScreenImage_button_download => '下載';
+
+  @override
+  String get history_fullScreenImage_button_delete => '刪除';
+
+  @override
+  String get history_fullScreenImage_dialog_delete_title => '刪除';
+
+  @override
+  String get history_fullScreenImage_dialog_delete_content1 => '您確定要刪除這條紀錄嗎？';
+
+  @override
+  String get history_fullScreenImage_dialog_delete_content2 =>
+      '此操作會將其從您的歷史中刪除。';
+
+  @override
+  String get history_fullScreenImage_dialog_delete_cancel => '取消';
+
+  @override
+  String get history_fullScreenImage_dialog_delete_delete => '刪除';
+
+  @override
+  String history_explore_appbar_title(Object count, Object num) {
+    return '探索 $count 中的 $num';
+  }
+
+  @override
+  String get history_explore_button_next => '重新整理';
+
+  @override
+  String get history_explore_button_open => '打開';
+
+  @override
+  String get history_explore_button_close => '關閉';
+
+  @override
+  String get history_dialog_delete_title => '刪除';
+
+  @override
+  String get history_dialog_delete_content1 => '您確定要刪除這些紀錄嗎？';
+
+  @override
+  String get history_dialog_delete_content2 => '此操作會將其從您的歷史中刪除。';
+
+  @override
+  String get history_dialog_delete_cancel => '取消';
+
+  @override
+  String get history_dialog_delete_delete => '刪除';
+
+  @override
+  String get history_dialog_saving => '儲存圖片中';
+
+  @override
+  String get history_snackbar_saved => '圖片已儲存至';
+
+  @override
+  String get history_snackbar_saveFailed => '圖片儲存失敗';
+
+  @override
+  String get setting_appbar_title => '設定';
+
+  @override
+  String get setting_list_api_desc => '設定圖源。';
+
+  @override
+  String get setting_list_display => '顯示';
+
+  @override
+  String get setting_list_display_desc => '控制軟體的顯示介面。';
+
+  @override
+  String get setting_list_cache => '快取';
+
+  @override
+  String get setting_list_cache_desc => '管理軟體快取。';
+
+  @override
+  String get setting_list_update => '更新';
+
+  @override
+  String get setting_list_update_desc => '取得軟體更新。';
+
+  @override
+  String get setting_list_developerOptions => '開發者選項';
+
+  @override
+  String get setting_list_developerOptions_desc => '用於測試或進階控制。';
+
+  @override
+  String get setting_list_about => '關於';
+
+  @override
+  String get setting_list_about_desc => '關於軟體的資訊。';
+
+  @override
+  String get setting_button_restart => '重新啟動';
+
+  @override
+  String get setting_dialog_restart_title => '重新啟動';
+
+  @override
+  String get setting_dialog_restart_content1 => '確定要重新啟動嗎？';
+
+  @override
+  String get setting_dialog_restart_content2 => '重新啟動會立即生效，';
+
+  @override
+  String get setting_dialog_restart_content3 => '如果您關閉了快取，建議您在重新啟動前儲存必要的資料。';
+
+  @override
+  String get setting_dialog_restart_cancel => '取消';
+
+  @override
+  String get setting_dialog_restart_restart => '重新啟動';
+
+  @override
+  String get apiSetting_appbar_title => 'API 設定';
+
+  @override
+  String get apiSetting_desc_content1 => '設定圖源。';
+
+  @override
+  String get apiSetting_desc_content2 => 'API 需要返回一張圖片，而不是 JSON。';
+
+  @override
+  String get apiSetting_desc_content3 => '您可以編輯文字框來新增自訂 API。';
+
+  @override
+  String get apiSetting_inputDecoration_label => '自訂 API URL';
+
+  @override
+  String get apiSetting_button_save => '儲存';
+
+  @override
+  String get displaySetting_appbar_title => '顯示設定';
+
+  @override
+  String get displaySetting_desc_content1 => '控制軟體的顯示介面。';
+
+  @override
+  String get displaySetting_desc_content2 => '部分特性需要重新啟動以生效。';
+
+  @override
+  String get displaySetting_list_global => '全域';
+
+  @override
+  String get displaySetting_list_home => '主頁';
+
+  @override
+  String get displaySetting_list_history => '歷史';
+
+  @override
+  String get displaySetting_global_language => '語言';
+
+  @override
+  String get displaySetting_global_themeMode => '主題模式';
+
+  @override
+  String get displaySetting_global_themeMode_system => '系統';
+
+  @override
+  String get displaySetting_global_themeMode_light => '淺色';
+
+  @override
+  String get displaySetting_global_themeMode_dark => '深色';
+
+  @override
+  String get displaySetting_global_navigationBarStyle => '導覽列樣式';
+
+  @override
+  String get displaySetting_global_navigationBarStyle_auto => '自動';
+
+  @override
+  String get displaySetting_global_navigationBarStyle_button => '底部';
+
+  @override
+  String get displaySetting_global_navigationBarStyle_right => '右側';
+
+  @override
+  String get displaySetting_global_navigationBarLabels => '導覽列標籤';
+
+  @override
+  String get displaySetting_global_wakeLock => '喚醒鎖';
+
+  @override
+  String get displaySetting_global_buttonSize => '按鈕大小';
+
+  @override
+  String get displaySetting_home_fadeInAnimationForImage => '圖片淡入動畫';
+
+  @override
+  String get displaySetting_home_showLatency => '顯示延遲';
+
+  @override
+  String get displaySetting_home_exitButton => '退出按鈕';
+
+  @override
+  String get displaySetting_history_imageColumns => '圖片欄數';
+
+  @override
+  String get displaySetting_history_exploreButton => '探索按鈕';
+
+  @override
+  String get cacheSetting_appbar_title => '快取設定';
+
+  @override
+  String get cacheSetting_desc_content1 => '管理軟體快取。';
+
+  @override
+  String get cacheSetting_desc_content2 => '部分特性需要重新啟動以生效。';
+
+  @override
+  String get cacheSetting_enableCacheAndHistory => '啟用快取和歷史';
+
+  @override
+  String get cacheSetting_clearCache => '清理快取';
+
+  @override
+  String get cacheSetting_dialog_clearCache_title => '清理快取';
+
+  @override
+  String get cacheSetting_dialog_clearCache_content1 => '您確定要清理快取嗎？';
+
+  @override
+  String get cacheSetting_dialog_clearCache_content2 => '您將會刪除快取和歷史。';
+
+  @override
+  String get cacheSetting_dialog_clearCache_cacnel => '取消';
+
+  @override
+  String get cacheSetting_dialog_clearCache_clear => '清理';
+
+  @override
+  String get updateSetting_appbar_title => '更新設定';
+
+  @override
+  String get updateSetting_desc_content1 => '取得軟體更新。';
+
+  @override
+  String get updateSetting_desc_content2 => '部分特性需要重新啟動以生效。';
+
+  @override
+  String get updateSetting_list_updateInspector => '更新提示器';
+
+  @override
+  String get updateSetting_list_manualUpdate => '手動更新';
+
+  @override
+  String get updateSetting_updateInspector_automaticUpdateCheck => '自動檢查更新';
+
+  @override
+  String get updateSetting_updateInspector_checkUpdate => '檢查更新';
+
+  @override
+  String get updateSetting_manualUpdate_visitReleasesPage => '造訪發佈頁面';
+
+  @override
+  String get updateSetting_dialog_getUpdate_title => '取得更新';
+
+  @override
+  String get updateSetting_dialog_getUpdate_available => '可用更新';
+
+  @override
+  String get updateSetting_dialog_getUpdate_runningTheLatest => '您正在執行最新版本。';
+
+  @override
+  String get updateSetting_dialog_getUpdate_failed => '取得更新失敗。';
+
+  @override
+  String get updateSetting_dialog_getUpdate_tooFrequent => '請求過於頻繁或版本伺服器不可達。';
+
+  @override
+  String get updateSetting_dialog_getUpdate_cancel => '取消';
+
+  @override
+  String get updateSetting_dialog_getUpdate_get => '取得';
+
+  @override
+  String get updateSetting_dialog_getUpdate_ok => '好的';
+
+  @override
+  String get developerOptions_appbar_title => '開發者選項';
+
+  @override
+  String get developerOptions_desc_content1 => '用於測試或進階控制。';
+
+  @override
+  String get developerOptions_desc_content2 => '部分特性需要重新啟動以生效。';
+
+  @override
+  String get developerOptions_list_configuration => '設定';
+
+  @override
+  String get developerOptions_list_performance => '效能';
+
+  @override
+  String get developerOptions_configuration_reset => '重置設定';
+
+  @override
+  String get developerOptions_performance_ramOverview => 'RAM 概況';
+
+  @override
+  String get developerOptions_performance_limitCaching => '限制快取';
+
+  @override
+  String get developerOptions_performance_limitCaching_desc => '使用更加保守的快取策略。';
+
+  @override
+  String get developerOptions_dialog_resetConfiguration_title => '重置設定';
+
+  @override
+  String get developerOptions_dialog_resetConfiguration_content1 =>
+      '您確定要重置設定嗎？';
+
+  @override
+  String get developerOptions_dialog_resetConfiguration_content2 =>
+      '軟體設定將會被重置。';
+
+  @override
+  String get developerOptions_dialog_resetConfiguration_cancel => '取消';
+
+  @override
+  String get developerOptions_dialog_resetConfiguration_reset => '重置';
+
+  @override
+  String get about_appbar_title => '關於';
+
+  @override
+  String get about_desc => '關於軟體的資訊。';
+
+  @override
+  String get about_list_version => '版本';
+
+  @override
+  String get about_list_environment => '環境';
+
+  @override
+  String get about_list_project => '專案';
+
+  @override
+  String get about_list_developer => '開發者';
+
+  @override
+  String get about_list_apiProviders => 'API 提供者';
+
+  @override
+  String get about_project_page => '專案頁面';
+
+  @override
+  String get about_project_bugs => '回報錯誤';
+
+  @override
+  String get about_apiProviders_thanks => '感謝 API 提供者，他們提供了軟體的靈魂。';
+
+  @override
+  String get about_dialog_version_title => '版本';
+
+  @override
+  String get about_dialog_version_ok => '好的';
+
+  @override
+  String get about_dialog_environment_title => '環境';
 
   @override
   String get about_dialog_environment_ok => '好的';

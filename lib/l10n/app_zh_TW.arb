@@ -1,0 +1,199 @@
+{
+  "snackBar_update_content": "新版本 {latestVersion} 可用！",
+  "snackBar_update_cancel": "取消",
+  "snackBar_update_get": "取得",
+
+  "navigation_home": "主頁",
+  "navigation_history": "歷史",
+  "navigation_setting": "設定",
+
+  "home_noData": "無資料",
+  "home_tryChangingTheApi": "嘗試更改 API",
+
+  "home_button_next": "重新整理",
+  "home_button_download": "下載",
+  "home_button_download_loading": "載入中",
+  "home_button_exit": "退出",
+
+  "home_fullScreenImage_button_download": "下載",
+
+  "home_snackbar_saved": "圖片已儲存至",
+  "home_snackbar_saveFailed": "圖片儲存失敗",
+  
+  "history_appbar_title": "歷史",
+  "history_appbar_button_refresh": "重新整理",
+  "history_appbar_button_selection": "選擇",
+  "history_appbar_button_selection_close": "關閉",
+
+  "history_cacheAndHistoryAreDisabled": "快取與歷史已關閉",
+  "history_noHistory": "無歷史",
+
+  "history_button_explore": "探索",
+  "history_button_download": "下載",
+  "history_button_delete": "刪除",
+
+  "history_fullScreenImage_button_download": "下載",
+  "history_fullScreenImage_button_delete": "刪除",
+  "history_fullScreenImage_dialog_delete_title": "刪除",
+  "history_fullScreenImage_dialog_delete_content1": "您確定要刪除這條紀錄嗎？",
+  "history_fullScreenImage_dialog_delete_content2": "此操作會將其從您的歷史中刪除。",
+  "history_fullScreenImage_dialog_delete_cancel": "取消",
+  "history_fullScreenImage_dialog_delete_delete": "刪除",
+
+  "history_explore_appbar_title": "探索 {count} 中的 {num}",
+  "history_explore_button_next": "重新整理",
+  "history_explore_button_open": "打開",
+  "history_explore_button_close": "關閉",
+
+  "history_dialog_delete_title": "刪除",
+  "history_dialog_delete_content1": "您確定要刪除這些紀錄嗎？",
+  "history_dialog_delete_content2": "此操作會將其從您的歷史中刪除。",
+  "history_dialog_delete_cancel": "取消",
+  "history_dialog_delete_delete": "刪除",
+  "history_dialog_saving": "儲存圖片中",
+
+  "history_snackbar_saved": "圖片已儲存至",
+  "history_snackbar_saveFailed": "圖片儲存失敗",
+
+  "setting_appbar_title": "設定",
+  
+  "setting_list_api_desc": "設定圖源。",
+  "setting_list_display": "顯示",
+  "setting_list_display_desc": "控制軟體的顯示介面。",
+  "setting_list_cache": "快取",
+  "setting_list_cache_desc": "管理軟體快取。",
+  "setting_list_update": "更新",
+  "setting_list_update_desc": "取得軟體更新。",
+  "setting_list_developerOptions": "開發者選項",
+  "setting_list_developerOptions_desc": "用於測試或進階控制。",
+  "setting_list_about": "關於",
+  "setting_list_about_desc": "關於軟體的資訊。",
+
+  "setting_button_restart": "重新啟動",
+
+  "setting_dialog_restart_title": "重新啟動",
+  "setting_dialog_restart_content1": "確定要重新啟動嗎？",
+  "setting_dialog_restart_content2": "重新啟動會立即生效，",
+  "setting_dialog_restart_content3": "如果您關閉了快取，建議您在重新啟動前儲存必要的資料。",
+  "setting_dialog_restart_cancel": "取消",
+  "setting_dialog_restart_restart": "重新啟動",
+
+  "apiSetting_appbar_title": "API 設定",
+
+  "apiSetting_desc_content1": "設定圖源。",
+  "apiSetting_desc_content2": "API 需要返回一張圖片，而不是 JSON。",
+  "apiSetting_desc_content3": "您可以編輯文字框來新增自訂 API。",
+
+  "apiSetting_inputDecoration_label": "自訂 API URL",
+  
+  "apiSetting_button_save": "儲存",
+
+  "displaySetting_appbar_title": "顯示設定",
+
+  "displaySetting_desc_content1": "控制軟體的顯示介面。",
+  "displaySetting_desc_content2": "部分特性需要重新啟動以生效。",
+
+  "displaySetting_list_global": "全域",
+  "displaySetting_list_home": "主頁",
+  "displaySetting_list_history": "歷史",
+
+  "displaySetting_global_language": "語言",
+
+  "displaySetting_global_themeMode": "主題模式",
+  "displaySetting_global_themeMode_system": "系統",
+  "displaySetting_global_themeMode_light": "淺色",
+  "displaySetting_global_themeMode_dark": "深色",
+
+  "displaySetting_global_navigationBarStyle": "導覽列樣式",
+  "displaySetting_global_navigationBarStyle_auto": "自動",
+  "displaySetting_global_navigationBarStyle_button": "底部",
+  "displaySetting_global_navigationBarStyle_right": "右側",
+
+  "displaySetting_global_navigationBarLabels": "導覽列標籤",
+  "displaySetting_global_wakeLock": "喚醒鎖",
+  
+  "displaySetting_global_buttonSize": "按鈕大小",
+
+  "displaySetting_home_fadeInAnimationForImage": "圖片淡入動畫",
+  "displaySetting_home_showLatency": "顯示延遲",
+  "displaySetting_home_exitButton": "退出按鈕",
+
+  "displaySetting_history_imageColumns": "圖片欄數",
+  "displaySetting_history_exploreButton": "探索按鈕",
+
+  "cacheSetting_appbar_title": "快取設定",
+
+  "cacheSetting_desc_content1": "管理軟體快取。",
+  "cacheSetting_desc_content2": "部分特性需要重新啟動以生效。",
+
+  "cacheSetting_enableCacheAndHistory": "啟用快取和歷史",
+  "cacheSetting_clearCache": "清理快取",
+
+  "cacheSetting_dialog_clearCache_title": "清理快取",
+  "cacheSetting_dialog_clearCache_content1": "您確定要清理快取嗎？",
+  "cacheSetting_dialog_clearCache_content2": "您將會刪除快取和歷史。",
+  "cacheSetting_dialog_clearCache_cacnel": "取消",
+  "cacheSetting_dialog_clearCache_clear": "清理",
+
+  "updateSetting_appbar_title": "更新設定",
+
+  "updateSetting_desc_content1": "取得軟體更新。",
+  "updateSetting_desc_content2": "部分特性需要重新啟動以生效。",
+
+  "updateSetting_list_updateInspector": "更新提示器",
+  "updateSetting_list_manualUpdate": "手動更新",
+
+  "updateSetting_updateInspector_automaticUpdateCheck": "自動檢查更新",
+  "updateSetting_updateInspector_checkUpdate": "檢查更新",
+
+  "updateSetting_manualUpdate_visitReleasesPage": "造訪發佈頁面",
+
+  "updateSetting_dialog_getUpdate_title": "取得更新",
+  "updateSetting_dialog_getUpdate_available": "可用更新",
+  "updateSetting_dialog_getUpdate_runningTheLatest": "您正在執行最新版本。",
+  "updateSetting_dialog_getUpdate_failed": "取得更新失敗。",
+  "updateSetting_dialog_getUpdate_tooFrequent": "請求過於頻繁或版本伺服器不可達。",
+  "updateSetting_dialog_getUpdate_cancel": "取消",
+  "updateSetting_dialog_getUpdate_get": "取得",
+  "updateSetting_dialog_getUpdate_ok": "好的",
+
+  "developerOptions_appbar_title": "開發者選項",
+
+  "developerOptions_desc_content1": "用於測試或進階控制。",
+  "developerOptions_desc_content2": "部分特性需要重新啟動以生效。",
+
+  "developerOptions_list_configuration": "設定",
+  "developerOptions_list_performance": "效能",
+
+  "developerOptions_configuration_reset": "重置設定",
+
+  "developerOptions_performance_ramOverview": "RAM 概況",
+
+  "developerOptions_performance_limitCaching": "限制快取",
+  "developerOptions_performance_limitCaching_desc": "使用更加保守的快取策略。",
+
+  "developerOptions_dialog_resetConfiguration_title": "重置設定",
+  "developerOptions_dialog_resetConfiguration_content1": "您確定要重置設定嗎？",
+  "developerOptions_dialog_resetConfiguration_content2": "軟體設定將會被重置。",
+  "developerOptions_dialog_resetConfiguration_cancel": "取消",
+  "developerOptions_dialog_resetConfiguration_reset": "重置",
+
+  "about_appbar_title": "關於",
+  "about_desc": "關於軟體的資訊。",
+
+  "about_list_version": "版本",
+  "about_list_environment": "環境",
+  "about_list_project": "專案",
+  "about_list_developer": "開發者",
+  "about_list_apiProviders": "API 提供者",
+
+  "about_project_page": "專案頁面",
+  "about_project_bugs": "回報錯誤",
+
+  "about_apiProviders_thanks": "感謝 API 提供者，他們提供了軟體的靈魂。",
+
+  "about_dialog_version_title": "版本",
+  "about_dialog_version_ok": "好的",
+  "about_dialog_environment_title": "環境",
+  "about_dialog_environment_ok": "好的"
+}
