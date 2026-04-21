@@ -33,6 +33,17 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
   int currentMax = 50;
   double initItemSize = 112;
 
+  Future<bool> _init() async {
+    await Future.wait([
+      loadConfig(),
+      Future.delayed(const Duration(milliseconds: 300), () {
+        refreshHistory();
+      }),
+    ]);
+
+    return true;
+  }
+
   Future<bool> loadConfig() async {
     final result = await Future.wait([
       /* 0 */ FunctionUtil.storage.isEnabledCacheAndHistory(),
@@ -95,8 +106,8 @@ class HistoryState extends State<History> with AutomaticKeepAliveClientMixin{
   @override
   void initState() {
     super.initState();
-    
-    configLoadFuture = loadConfig();
+
+    configLoadFuture = _init();
 
     scrollController.addListener(() {
       if (scrollController.position.pixels >= scrollController.position.maxScrollExtent) {
