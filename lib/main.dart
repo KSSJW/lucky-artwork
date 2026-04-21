@@ -97,6 +97,7 @@ class MainPageState extends State<MainPage> {
   bool promptedUpdate = false;
   int navigationBarPos = 1;
   int selectedIndex = 0;
+  bool _fromNavBar = false;
   final PageController pageController = PageController();
 
   Future<void> checkAgreement() async {
@@ -201,7 +202,9 @@ class MainPageState extends State<MainPage> {
     }
   }
 
-  void onItemTapped(int index) {
+  Future<void> onItemTapped(int index) async {
+    _fromNavBar = true;
+
     setState(() {
       selectedIndex = index;
       if (index == 1) {
@@ -209,11 +212,13 @@ class MainPageState extends State<MainPage> {
       }
     });
     
-    pageController.animateToPage(
+    await pageController.animateToPage(
       index,
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
+
+    _fromNavBar = false; // Reset
   }
 
   final GlobalKey<HistoryState> historyKey = GlobalKey();
@@ -266,12 +271,16 @@ class MainPageState extends State<MainPage> {
                 controller: pageController,
                 physics: navigationBarPos == 2 ? const NeverScrollableScrollPhysics() : null,
                 onPageChanged: (index) {
-                  setState(() {
-                    selectedIndex = index;
-                    if (index == 1) {
-                      historyKey.currentState?.refreshHistory();
-                    }
-                  });
+
+                  // 用于滑动逻辑
+                  if (!_fromNavBar) {
+                    setState(() {
+                      selectedIndex = index;
+                      if (index == 1) {
+                        historyKey.currentState?.refreshHistory();
+                      }
+                    });
+                  }
                 },
                 children: [
                   const Home(),
