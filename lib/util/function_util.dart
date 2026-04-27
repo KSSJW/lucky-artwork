@@ -77,7 +77,7 @@ class Network {
   Future<String> getAPI() async {
     var prefs = await SharedPreferences.getInstance();
 
-    return prefs.getString("api_url") ?? "https://manyacg.top/sese";  // Fallback
+    return prefs.getString("api_url") ?? "https://manyacg.top/setu";  // Fallback
   }
 }
 

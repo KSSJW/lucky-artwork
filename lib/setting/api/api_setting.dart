@@ -16,6 +16,7 @@ class ApiSettingState extends State<ApiSetting> {
   String selectedApi = "";
 
   final List<String> builtInApis = [
+    "https://manyacg.top/setu",
     "https://manyacg.top/sese",
     "https://pixiv.yuki.sh/api/recommend?size=regular",
     "https://app.zichen.zone/api/acg/api.php",
